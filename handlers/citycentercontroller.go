@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"time"
 
+	ca_reg "recruit/payloadstructure/candidate_registration"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -65,39 +67,31 @@ type ExamCityCenterCreateResponse struct {
 // @Router /deptexam/CreateExamCityCenters [post]
 func CreateExamCityCenters(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
+		var mainFunction string = " main - CreateExamCityCenters "
+		var startFunction string = " - start CreateExamCityCenters "
+		var newExamCity ca_reg.ExamCityCenterRequest
 
-		newExamCity := new(ent.ExamCityCenter)
 		if err := gctx.ShouldBindJSON(&newExamCity); err != nil {
-			Action = "404"
-			Remarks = "main - UpdateAdminUser - ShouldBindJSON error" + err.Error()
-			util.SystemLogError(client, Action, Remarks)
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": UserErrorRemarks})
+			Remarks := "400 error from " + mainFunction + " - ShouldBindJSON " + err.Error()
+			start.MainHandleError(gctx, client, Remarks, " -HA01", gctx.GetHeader("UserName"))
 			return
 		}
-		newExamCity, status, err := start.CreateExamCityCenters(client, newExamCity)
+		logdata := newExamCity.Edges.LogData[0]
+		newExamcity, status, stgError, dataStatus, err := start.CreateExamCityCenters(client, &newExamCity)
 
 		if err != nil {
-			if status == 400 {
-				Action = "400"
-				Remarks = "start.CreateExamCityCenters " + err.Error()
-				util.SystemLogError(client, Action, Remarks)
-				gctx.JSON(http.StatusBadRequest, gin.H{"error": UserErrorRemarks})
-				return
-			} else if status == 422 {
-				Action = "400"
-				Remarks = "start.CreateExamCityCenters " + err.Error()
-				util.SystemLogError(client, Action, Remarks)
-				gctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
-				return
-			} else {
-				Action = "500"
-				Remarks = "start.CreateExamCityCenters " + err.Error()
-				util.SystemLogError(client, Action, Remarks)
-				gctx.JSON(http.StatusBadRequest, gin.H{"error": UserErrorRemarks})
-				return
-			}
+			Remarks := mainFunction + startFunction
+			start.StartErrorHandlerWithLog(gctx, err, status, stgError, logdata, client, Remarks)
+			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": gin.H{"message": "Exam City Center created successfully"}})
+		util.LoggerNew(client, logdata)
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Exam City Center created successfully",
+			"data":       newExamcity,
+			"dataexists": dataStatus,
+		})
+
 	}
 	return gin.HandlerFunc(fn)
 }

@@ -2424,3 +2424,78 @@ type AdminMasterResponse struct {
 	UpdatedBy                   string    `json:"UpdatedBy,omitempty"`
 	UpdatedDate                 time.Time `json:"UpdatedDate,omitempty"`
 }
+type ExamCityCenterRequest struct {
+	ExamCode              int32        `json:"ExamCode" binding:"required"`
+	ExamName              string       `json:"ExamName" binding:"required"`
+	ExamShortName         string       `json:"ExamShortName" binding:"required"`
+	ExamYear              int32        `json:"ExamYear"  binding:"required"`
+	ConductedBy           string       `json:"ConductedBy"  binding:"required"`
+	NodalOfficeFacilityID string       `json:"NodalOfficeFacilityID"  binding:"required"`
+	NodalOfficeName       string       `json:"NodalOfficeName"`
+	NotificationCode      int32        `json:"NotificationCode" binding:"required"`
+	NotificationNumber    string       `json:"NotificationNumber"  binding:"required"`
+	CenterCityName        string       `json:"CenterCityName" binding:"required"`
+	CreatedById           int64        `json:"CreatedById"  binding:"required"`
+	CreatedByUserName     string       `json:"CreatedByUserName"  binding:"required"`
+	CreatedByEmpId        int64        `json:"CreatedByEmpId"  binding:"required"`
+	CreatedByDesignation  string       `json:"CreatedByDesignation"  binding:"required"`
+	CreatedDate           time.Time    `json:"CreatedDate"  binding:"required"`
+	Status                string       `json:"Status"`
+	DeletedById           int64        `json:"DeletedById,omitempty"`
+	DeletedByUserName     string       `json:"DeletedByUserName,omitempty"`
+	DeletedByEmployeeId   int64        `json:"DeletedByEmployeeId,omitempty"`
+	DeletedByDesignation  string       `json:"DeletedByDesignation,omitempty"`
+	DeletedDate           time.Time    `json:"DeletedDate,omitempty"`
+	CircleCityName        string       `json:"CircleCityName"`
+	DivisionCode          int32        `json:"DivisionCode"`
+	RegionCode            int32        `json:"RegionCode"`
+	DivisionName          string       `json:"DivisionName"`
+	RegionID              int32        `json:"RegionID"`
+	RegionName            string       `json:"RegionName"`
+	RegionCityName        string       `json:"RegionCityName"`
+	CentreCityName        string       `json:"CentreCityName"`
+	Remarks               string       `json:"Remarks"`
+	UpdatedAt             time.Time    `json:"UpdatedAt"`
+	UpdatedBy             string       `json:"UpdatedBy"`
+	CentreCode            int32        `json:"CentreCode"`
+	CircleID              int32        `json:"CircleID"`
+	Edges                 EdgesLogdata `json:"edges" binding:"required"`
+}
+type ExamCityCenterResponse struct {
+	ID                   int32     `json:"ID,omitempty"`
+	ExamCode             int32     `json:"ExamCode,omitempty"`
+	ExamName             string    `json:"ExamName,omitempty"`
+	ExamShortName        string    `json:"ExamShortName,omitempty"`
+	ExamYear             int32     `json:"ExamYear,omitempty"`
+	ConductedBy          string    `json:"ConductedBy,omitempty"`
+	NodalOfficeFacilityID string   `json:"NodalOfficeFacilityID,omitempty"`
+	NodalOfficeName      string    `json:"NodalOfficeName,omitempty"`
+	NotificationCode     int32     `json:"NotificationCode,omitempty"`
+	NotificationNumber   string    `json:"NotificationNumber,omitempty"`
+	CenterCityName       string    `json:"CenterCityName,omitempty"`
+	CreatedById          int64     `json:"CreatedById,omitempty"`
+	CreatedByUserName    string    `json:"CreatedByUserName,omitempty"`
+	CreatedByEmpId       int64     `json:"CreatedByEmpId,omitempty"`
+	CreatedByDesignation string    `json:"CreatedByDesignation,omitempty"`
+	CreatedDate          time.Time `json:"CreatedDate,omitempty"`
+	Status               string    `json:"Status,omitempty"`
+	DeletedById          int64     `json:"DeletedById,omitempty"`
+	DeletedByUserName    string    `json:"DeletedByUserName,omitempty"`
+	DeletedByEmployeeId  int64     `json:"DeletedByEmployeeId,omitempty"`
+	DeletedByDesignation string    `json:"DeletedByDesignation,omitempty"`
+	DeletedDate          time.Time `json:"DeletedDate,omitempty"`
+	CircleCityName       string    `json:"CircleCityName,omitempty"`
+	DivisionCode         int32     `json:"DivisionCode,omitempty"`
+	RegionCode           int32     `json:"RegionCode,omitempty"`
+	DivisionName         string    `json:"DivisionName,omitempty"`
+	RegionID             int32     `json:"RegionID,omitempty"`
+	RegionName           string    `json:"RegionName,omitempty"`
+	RegionCityName       string    `json:"RegionCityName,omitempty"`
+	CentreCityName       string    `json:"CentreCityName,omitempty"`
+	Remarks              string    `json:"Remarks,omitempty"`
+	UpdatedAt            time.Time `json:"UpdatedAt,omitempty"`
+	UpdatedBy            string    `json:"UpdatedBy,omitempty"`
+	CentreCode           int32     `json:"CentreCode,omitempty"`
+	CircleID             int32     `json:"CircleID,omitempty"`
+}
+

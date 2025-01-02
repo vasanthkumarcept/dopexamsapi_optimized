@@ -1049,68 +1049,35 @@ func QueryExamCityNamesForIPExam(client *ent.Client, ctx context.Context, nn str
 }
 */
 
-func CreateExamCityCenters(client *ent.Client, newExamCity *ent.ExamCityCenter) (*ent.ExamCityCenter, int32, error) {
+func CreateExamCityCenters(client *ent.Client, newExamCity *ca_reg.ExamCityCenterRequest) (*ca_reg.ExamCityCenterResponse, int32, string, bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 	defer cancel()
-	currentTime := time.Now().Truncate(time.Second)
+
 	tx, err := client.Tx(ctx)
 	if err != nil {
-		return nil, 500, fmt.Errorf("failed to start transaction: %w", err)
+		return nil, 500, " -STR001", false, err
 	}
 
-	defer func() {
-		if p := recover(); p != nil {
-			tx.Rollback()
-			panic(p) // re-throw panic after Rollback
-		} else if err != nil {
-			tx.Rollback() // err is non-nil; don't change it
-		} else {
-			err = tx.Commit() // err is nil; if Commit returns error update err
-		}
-	}()
+	defer handleTransaction(tx, &err)
 
-	exists, err := tx.ExamCityCenter.
-		Query().
-		Where(
-			examcitycenter.CenterCityNameEQ(newExamCity.CenterCityName),
-			examcitycenter.ExamCodeEQ(newExamCity.ExamCode),
-			examcitycenter.NotificationNumberEQ(newExamCity.NotificationNumber),
-			examcitycenter.NodalOfficeFacilityIDEQ(newExamCity.NodalOfficeFacilityID),
-			examcitycenter.ConductedByEQ(newExamCity.ConductedBy)).
-		Exist(ctx)
+	exists, err := checkExamCityCenterExists(ctx, tx, newExamCity)
 	if err != nil {
-		return nil, 400, fmt.Errorf("failed to check existance of  city names: %v", err)
+		return nil, 500, " -STR002", false, err
 	}
 	if exists {
-		return nil, 422, errors.New("this city name is already added for the Exam")
+		return nil, 422, " -STR003", false, errors.New("this city name is already added for the Exam")
 	}
 
-	cp, err := tx.ExamCityCenter.Create().
-		SetExamYear(newExamCity.ExamYear).
-		SetExamName(newExamCity.ExamName).
-		SetExamCode(newExamCity.ExamCode).
-		SetExamShortName(newExamCity.ExamShortName).
-		SetNotificationNumber(newExamCity.NotificationNumber).
-		SetConductedBy(newExamCity.ConductedBy).
-		SetCenterCityName(newExamCity.CenterCityName).
-		SetNodalOfficeFacilityID(newExamCity.NodalOfficeFacilityID).
-		SetNodalOfficeName(newExamCity.NodalOfficeName).
-		SetCreatedByUserName(newExamCity.CreatedByUserName).
-		SetUpdatedAt(currentTime).
-		SetCreatedById(newExamCity.CreatedById).
-		SetCreatedByEmpId(newExamCity.CreatedByEmpId).
-		SetCreatedByDesignation(newExamCity.CreatedByDesignation).
-		SetStatus("active").
-		Save(ctx)
+	cp, err := createExamCityCenter(ctx, tx, newExamCity)
 	if err != nil {
-		return nil, 400, fmt.Errorf("failed creating city preference: %w", err)
+		return nil, 500, " -STR004", false, err
 	}
-
 	if err = tx.Commit(); err != nil {
 		tx.Rollback()
-		return nil, 500, err
+		return nil, 500, " -STR005", false, err
 	}
-	return cp, 200, nil
+	response := buildExamCityCenterResponse(cp)
+	return response, 200, "", true, nil
 }
 
 func UpdateExamCentresMTSPMMGExamsreturnarray(ctx context.Context, client *ent.Client, newappls []*ent.Exam_Application_MTSPMMG) ([]UpdateResult, int32, string, bool, error) {

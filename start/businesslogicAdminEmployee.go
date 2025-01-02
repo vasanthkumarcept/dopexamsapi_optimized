@@ -8,6 +8,7 @@ import (
 	"recruit/ent"
 	"recruit/ent/adminmaster"
 	"recruit/ent/employeemaster"
+	"recruit/ent/examcitycenter"
 	"recruit/ent/usermaster"
 	"time"
 
@@ -116,16 +117,15 @@ func mapToAdminResponse(admin *ent.AdminMaster) *ca_reg.AdminMasterResponse {
 }
 func mapToAdminMasterResponse(admin *ent.AdminMaster) *ca_reg.AdminMasterResponse {
 	return &ca_reg.AdminMasterResponse{
-		ID:                          admin.ID,
-		EmployeeId:                  admin.EmployeeId,
-		EmployeeName:                admin.EmployeeName,
-		Designation:                 admin.Designation,
-		RoleUserCode:                admin.RoleUserCode,
-		RoleUserDescription:         admin.RoleUserDescription,
-		Mobile:                      admin.Mobile,
-		EmailID:                     admin.EmailID,
-		UserName:                    admin.UserName,
-		
+		ID:                  admin.ID,
+		EmployeeId:          admin.EmployeeId,
+		EmployeeName:        admin.EmployeeName,
+		Designation:         admin.Designation,
+		RoleUserCode:        admin.RoleUserCode,
+		RoleUserDescription: admin.RoleUserDescription,
+		Mobile:              admin.Mobile,
+		EmailID:             admin.EmailID,
+		UserName:            admin.UserName,
 	}
 }
 func determineVerifyStatus(requestedStatus bool) bool {
@@ -456,7 +456,7 @@ func validateAdminLoginInputs(newUser *ent.AdminMaster) error {
 	if newUser.OTP <= 0 {
 		return errors.New("OTP cannot be nil")
 	}
-	
+
 	return nil
 }
 func fetchAdminUser(tx *ent.Tx, userName string, ctx context.Context) (*ent.AdminMaster, error) {
@@ -527,4 +527,55 @@ func checkduplicateAdmin(tx *ent.Tx, newUser ca_reg.UpdateAdminMasterStruc, ctx 
 			adminmaster.FacilityIDEQ(newUser.FacilityID),
 			adminmaster.StatussEQ("active"),
 		).Exist(ctx)
+}
+func checkExamCityCenterExists(ctx context.Context, tx *ent.Tx, newExamCity *ca_reg.ExamCityCenterRequest) (bool, error) {
+	return tx.ExamCityCenter.
+		Query().
+		Where(
+			examcitycenter.CenterCityNameEQ(newExamCity.CenterCityName),
+			examcitycenter.ExamCodeEQ(newExamCity.ExamCode),
+			examcitycenter.NotificationNumberEQ(newExamCity.NotificationNumber),
+			examcitycenter.NodalOfficeFacilityIDEQ(newExamCity.NodalOfficeFacilityID),
+			examcitycenter.ConductedByEQ(newExamCity.ConductedBy)).
+		Exist(ctx)
+}
+func createExamCityCenter(ctx context.Context, tx *ent.Tx, newExamCity *ca_reg.ExamCityCenterRequest) (*ent.ExamCityCenter, error) {
+	currentTime := time.Now().Truncate(time.Second)
+	return tx.ExamCityCenter.Create().
+		SetExamYear(newExamCity.ExamYear).
+		SetExamName(newExamCity.ExamName).
+		SetExamCode(newExamCity.ExamCode).
+		SetExamShortName(newExamCity.ExamShortName).
+		SetNotificationNumber(newExamCity.NotificationNumber).
+		SetConductedBy(newExamCity.ConductedBy).
+		SetCenterCityName(newExamCity.CenterCityName).
+		SetNodalOfficeFacilityID(newExamCity.NodalOfficeFacilityID).
+		SetNodalOfficeName(newExamCity.NodalOfficeName).
+		SetCreatedByUserName(newExamCity.CreatedByUserName).
+		SetUpdatedAt(currentTime).
+		SetCreatedById(newExamCity.CreatedById).
+		SetCreatedByEmpId(newExamCity.CreatedByEmpId).
+		SetCreatedByDesignation(newExamCity.CreatedByDesignation).
+		SetStatus("active").
+		Save(ctx)
+}
+
+// Subfunction to build the response
+func buildExamCityCenterResponse(cp *ent.ExamCityCenter) *ca_reg.ExamCityCenterResponse {
+	return &ca_reg.ExamCityCenterResponse{
+		ID:                    cp.ID,
+		ExamYear:              cp.ExamYear,
+		ExamName:              cp.ExamName,
+		ExamCode:              cp.ExamCode,
+		ExamShortName:         cp.ExamShortName,
+		NotificationNumber:    cp.NotificationNumber,
+		ConductedBy:           cp.ConductedBy,
+		CenterCityName:        cp.CenterCityName,
+		NodalOfficeFacilityID: cp.NodalOfficeFacilityID,
+		NodalOfficeName:       cp.NodalOfficeName,
+		CreatedByUserName:     cp.CreatedByUserName,
+		CreatedById:           cp.CreatedById,
+		CreatedByEmpId:        cp.CreatedByEmpId,
+		CreatedByDesignation:  cp.CreatedByDesignation,
+	}
 }
