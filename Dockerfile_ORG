@@ -1,0 +1,49 @@
+# Use the official Go image as a base image
+FROM golang:latest
+
+RUN useradd -m -s /bin/bash appuser
+
+# Set the timezone to your desired timezone
+ENV TZ=Asia/Kolkata
+
+# Set proxy environment variables for apt
+ENV http_proxy=http://172.28.12.2:3128
+ENV https_proxy=http://172.28.12.2:3128
+ENV no_proxy=localhost,127.0.0.1,api.cept.gov.in,dopverysecure.in,nexusrsi.cept.gov.in,cattle-system.svc,.svc,.cluster.local,::1
+
+# Update the package lists and install any necessary packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    tzdata && \
+    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy go.mod and go.sum files to ensure dependencies are downloaded efficiently
+WORKDIR /home/appuser/
+COPY go.mod go.sum .
+
+# Download and install dependencies
+RUN go mod download
+
+# Copy the entire application source code to the container's workspace
+#COPY . .
+#COPY config.yaml .
+COPY .env .
+COPY main .
+
+# Build the Go application
+#RUN go build -o main
+
+ENV http_proxy=
+ENV https_proxy=
+ENV no_proxy=
+
+# Expose port 8080 to the outside world
+EXPOSE 8080
+
+USER appuser
+
+# Command to run the executable
+CMD ["./main"]
