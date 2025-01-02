@@ -897,6 +897,18 @@ func (eapc *ExamApplicationsPMPACreate) SetNillablePhoto(s *string) *ExamApplica
 	return eapc
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eapc *ExamApplicationsPMPACreate) SetCandidatePhoto(b []byte) *ExamApplicationsPMPACreate {
+	eapc.mutation.SetCandidatePhoto(b)
+	return eapc
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eapc *ExamApplicationsPMPACreate) SetCandidateSignature(b []byte) *ExamApplicationsPMPACreate {
+	eapc.mutation.SetCandidateSignature(b)
+	return eapc
+}
+
 // SetSignaturePath sets the "SignaturePath" field.
 func (eapc *ExamApplicationsPMPACreate) SetSignaturePath(s string) *ExamApplicationsPMPACreate {
 	eapc.mutation.SetSignaturePath(s)
@@ -2329,6 +2341,14 @@ func (eapc *ExamApplicationsPMPACreate) createSpec() (*Exam_Applications_PMPA, *
 	if value, ok := eapc.mutation.Photo(); ok {
 		_spec.SetField(exam_applications_pmpa.FieldPhoto, field.TypeString, value)
 		_node.Photo = value
+	}
+	if value, ok := eapc.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_pmpa.FieldCandidatePhoto, field.TypeBytes, value)
+		_node.CandidatePhoto = value
+	}
+	if value, ok := eapc.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_pmpa.FieldCandidateSignature, field.TypeBytes, value)
+		_node.CandidateSignature = value
 	}
 	if value, ok := eapc.mutation.SignaturePath(); ok {
 		_spec.SetField(exam_applications_pmpa.FieldSignaturePath, field.TypeString, value)

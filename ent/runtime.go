@@ -1082,31 +1082,31 @@ func init() {
 	// exam_applications_pmpa.DefaultExamCityCenterCode holds the default value on creation for the ExamCityCenterCode field.
 	exam_applications_pmpa.DefaultExamCityCenterCode = exam_applications_pmpaDescExamCityCenterCode.Default.(int32)
 	// exam_applications_pmpaDescStatus is the schema descriptor for Status field.
-	exam_applications_pmpaDescStatus := exam_applications_pmpaFields[71].Descriptor()
+	exam_applications_pmpaDescStatus := exam_applications_pmpaFields[73].Descriptor()
 	// exam_applications_pmpa.DefaultStatus holds the default value on creation for the Status field.
 	exam_applications_pmpa.DefaultStatus = exam_applications_pmpaDescStatus.Default.(string)
 	// exam_applications_pmpaDescPunishmentStatus is the schema descriptor for PunishmentStatus field.
-	exam_applications_pmpaDescPunishmentStatus := exam_applications_pmpaFields[93].Descriptor()
+	exam_applications_pmpaDescPunishmentStatus := exam_applications_pmpaFields[95].Descriptor()
 	// exam_applications_pmpa.DefaultPunishmentStatus holds the default value on creation for the PunishmentStatus field.
 	exam_applications_pmpa.DefaultPunishmentStatus = exam_applications_pmpaDescPunishmentStatus.Default.(bool)
 	// exam_applications_pmpaDescDisciplinaryCaseStatus is the schema descriptor for DisciplinaryCaseStatus field.
-	exam_applications_pmpaDescDisciplinaryCaseStatus := exam_applications_pmpaFields[94].Descriptor()
+	exam_applications_pmpaDescDisciplinaryCaseStatus := exam_applications_pmpaFields[96].Descriptor()
 	// exam_applications_pmpa.DefaultDisciplinaryCaseStatus holds the default value on creation for the DisciplinaryCaseStatus field.
 	exam_applications_pmpa.DefaultDisciplinaryCaseStatus = exam_applications_pmpaDescDisciplinaryCaseStatus.Default.(bool)
 	// exam_applications_pmpaDescHallTicketNumber is the schema descriptor for HallTicketNumber field.
-	exam_applications_pmpaDescHallTicketNumber := exam_applications_pmpaFields[96].Descriptor()
+	exam_applications_pmpaDescHallTicketNumber := exam_applications_pmpaFields[98].Descriptor()
 	// exam_applications_pmpa.DefaultHallTicketNumber holds the default value on creation for the HallTicketNumber field.
 	exam_applications_pmpa.DefaultHallTicketNumber = exam_applications_pmpaDescHallTicketNumber.Default.(string)
 	// exam_applications_pmpaDescHallTicketGeneratedFlag is the schema descriptor for HallTicketGeneratedFlag field.
-	exam_applications_pmpaDescHallTicketGeneratedFlag := exam_applications_pmpaFields[97].Descriptor()
+	exam_applications_pmpaDescHallTicketGeneratedFlag := exam_applications_pmpaFields[99].Descriptor()
 	// exam_applications_pmpa.DefaultHallTicketGeneratedFlag holds the default value on creation for the HallTicketGeneratedFlag field.
 	exam_applications_pmpa.DefaultHallTicketGeneratedFlag = exam_applications_pmpaDescHallTicketGeneratedFlag.Default.(bool)
 	// exam_applications_pmpaDescUpdatedAt is the schema descriptor for UpdatedAt field.
-	exam_applications_pmpaDescUpdatedAt := exam_applications_pmpaFields[128].Descriptor()
+	exam_applications_pmpaDescUpdatedAt := exam_applications_pmpaFields[130].Descriptor()
 	// exam_applications_pmpa.DefaultUpdatedAt holds the default value on creation for the UpdatedAt field.
 	exam_applications_pmpa.DefaultUpdatedAt = exam_applications_pmpaDescUpdatedAt.Default.(func() time.Time)
 	// exam_applications_pmpaDescUpdatedBy is the schema descriptor for UpdatedBy field.
-	exam_applications_pmpaDescUpdatedBy := exam_applications_pmpaFields[129].Descriptor()
+	exam_applications_pmpaDescUpdatedBy := exam_applications_pmpaFields[131].Descriptor()
 	// exam_applications_pmpa.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
 	exam_applications_pmpa.DefaultUpdatedBy = exam_applications_pmpaDescUpdatedBy.Default.(string)
 	exam_applications_psFields := schema.Exam_Applications_PS{}.Fields()

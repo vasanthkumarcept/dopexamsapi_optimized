@@ -1240,8 +1240,8 @@ type ApplicationPMPA struct {
 	MobileNumber                    string         `json:"MobileNumber" binding:"required"`
 	NodalOfficeFacilityID           string         `json:"NodalOfficeFacilityID" binding:"required"`
 	NodalOfficeName                 string         `json:"NodalOfficeName" binding:"required"`
-	Photo                           string         `json:"Photo" binding:"required"`
-	PhotoPath                       string         `json:"PhotoPath" binding:"required"`
+	Photo                           string         `json:"Photo"`
+	PhotoPath                       string         `json:"PhotoPath"`
 	PMMailGuardMTSEngagement        *[]interface{} `json:"PMMailGuardMTSEngagement" binding:"required"`
 	PostPreferences                 *[]interface{} `json:"PostPreferences" binding:"required"`
 	PresentDesignation              string         `json:"PresentDesignation" binding:"required"`
@@ -1250,8 +1250,8 @@ type ApplicationPMPA struct {
 	ReportingOfficeFacilityID       string         `json:"ReportingOfficeFacilityID" binding:"required"`
 	ReportingOfficeName             string         `json:"ReportingOfficeName" binding:"required"`
 	ServiceLength                   *[]interface{} `json:"ServiceLength" binding:"required"`
-	Signature                       string         `json:"Signature" binding:"required"`
-	SignaturePath                   string         `json:"SignaturePath" binding:"required"`
+	Signature                       string         `json:"Signature"`
+	SignaturePath                   string         `json:"SignaturePath" `
 	TempHallTicket                  string         `json:"TempHallTicket" binding:"required"`
 	UnitPreferences                 *[]interface{} `json:"UnitPreferences" binding:"required"`
 	UserID                          int32          `json:"UserID" binding:"required"`
@@ -1264,6 +1264,9 @@ type ApplicationPMPA struct {
 	WorkingOfficePincode            int32          `json:"WorkingOfficePincode" binding:"required"`
 	WorkingOfficeRegionFacilityID   string         `json:"WorkingOfficeRegionFacilityID" `
 	WorkingOfficeRegionName         string         `json:"WorkingOfficeRegionName" `
+	CandidatePhoto                  []byte         `json:"CandidatePhoto" binding:"required"`
+	CandidateSignature              []byte         `json:"CandidateSignature" binding:"required"`
+	ApplicationLastDate             time.Time      `json:"ApplicationLastDate" binding:"required"`
 }
 
 type ReApplicationPMPA struct {
@@ -1395,57 +1398,58 @@ type NAVerifyApplicationPMPA struct {
 	RecommendedStatus           string                     `json:"RecommendedStatus"`
 }
 type ApplicationGDSPM struct {
-	Cadre                           string         `json:"Cadre"`
-	CandidateRemarks                string         `json:"CandidateRemarks" `
-	CategoryCode                    string         `json:"CategoryCode" binding:"required"`
-	CategoryDescription             string         `json:"CategoryDescription" binding:"required"`
-	CenterFacilityId                string         `json:"CenterFacilityId" binding:"required"`
-	CenterId                        int32          `json:"CenterId" binding:"required"`
-	CentrePreference                string         `json:"CentrePreference" binding:"required"`
-	ClaimingQualifyingService       string         `json:"ClaimingQualifyingService" binding:"required"`
-	ControllingOfficeFacilityID     string         `json:"ControllingOfficeFacilityID" binding:"required"`
-	ControllingOfficeName           string         `json:"ControllingOfficeName" binding:"required"`
-	DCCS                            string         `json:"DCCS"`
-	DOB                             string         `json:"DOB" binding:"required"`
-	DeputationControllingOfficeID   string         `json:"DeputationControllingOfficeID"`
-	DeputationControllingOfficeName string         `json:"DeputationControllingOfficeName"`
-	DeputationOfficeFacilityID      string         `json:"DeputationOfficeFacilityID" `
-	DeputationOfficeName            string         `json:"DeputationOfficeName" `
-	DeputationOfficePincode         string         `json:"DeputationOfficePincode" `
-	DeputationOfficeUniqueId        string         `json:"DeputationOfficeUniqueId"`
-	InDeputation                    string         `json:"InDeputation" `
-	DeputationType                  string         `json:"DeputationType" `
-	DesignationID                   string         `json:"DesignationID" `
-	DisabilityPercentage            int32          `json:"DisabilityPercentage" `
-	DisabilityTypeCode              string         `json:"DisabilityTypeCode"`
-	DisabilityTypeDescription       string         `json:"DisabilityTypeDescription" `
-	DisabilityTypeID                string         `json:"DisabilityTypeID"`
-	Edges                           EdgesLogdata   `json:"edges" binding:"required"`
-	EducationCode                   string         `json:"EducationCode"`
-	EducationDescription            string         `json:"EducationDescription" binding:"required"`
-	EmailID                         string         `json:"EmailID" binding:"required"`
-	EmployeeID                      int64          `json:"EmployeeID" binding:"required"`
-	EmployeeName                    string         `json:"EmployeeName" binding:"required"`
-	EmployeePost                    string         `json:"EmployeePost" `
-	EntryPostCode                   string         `json:"EntryPostCode" `
-	EntryPostDescription            string         `json:"EntryPostDescription" `
-	ExamCode                        int32          `json:"ExamCode" binding:"required"`
-	ExamName                        string         `json:"ExamName" binding:"required"`
-	ExamShortName                   string         `json:"ExamShortName" binding:"required"`
-	ExamYear                        string         `json:"ExamYear" binding:"required"`
-	FacilityName                    string         `json:"FacilityName" `
-	FacilityUniqueID                string         `json:"FacilityUniqueID" binding:"required"`
-	FeederPostCode                  string         `json:"FeederPostCode" `
-	FeederPostDescription           string         `json:"FeederPostDescription"`
-	FeederPostJoiningDate           string         `json:"FeederPostJoiningDate" binding:"required"`
-	Gender                          string         `json:"Gender" binding:"required"`
-	LienControllingOfficeID         string         `json:"LienControllingOfficeID" binding:"required"`
-	LienControllingOfficeName       string         `json:"LienControllingOfficeName" binding:"required"`
-	MobileNumber                    string         `json:"MobileNumber" binding:"required"`
-	NodalOfficeFacilityID           string         `json:"NodalOfficeFacilityID" binding:"required"`
-	NodalOfficeName                 string         `json:"NodalOfficeName" binding:"required"`
-	Photo                           string         `json:"Photo" binding:"required"`
-	PhotoPath                       string         `json:"PhotoPath" binding:"required"`
+	Cadre                           string       `json:"Cadre"`
+	CandidateRemarks                string       `json:"CandidateRemarks" `
+	CategoryCode                    string       `json:"CategoryCode" binding:"required"`
+	CategoryDescription             string       `json:"CategoryDescription" binding:"required"`
+	CenterFacilityId                string       `json:"CenterFacilityId" binding:"required"`
+	CenterId                        int32        `json:"CenterId" binding:"required"`
+	CentrePreference                string       `json:"CentrePreference" binding:"required"`
+	ClaimingQualifyingService       string       `json:"ClaimingQualifyingService" binding:"required"`
+	ControllingOfficeFacilityID     string       `json:"ControllingOfficeFacilityID" binding:"required"`
+	ControllingOfficeName           string       `json:"ControllingOfficeName" binding:"required"`
+	DCCS                            string       `json:"DCCS"`
+	DOB                             string       `json:"DOB" binding:"required"`
+	DeputationControllingOfficeID   string       `json:"DeputationControllingOfficeID"`
+	DeputationControllingOfficeName string       `json:"DeputationControllingOfficeName"`
+	DeputationOfficeFacilityID      string       `json:"DeputationOfficeFacilityID" `
+	DeputationOfficeName            string       `json:"DeputationOfficeName" `
+	DeputationOfficePincode         string       `json:"DeputationOfficePincode" `
+	DeputationOfficeUniqueId        string       `json:"DeputationOfficeUniqueId"`
+	InDeputation                    string       `json:"InDeputation" `
+	DeputationType                  string       `json:"DeputationType" `
+	DesignationID                   string       `json:"DesignationID" `
+	DisabilityPercentage            int32        `json:"DisabilityPercentage" `
+	DisabilityTypeCode              string       `json:"DisabilityTypeCode"`
+	DisabilityTypeDescription       string       `json:"DisabilityTypeDescription" `
+	DisabilityTypeID                string       `json:"DisabilityTypeID"`
+	Edges                           EdgesLogdata `json:"edges" binding:"required"`
+	EducationCode                   string       `json:"EducationCode"`
+	EducationDescription            string       `json:"EducationDescription" binding:"required"`
+	EmailID                         string       `json:"EmailID" binding:"required"`
+	EmployeeID                      int64        `json:"EmployeeID" binding:"required"`
+	EmployeeName                    string       `json:"EmployeeName" binding:"required"`
+	EmployeePost                    string       `json:"EmployeePost" `
+	EntryPostCode                   string       `json:"EntryPostCode" `
+	EntryPostDescription            string       `json:"EntryPostDescription" `
+	ExamCode                        int32        `json:"ExamCode" binding:"required"`
+	ExamName                        string       `json:"ExamName" binding:"required"`
+	ExamShortName                   string       `json:"ExamShortName" binding:"required"`
+	ExamYear                        string       `json:"ExamYear" binding:"required"`
+	FacilityName                    string       `json:"FacilityName" `
+	FacilityUniqueID                string       `json:"FacilityUniqueID" binding:"required"`
+	FeederPostCode                  string       `json:"FeederPostCode" `
+	FeederPostDescription           string       `json:"FeederPostDescription"`
+	FeederPostJoiningDate           string       `json:"FeederPostJoiningDate" binding:"required"`
+	Gender                          string       `json:"Gender" binding:"required"`
+	LienControllingOfficeID         string       `json:"LienControllingOfficeID" binding:"required"`
+	LienControllingOfficeName       string       `json:"LienControllingOfficeName" binding:"required"`
+	MobileNumber                    string       `json:"MobileNumber" binding:"required"`
+	NodalOfficeFacilityID           string       `json:"NodalOfficeFacilityID" binding:"required"`
+	NodalOfficeName                 string       `json:"NodalOfficeName" binding:"required"`
+	Photo                           string       `json:"Photo" `
+	PhotoPath                       string       `json:"PhotoPath"`
+
 	PostPreferences                 *[]interface{} `json:"PostPreferences" binding:"required"`
 	PresentDesignation              string         `json:"PresentDesignation" binding:"required"`
 	PresentPostCode                 string         `json:"PresentPostCode" `
@@ -1455,8 +1459,8 @@ type ApplicationGDSPM struct {
 	ServiceLength                   *[]interface{} `json:"ServiceLength" binding:"required"`
 	SubdivisionOfficeFacilityID     string         `json:"SubdivisionOfficeFacilityID" `
 	SubdivisionOfficeName           string         `json:"SubdivisionOfficeName" `
-	Signature                       string         `json:"Signature" binding:"required"`
-	SignaturePath                   string         `json:"SignaturePath" binding:"required"`
+	Signature                       string         `json:"Signature"`
+	SignaturePath                   string         `json:"SignaturePath"`
 	TempHallTicket                  string         `json:"TempHallTicket" binding:"required"`
 	UnitPreferences                 *[]interface{} `json:"UnitPreferences" binding:"required"`
 	UserID                          int32          `json:"UserID" binding:"required"`

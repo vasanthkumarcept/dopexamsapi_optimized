@@ -146,6 +146,7 @@ func saveApplication(tx *ent.Tx, newAppln any, applicationNumber string, examcod
 			SetDisabilityTypeID(applicationIp.DisabilityTypeID).
 			SetDesignationID(applicationIp.DesignationID).
 			SetEducationCode(applicationIp.EducationCode).
+			
 			Save(ctx)
 
 		if err != nil {
@@ -306,6 +307,8 @@ func saveApplication(tx *ent.Tx, newAppln any, applicationNumber string, examcod
 			SetEntryPostDescription(applicationPmpa.EntryPostDescription).
 			SetExamCode(applicationPmpa.ExamCode).
 			SetExamName(applicationPmpa.ExamName).
+			SetCandidatePhoto(applicationPmpa.CandidatePhoto).
+			SetCandidateSignature(applicationPmpa.CandidateSignature).
 			SetExamShortName(applicationPmpa.ExamShortName).
 			SetExamYear(applicationPmpa.ExamYear).
 			SetExamCityCenterCode(applicationPmpa.CenterId).

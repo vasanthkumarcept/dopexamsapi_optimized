@@ -147,6 +147,10 @@ type Exam_Applications_PMPA struct {
 	Signature string `json:"Signature,omitempty"`
 	// Photo holds the value of the "Photo" field.
 	Photo string `json:"Photo,omitempty"`
+	// CandidatePhoto holds the value of the "CandidatePhoto" field.
+	CandidatePhoto []byte `json:"CandidatePhoto,omitempty"`
+	// CandidateSignature holds the value of the "CandidateSignature" field.
+	CandidateSignature []byte `json:"CandidateSignature,omitempty"`
 	// SignaturePath holds the value of the "SignaturePath" field.
 	SignaturePath string `json:"SignaturePath,omitempty"`
 	// PhotoPath holds the value of the "PhotoPath" field.
@@ -434,7 +438,7 @@ func (*Exam_Applications_PMPA) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case exam_applications_pmpa.FieldCadrePreferences, exam_applications_pmpa.FieldDivisionPreferences, exam_applications_pmpa.FieldServiceLength, exam_applications_pmpa.FieldNonQualifyingService, exam_applications_pmpa.FieldPostPreferences, exam_applications_pmpa.FieldUnitPreferences, exam_applications_pmpa.FieldPMMailGuardMTSEngagement:
+		case exam_applications_pmpa.FieldCandidatePhoto, exam_applications_pmpa.FieldCandidateSignature, exam_applications_pmpa.FieldCadrePreferences, exam_applications_pmpa.FieldDivisionPreferences, exam_applications_pmpa.FieldServiceLength, exam_applications_pmpa.FieldNonQualifyingService, exam_applications_pmpa.FieldPostPreferences, exam_applications_pmpa.FieldUnitPreferences, exam_applications_pmpa.FieldPMMailGuardMTSEngagement:
 			values[i] = new([]byte)
 		case exam_applications_pmpa.FieldPunishmentStatus, exam_applications_pmpa.FieldDisciplinaryCaseStatus, exam_applications_pmpa.FieldGenerateHallTicketFlag, exam_applications_pmpa.FieldHallTicketGeneratedFlag, exam_applications_pmpa.FieldGenerateHallTicketFlagByNO:
 			values[i] = new(sql.NullBool)
@@ -838,6 +842,18 @@ func (eap *Exam_Applications_PMPA) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field Photo", values[i])
 			} else if value.Valid {
 				eap.Photo = value.String
+			}
+		case exam_applications_pmpa.FieldCandidatePhoto:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field CandidatePhoto", values[i])
+			} else if value != nil {
+				eap.CandidatePhoto = *value
+			}
+		case exam_applications_pmpa.FieldCandidateSignature:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field CandidateSignature", values[i])
+			} else if value != nil {
+				eap.CandidateSignature = *value
 			}
 		case exam_applications_pmpa.FieldSignaturePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1548,6 +1564,12 @@ func (eap *Exam_Applications_PMPA) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("Photo=")
 	builder.WriteString(eap.Photo)
+	builder.WriteString(", ")
+	builder.WriteString("CandidatePhoto=")
+	builder.WriteString(fmt.Sprintf("%v", eap.CandidatePhoto))
+	builder.WriteString(", ")
+	builder.WriteString("CandidateSignature=")
+	builder.WriteString(fmt.Sprintf("%v", eap.CandidateSignature))
 	builder.WriteString(", ")
 	builder.WriteString("SignaturePath=")
 	builder.WriteString(eap.SignaturePath)

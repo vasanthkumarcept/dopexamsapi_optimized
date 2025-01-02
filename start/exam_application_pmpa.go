@@ -43,7 +43,7 @@ func SubGetPMMGMTSPASAApplicationsFacilityIDYear(ctx context.Context, client *en
 	return records, 200, nil
 }
 
-func CreatePMPAApplications(client *ent.Client, newAppln *ca_reg.ApplicationGDSPM) (*ca_reg.ApplicationsResponse, int32, string, bool, error) {
+func CreatePMPAApplications(client *ent.Client, newAppln *ca_reg.ApplicationPMPA) (*ca_reg.ApplicationsResponse, int32, string, bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 	defer cancel()
 	if err := validateTempHallTicket(newAppln.TempHallTicket, newAppln.EmployeeID); err != nil {

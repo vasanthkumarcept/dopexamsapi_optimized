@@ -22,7 +22,7 @@ func CreateNewPMPAApplications(client *ent.Client) gin.HandlerFunc {
 		defer cancel()
 		var mainFunction string = " main - CreateNewPMPAApplications "
 		var startFunction string = " - start - CreatePMPAApplications "
-		var newPAAppplns ca_reg.ApplicationGDSPM
+		var newPAAppplns ca_reg.ApplicationPMPA
 
 		if err := gctx.ShouldBindJSON(&newPAAppplns); err != nil {
 			Remarks = "400 error from " + mainFunction + " - ShouldBindJSON " + err.Error()
