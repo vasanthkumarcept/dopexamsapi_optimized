@@ -4641,16 +4641,7 @@ func UpdateCenterCodeForApplications(ctx context.Context, client *ent.Client, co
 		return 0, nil, 500, " -TX001", false, fmt.Errorf("failed to start transaction: %w", err)
 	}
 
-	defer func() {
-		if p := recover(); p != nil {
-			tx.Rollback()
-			panic(p) // re-throw panic after Rollback
-		} else if err != nil {
-			tx.Rollback() // err is non-nil; don't change it
-		} else {
-			err = tx.Commit() // err is nil; if Commit returns error update err
-		}
-	}()
+	defer handleTransaction(tx, &err)
 	// Querying Applications
 	applications, err := tx.Exam_Applications_IP.
 		Query().

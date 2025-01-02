@@ -2439,7 +2439,7 @@ type ExamCityCenterRequest struct {
 	CreatedByUserName     string       `json:"CreatedByUserName"  binding:"required"`
 	CreatedByEmpId        int64        `json:"CreatedByEmpId"  binding:"required"`
 	CreatedByDesignation  string       `json:"CreatedByDesignation"  binding:"required"`
-	CreatedDate           time.Time    `json:"CreatedDate"  binding:"required"`
+	CreatedDate           time.Time    `json:"CreatedDate"`
 	Status                string       `json:"Status"`
 	DeletedById           int64        `json:"DeletedById,omitempty"`
 	DeletedByUserName     string       `json:"DeletedByUserName,omitempty"`
