@@ -67,6 +67,7 @@ func StartQueryRegionHeadQuartersByExamConductedBy(client *ent.Client, naid stri
 		log.Println("error at Facility Master: ", err)
 		return nil, 422, " -STR001", false, fmt.Errorf("failed querying Region Master: %w", err)
 	}
+	fmt.Println("start querying Region Master: ", regions)
 	//log.Println("Regions returned: ", Regions)
 	return regions, 200, "", true, nil
 }

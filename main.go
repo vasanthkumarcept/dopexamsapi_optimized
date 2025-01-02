@@ -182,7 +182,7 @@ func initRoutes(client *ent.Client) {
 	r.GET(apiSubPath+"QueryCityNamesByNotiIDFromExamCenter/:id1/:id2", util.TokenValidationMiddlewareNew(client), h.QueryCityNamesByExamIDFromExamCenter(client))
 	r.GET(apiSubPath+"QueryCityNamesByNotificationIDFromExamCenter/:id1/:id2/:id3", util.TokenValidationMiddlewareNew(client), h.QueryCityNamesByNotificationIDFromExamCenter(client)) //Hari
 	r.GET(apiSubPath+"QueryExamCityNamesForIPExam/:notificationnumber/:examyear/:examcode", util.TokenValidationMiddlewareNew(client), h.QueryExamCityNamesForIPExam(client))          //hari
-	r.GET(apiSubPath+"RegionHeadQuarters/:id1/:id2", util.TokenValidationMiddlewareNew(client), h.QueryRegionHeadQuartersByExamConductedBy(client))
+	r.GET(apiSubPath+"RegionHeadQuarters/Circle/:id2", h.QueryRegionHeadQuartersByExamConductedBy(client))
 
 	r.GET(apiSubPath+"candidate/getcandidateuserbyempid/:employeeid", util.TokenValidationMiddlewareNew(client), h.GetCandidateUsersByEmpId(client)) //--vasanth dev
 	r.GET(apiSubPath+"center/get/:id", util.TokenValidationMiddlewareNew(client), h.GetCenterID(client))
