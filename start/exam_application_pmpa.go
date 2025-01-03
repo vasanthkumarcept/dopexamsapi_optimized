@@ -63,17 +63,17 @@ func CreatePMPAApplications(client *ent.Client, newAppln *ca_reg.ApplicationPMPA
 
 	statuses := []string{"CAVerificationPending", "ResubmitCAVerificationPending", "PendingWithCandidate", "VerifiedByCA"}
 	existing, status, stgError, err := checkIfApplicationExists(ctx, tx, newAppln.EmployeeID, newAppln.ExamYear, newAppln.ExamCode, statuses)
+	if existing {
+		return nil, 422, " -STR003" + stgError, false, errors.New("already application submitted for this candidate")
+	}
 	if status == 500 {
-		return nil, 500 + status, " -STR003 " + stgError, false, err
+		return nil, 500 + status, " -STR004 " + stgError, false, err
 	}
 	if status == 422 {
-		return nil, 422 + status, " -STR004 " + stgError, false, err
+		return nil, 422 + status, " -STR005 " + stgError, false, err
 
 	}
 
-	if existing {
-		return nil, 422 + status, " -STR005" + stgError, false, errors.New("already application submitted for this candidate")
-	}
 	var currentTime = time.Now().UTC().Truncate(time.Second) // Ensure UTC for consistent comparison
 	currentTime = currentTime.Add(5*time.Hour + 30*time.Minute)
 	applicationLastDate := newAppln.ApplicationLastDate.UTC().Truncate(time.Second)

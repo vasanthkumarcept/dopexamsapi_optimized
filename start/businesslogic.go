@@ -1166,21 +1166,62 @@ func MapExamApplicationsToResponse(appIP interface{}) (*ca_reg.ApplicationsRespo
 				ApplicationRemarks:    app.AppliactionRemarks,
 				CAGeneralRemarks:      app.CAGeneralRemarks,
 			}, nil
-		case *ent.Exam_Applications_PS, *ent.Exam_Applications_GDSPM,
-			*ent.Exam_Application_MTSPMMG, *ent.Exam_Applications_GDSPA:
+		case *ent.Exam_Applications_GDSPM:
+			return &ca_reg.ApplicationsResponse{
+				EmployeeID:            app.EmployeeID,
+				ApplicationNumber:     app.ApplicationNumber,
+				ApplicationStatus:     app.ApplicationStatus,
+				MobileNumber:          app.MobileNumber,
+				EmailID:               app.EmailID,
+				RoleUserCode:          app.RoleUserCode,
+				ApplnSubmittedDate:    app.ApplnSubmittedDate,
+				ControllingOfficeName: app.ControllingOfficeName,
+				RecommendedStatus:     app.RecommendedStatus,
+				ApplicationRemarks:    app.AppliactionRemarks,
+				CAGeneralRemarks:      app.CAGeneralRemarks,
+			}, nil
+		case *ent.Exam_Applications_GDSPA:
+			return &ca_reg.ApplicationsResponse{
+				EmployeeID:            app.EmployeeID,
+				ApplicationNumber:     app.ApplicationNumber,
+				ApplicationStatus:     app.ApplicationStatus,
+				MobileNumber:          app.MobileNumber,
+				EmailID:               app.EmailID,
+				RoleUserCode:          app.RoleUserCode,
+				ApplnSubmittedDate:    app.ApplnSubmittedDate,
+				ControllingOfficeName: app.ControllingOfficeName,
+				RecommendedStatus:     app.RecommendedStatus,
+				ApplicationRemarks:    app.AppliactionRemarks,
+				CAGeneralRemarks:      app.CAGeneralRemarks,
+			}, nil
+		case *ent.Exam_Application_MTSPMMG:
+			return &ca_reg.ApplicationsResponse{
+				EmployeeID:            app.EmployeeID,
+				ApplicationNumber:     app.ApplicationNumber,
+				ApplicationStatus:     app.ApplicationStatus,
+				MobileNumber:          app.MobileNumber,
+				EmailID:               app.EmailID,
+				RoleUserCode:          app.RoleUserCode,
+				ApplnSubmittedDate:    app.ApplnSubmittedDate,
+				ControllingOfficeName: app.ControllingOfficeName,
+				RecommendedStatus:     app.RecommendedStatus,
+				ApplicationRemarks:    app.AppliactionRemarks,
+				CAGeneralRemarks:      app.CAGeneralRemarks,
+			}, nil
+		case *ent.Exam_Applications_PS:
 			// Reuse the same logic for all other types
 			return &ca_reg.ApplicationsResponse{
-				EmployeeID:            app.(*ent.Exam_Applications_PS).EmployeeID, // Accessing via type assertion
-				ApplicationNumber:     app.(*ent.Exam_Applications_PS).ApplicationNumber,
-				ApplicationStatus:     app.(*ent.Exam_Applications_PS).ApplicationStatus,
-				MobileNumber:          app.(*ent.Exam_Applications_PS).MobileNumber,
-				EmailID:               app.(*ent.Exam_Applications_PS).EmailID,
-				RoleUserCode:          app.(*ent.Exam_Applications_PS).RoleUserCode,
-				ApplnSubmittedDate:    app.(*ent.Exam_Applications_PS).ApplnSubmittedDate,
-				ControllingOfficeName: app.(*ent.Exam_Applications_PS).ControllingOfficeName,
-				RecommendedStatus:     app.(*ent.Exam_Applications_PS).RecommendedStatus,
-				ApplicationRemarks:    app.(*ent.Exam_Applications_PS).AppliactionRemarks,
-				CAGeneralRemarks:      app.(*ent.Exam_Applications_PS).CAGeneralRemarks,
+				EmployeeID:            app.EmployeeID, // Accessing via type assertion
+				ApplicationNumber:     app.ApplicationNumber,
+				ApplicationStatus:     app.ApplicationStatus,
+				MobileNumber:          app.MobileNumber,
+				EmailID:               app.EmailID,
+				RoleUserCode:          app.RoleUserCode,
+				ApplnSubmittedDate:    app.ApplnSubmittedDate,
+				ControllingOfficeName: app.ControllingOfficeName,
+				RecommendedStatus:     app.RecommendedStatus,
+				ApplicationRemarks:    app.AppliactionRemarks,
+				CAGeneralRemarks:      app.CAGeneralRemarks,
 			}, nil
 		default:
 			return nil, fmt.Errorf("invalid application type: %T", app)
