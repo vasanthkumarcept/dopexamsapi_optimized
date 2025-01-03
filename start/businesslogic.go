@@ -11,7 +11,7 @@ import (
 	"recruit/ent/exam_applications_ip"
 	"recruit/ent/exam_applications_pmpa"
 	"recruit/ent/exam_applications_ps"
-	
+
 	ca_reg "recruit/payloadstructure/candidate_registration"
 	"recruit/util"
 
@@ -146,7 +146,6 @@ func saveApplication(tx *ent.Tx, newAppln any, applicationNumber string, examcod
 			SetDisabilityTypeID(applicationIp.DisabilityTypeID).
 			SetDesignationID(applicationIp.DesignationID).
 			SetEducationCode(applicationIp.EducationCode).
-			
 			Save(ctx)
 
 		if err != nil {
@@ -264,7 +263,7 @@ func saveApplication(tx *ent.Tx, newAppln any, applicationNumber string, examcod
 	case 3:
 		applicationPmpa, ok := newAppln.(*ca_reg.ApplicationPMPA)
 		if !ok {
-			return nil, 422, " -SUB009", fmt.Errorf("invalid application data type for exam code 4")
+			return nil, 422, " -SUB009", fmt.Errorf("invalid application data type for exam code 3")
 		}
 
 		createdAppln, err = tx.Exam_Applications_PMPA.
@@ -703,7 +702,6 @@ func checkIfApplicationExists(ctx context.Context, tx *ent.Tx, employeeID int64,
 	return exists, 200, "", nil
 }
 
-
 func fetchExistingApplication(ctx context.Context, tx *ent.Tx, employeeID int64, examYear string) (*ent.Exam_Applications_IP, int32, string, error) {
 	oldAppln, err := tx.Exam_Applications_IP.
 		Query().
@@ -895,7 +893,7 @@ func determineApplicationStatus(ctx context.Context, oldAppln interface{}, remar
 			}
 			return processApplicationStatus(appln.ApplicationStatus, remarks, updateFunc)
 		}()
-		case 3: // examapplicationIP
+	case 3: // examapplicationIP
 		appln, ok := oldAppln.(*ent.Exam_Applications_PMPA)
 		if !ok {
 			return "", 422, " -SUB002", errors.New("invalid application type for examCode 2")
@@ -1154,7 +1152,21 @@ func MapExamApplicationsToResponse(appIP interface{}) (*ca_reg.ApplicationsRespo
 				ApplicationRemarks:    app.AppliactionRemarks,
 				CAGeneralRemarks:      app.CAGeneralRemarks,
 			}, nil
-		case *ent.Exam_Applications_PS, *ent.Exam_Applications_PMPA, *ent.Exam_Applications_GDSPM,
+		case *ent.Exam_Applications_PMPA:
+			return &ca_reg.ApplicationsResponse{
+				EmployeeID:            app.EmployeeID,
+				ApplicationNumber:     app.ApplicationNumber,
+				ApplicationStatus:     app.ApplicationStatus,
+				MobileNumber:          app.MobileNumber,
+				EmailID:               app.EmailID,
+				RoleUserCode:          app.RoleUserCode,
+				ApplnSubmittedDate:    app.ApplnSubmittedDate,
+				ControllingOfficeName: app.ControllingOfficeName,
+				RecommendedStatus:     app.RecommendedStatus,
+				ApplicationRemarks:    app.AppliactionRemarks,
+				CAGeneralRemarks:      app.CAGeneralRemarks,
+			}, nil
+		case *ent.Exam_Applications_PS, *ent.Exam_Applications_GDSPM,
 			*ent.Exam_Application_MTSPMMG, *ent.Exam_Applications_GDSPA:
 			// Reuse the same logic for all other types
 			return &ca_reg.ApplicationsResponse{
@@ -1351,98 +1363,98 @@ func createUpdatePmpaApplication(ctx context.Context, tx *ent.Tx, oldAppln *ent.
 	currentTime := time.Now().Truncate(time.Second)
 
 	updatedAppln, err := tx.Exam_Applications_PMPA.
-	Create().
-	SetAppliactionRemarks(newAppln.AppliactionRemarks).
-	SetApplicationNumber(oldAppln.ApplicationNumber).
-	SetApplicationStatus(applicationStatus).
-	SetApplnSubmittedDate(oldAppln.ApplnSubmittedDate).
-	SetCADate(currentTime).
-	SetCAEmployeeDesignation(newAppln.CA_EmployeeDesignation).
-	SetCAEmployeeID(newAppln.CA_EmployeeID).
-	SetCAGeneralRemarks(newAppln.CA_GeneralRemarks).
-	SetCARemarks(newAppln.CA_Remarks).
-	SetCAUserName(newAppln.CA_UserName).
-	SetRecommendedStatus(newAppln.RecommendedStatus).
-	SetCadre(oldAppln.Cadre).
-	SetCandidateRemarks(oldAppln.CandidateRemarks).
-	SetCategoryCode(oldAppln.CategoryCode).
-	SetCategoryDescription(oldAppln.CategoryDescription).
-	SetCenterFacilityId(oldAppln.CenterFacilityId).
-	SetCenterId(oldAppln.CenterId).
-	SetCentrePreference(oldAppln.CentrePreference).
-	SetCentrePreference(oldAppln.CentrePreference).
-	SetClaimingQualifyingService(oldAppln.ClaimingQualifyingService).
-	SetControllingOfficeFacilityID(oldAppln.ControllingOfficeFacilityID).
-	SetControllingOfficeName(oldAppln.ControllingOfficeName).
-	SetDCCS(oldAppln.DCCS).
-	SetDOB(oldAppln.DOB).
-	SetDeputationControllingOfficeID(oldAppln.DeputationControllingOfficeID).
-	SetDeputationControllingOfficeName(oldAppln.DeputationControllingOfficeName).
-	SetDeputationOfficeFacilityID(oldAppln.DeputationOfficeFacilityID).
-	SetDeputationOfficeName(oldAppln.DeputationOfficeName).
-	SetDeputationOfficePincode(oldAppln.DeputationOfficePincode).
-	SetDeputationOfficeUniqueId(oldAppln.DeputationOfficeUniqueId).
-	SetInDeputation(oldAppln.InDeputation).
-	SetDeputationType(oldAppln.DeputationType).
-	SetDesignationID(oldAppln.DesignationID).
-	SetDisabilityPercentage(oldAppln.DisabilityPercentage).
-	SetDisabilityTypeCode(oldAppln.DisabilityTypeCode).
-	SetDisabilityTypeDescription(oldAppln.DisabilityTypeDescription).
-	SetDisabilityTypeID(oldAppln.DisabilityTypeID).
-	SetEducationCode(oldAppln.EducationCode).
-	SetEducationDescription(oldAppln.EducationDescription).
-	SetEmailID(oldAppln.EmailID).
-	SetEmployeeID(oldAppln.EmployeeID).
-	SetEmployeeName(oldAppln.EmployeeName).
-	SetEmployeePost(oldAppln.EmployeePost).
-	SetEntryPostCode(oldAppln.EntryPostCode).
-	SetEntryPostDescription(oldAppln.EntryPostDescription).
-	SetExamCode(oldAppln.ExamCode).
-	SetExamName(oldAppln.ExamName).
-	SetExamShortName(oldAppln.ExamShortName).
-	SetExamYear(oldAppln.ExamYear).
-	SetExamCityCenterCode(oldAppln.CenterId).
-	SetFacilityUniqueID(oldAppln.FacilityUniqueID).
-	SetFeederPostCode(oldAppln.FeederPostCode).
-	SetFeederPostDescription(oldAppln.FeederPostDescription).
-	SetFeederPostJoiningDate(oldAppln.FeederPostJoiningDate).
-	SetGender(oldAppln.Gender).
-	SetGenerateHallTicketFlag(newAppln.GenerateHallTicketFlag).
-	SetLienControllingOfficeID(oldAppln.LienControllingOfficeID).
-	SetLienControllingOfficeName(oldAppln.LienControllingOfficeName).
-	SetMobileNumber(oldAppln.MobileNumber).
-	SetNodalOfficeFacilityID(oldAppln.NodalOfficeFacilityID).
-	SetNodalOfficeName(oldAppln.NodalOfficeName).
-	SetOptionUsed(oldAppln.OptionUsed).
-	SetPMMailGuardMTSEngagement(oldAppln.PMMailGuardMTSEngagement).
-	SetPhoto(oldAppln.Photo).
-	SetPhotoPath(oldAppln.PhotoPath).
-	SetPostPreferences(oldAppln.PostPreferences).
-	SetPresentDesignation(oldAppln.PresentDesignation).
-	SetPresentPostCode(oldAppln.PresentPostCode).
-	SetPresentPostDescription(oldAppln.PresentPostDescription).
-	SetReportingOfficeFacilityID(oldAppln.ReportingOfficeFacilityID).
-	SetReportingOfficeName(oldAppln.ReportingOfficeName).
-	SetServiceLength(oldAppln.ServiceLength).
-	SetSignature(oldAppln.Signature).
-	SetSignaturePath(oldAppln.SignaturePath).
-	SetStatus("active").
-	SetTempHallTicket(oldAppln.TempHallTicket).
-	SetUnitPreferences(oldAppln.UnitPreferences).
-	SetUserID(oldAppln.UserID).
-	SetWorkingOfficeCircleFacilityID(oldAppln.WorkingOfficeCircleFacilityID).
-	SetWorkingOfficeCircleName(oldAppln.WorkingOfficeCircleName).
-	SetWorkingOfficeDivisionFacilityID(oldAppln.WorkingOfficeDivisionFacilityID).
-	SetWorkingOfficeDivisionName(oldAppln.WorkingOfficeDivisionName).
-	SetWorkingOfficeFacilityID(oldAppln.WorkingOfficeFacilityID).
-	SetWorkingOfficeName(oldAppln.WorkingOfficeName).
-	SetWorkingOfficePincode(oldAppln.WorkingOfficePincode).
-	SetWorkingOfficeRegionFacilityID(oldAppln.WorkingOfficeRegionFacilityID).
-	SetWorkingOfficeRegionName(oldAppln.WorkingOfficeRegionName).
-	SetPunishmentStatus(newAppln.PunishmentStatus).             //here added punishmentstatus
-	SetDisciplinaryCaseStatus(newAppln.DisciplinaryCaseStatus). //here added DisciplinaryCaseStatus
+		Create().
+		SetAppliactionRemarks(newAppln.AppliactionRemarks).
+		SetApplicationNumber(oldAppln.ApplicationNumber).
+		SetApplicationStatus(applicationStatus).
+		SetApplnSubmittedDate(oldAppln.ApplnSubmittedDate).
+		SetCADate(currentTime).
+		SetCAEmployeeDesignation(newAppln.CA_EmployeeDesignation).
+		SetCAEmployeeID(newAppln.CA_EmployeeID).
+		SetCAGeneralRemarks(newAppln.CA_GeneralRemarks).
+		SetCARemarks(newAppln.CA_Remarks).
+		SetCAUserName(newAppln.CA_UserName).
+		SetRecommendedStatus(newAppln.RecommendedStatus).
+		SetCadre(oldAppln.Cadre).
+		SetCandidateRemarks(oldAppln.CandidateRemarks).
+		SetCategoryCode(oldAppln.CategoryCode).
+		SetCategoryDescription(oldAppln.CategoryDescription).
+		SetCenterFacilityId(oldAppln.CenterFacilityId).
+		SetCenterId(oldAppln.CenterId).
+		SetCentrePreference(oldAppln.CentrePreference).
+		SetCentrePreference(oldAppln.CentrePreference).
+		SetClaimingQualifyingService(oldAppln.ClaimingQualifyingService).
+		SetControllingOfficeFacilityID(oldAppln.ControllingOfficeFacilityID).
+		SetControllingOfficeName(oldAppln.ControllingOfficeName).
+		SetDCCS(oldAppln.DCCS).
+		SetDOB(oldAppln.DOB).
+		SetDeputationControllingOfficeID(oldAppln.DeputationControllingOfficeID).
+		SetDeputationControllingOfficeName(oldAppln.DeputationControllingOfficeName).
+		SetDeputationOfficeFacilityID(oldAppln.DeputationOfficeFacilityID).
+		SetDeputationOfficeName(oldAppln.DeputationOfficeName).
+		SetDeputationOfficePincode(oldAppln.DeputationOfficePincode).
+		SetDeputationOfficeUniqueId(oldAppln.DeputationOfficeUniqueId).
+		SetInDeputation(oldAppln.InDeputation).
+		SetDeputationType(oldAppln.DeputationType).
+		SetDesignationID(oldAppln.DesignationID).
+		SetDisabilityPercentage(oldAppln.DisabilityPercentage).
+		SetDisabilityTypeCode(oldAppln.DisabilityTypeCode).
+		SetDisabilityTypeDescription(oldAppln.DisabilityTypeDescription).
+		SetDisabilityTypeID(oldAppln.DisabilityTypeID).
+		SetEducationCode(oldAppln.EducationCode).
+		SetEducationDescription(oldAppln.EducationDescription).
+		SetEmailID(oldAppln.EmailID).
+		SetEmployeeID(oldAppln.EmployeeID).
+		SetEmployeeName(oldAppln.EmployeeName).
+		SetEmployeePost(oldAppln.EmployeePost).
+		SetEntryPostCode(oldAppln.EntryPostCode).
+		SetEntryPostDescription(oldAppln.EntryPostDescription).
+		SetExamCode(oldAppln.ExamCode).
+		SetExamName(oldAppln.ExamName).
+		SetExamShortName(oldAppln.ExamShortName).
+		SetExamYear(oldAppln.ExamYear).
+		SetExamCityCenterCode(oldAppln.CenterId).
+		SetFacilityUniqueID(oldAppln.FacilityUniqueID).
+		SetFeederPostCode(oldAppln.FeederPostCode).
+		SetFeederPostDescription(oldAppln.FeederPostDescription).
+		SetFeederPostJoiningDate(oldAppln.FeederPostJoiningDate).
+		SetGender(oldAppln.Gender).
+		SetGenerateHallTicketFlag(newAppln.GenerateHallTicketFlag).
+		SetLienControllingOfficeID(oldAppln.LienControllingOfficeID).
+		SetLienControllingOfficeName(oldAppln.LienControllingOfficeName).
+		SetMobileNumber(oldAppln.MobileNumber).
+		SetNodalOfficeFacilityID(oldAppln.NodalOfficeFacilityID).
+		SetNodalOfficeName(oldAppln.NodalOfficeName).
+		SetOptionUsed(oldAppln.OptionUsed).
+		SetPMMailGuardMTSEngagement(oldAppln.PMMailGuardMTSEngagement).
+		SetPhoto(oldAppln.Photo).
+		SetPhotoPath(oldAppln.PhotoPath).
+		SetPostPreferences(oldAppln.PostPreferences).
+		SetPresentDesignation(oldAppln.PresentDesignation).
+		SetPresentPostCode(oldAppln.PresentPostCode).
+		SetPresentPostDescription(oldAppln.PresentPostDescription).
+		SetReportingOfficeFacilityID(oldAppln.ReportingOfficeFacilityID).
+		SetReportingOfficeName(oldAppln.ReportingOfficeName).
+		SetServiceLength(oldAppln.ServiceLength).
+		SetSignature(oldAppln.Signature).
+		SetSignaturePath(oldAppln.SignaturePath).
+		SetStatus("active").
+		SetTempHallTicket(oldAppln.TempHallTicket).
+		SetUnitPreferences(oldAppln.UnitPreferences).
+		SetUserID(oldAppln.UserID).
+		SetWorkingOfficeCircleFacilityID(oldAppln.WorkingOfficeCircleFacilityID).
+		SetWorkingOfficeCircleName(oldAppln.WorkingOfficeCircleName).
+		SetWorkingOfficeDivisionFacilityID(oldAppln.WorkingOfficeDivisionFacilityID).
+		SetWorkingOfficeDivisionName(oldAppln.WorkingOfficeDivisionName).
+		SetWorkingOfficeFacilityID(oldAppln.WorkingOfficeFacilityID).
+		SetWorkingOfficeName(oldAppln.WorkingOfficeName).
+		SetWorkingOfficePincode(oldAppln.WorkingOfficePincode).
+		SetWorkingOfficeRegionFacilityID(oldAppln.WorkingOfficeRegionFacilityID).
+		SetWorkingOfficeRegionName(oldAppln.WorkingOfficeRegionName).
+		SetPunishmentStatus(newAppln.PunishmentStatus).             //here added punishmentstatus
+		SetDisciplinaryCaseStatus(newAppln.DisciplinaryCaseStatus). //here added DisciplinaryCaseStatus
 
-	Save(ctx)
+		Save(ctx)
 
 	if err != nil {
 		return nil, err
@@ -1844,12 +1856,12 @@ func handlePmpaRecommendations(ctx context.Context, tx *ent.Tx, updatedAppln *en
 			SetApplicationStatus("VerifiedRecommendationsByCA").
 			Save(ctx)
 		if err != nil {
-			return  fmt.Errorf("failed to save Recommendation: %v", err)
+			return fmt.Errorf("failed to save Recommendation: %v", err)
 		}
 		recommendationsRef[i] = RecommendationsRefEntity
 	}
 
-	_,err:=updatedAppln.Update().
+	_, err := updatedAppln.Update().
 		ClearPMPAApplicationsRef().
 		AddPMPAApplicationsRef(recommendationsRef...).
 		Save(ctx)
@@ -2675,6 +2687,8 @@ func createPmPaResubmitApplication(ctx context.Context, tx *ent.Tx, oldAppln *en
 		SetPMMailGuardMTSEngagement(*newAppln.PMMailGuardMTSEngagement).
 		SetPhoto(newAppln.Photo).
 		SetPhotoPath(newAppln.PhotoPath).
+		SetCandidatePhoto(newAppln.CandidatePhoto).
+		SetCandidateSignature(newAppln.CandidateSignature).
 		SetPostPreferences(*newAppln.PostPreferences).
 		SetPresentDesignation(newAppln.PresentDesignation).
 		SetPresentPostCode(newAppln.PresentPostCode).
@@ -2920,4 +2934,3 @@ func saveCirclePreferences(ctx context.Context, tx *ent.Tx, applicationID int64,
 		Save(ctx)
 	return err
 }
-

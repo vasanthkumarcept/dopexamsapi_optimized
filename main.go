@@ -346,7 +346,7 @@ func initRoutes(client *ent.Client) {
 	r.GET(apiSubPath+"PMPAexams/hallticket/get/:id1/:id2", util.TokenValidationMiddlewareNew(client), h.GetPMPAHallTicketWithExamCodeEmpID(client))
 	r.GET(apiSubPath+"PMPAexams/recommendations/:id", util.TokenValidationMiddlewareNew(client), h.GetPMPAExamRecommendationsByEmpId(client))
 
-	r.POST(apiSubPath+"PMPAexams/applications/submit", util.TokenValidationMiddlewareNew(client), h.CreateNewPMPAApplications(client))
+	r.POST(apiSubPath+"PMPAexams/applications/submit", h.CreateNewPMPAApplications(client))
 
 	r.PUT(apiSubPath+"PMPAexams/applications/resubmit", util.TokenValidationMiddlewareNew(client), h.ResubmitPMPAApplication(client))
 	r.PUT(apiSubPath+"PMPAexams/applications/verify", util.TokenValidationMiddlewareNew(client), h.VerifyPMPAApplication(client))

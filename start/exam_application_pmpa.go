@@ -80,7 +80,7 @@ func CreatePMPAApplications(client *ent.Client, newAppln *ca_reg.ApplicationPMPA
 
 	fmt.Print("current time: ", currentTime, " application last date: ", applicationLastDate, "date from payload", newAppln.ApplicationLastDate)
 	if currentTime.After(applicationLastDate) {
-		return nil, 422, " -STR007", false, fmt.Errorf("application submission deadline has passed as current time is %v", currentTime)
+		return nil, 422, " -STR006", false, fmt.Errorf("application submission deadline has passed as current time is %v", currentTime)
 	}
 
 	// Generate Application number
@@ -89,11 +89,11 @@ func CreatePMPAApplications(client *ent.Client, newAppln *ca_reg.ApplicationPMPA
 	//applicationNumber, err := generatePMPAApplicationNumber(client, newAppln.EmployeeID)
 	applicationNumber, err := util.GenerateApplicationNumber(client, newAppln.EmployeeID, newAppln.ExamYear, "PMPA")
 	if err != nil {
-		return nil, 422, " -STR006", false, fmt.Errorf("failed to generate application number: %v", err)
+		return nil, 422, " -STR007", false, fmt.Errorf("failed to generate application number: %v", err)
 	}
 	createdAppln, status, stgError, err := saveApplication(tx, newAppln, applicationNumber, newAppln.ExamCode, ctx)
 	if err != nil {
-		return nil, 500 + status, " -STR007 " + stgError, false, err
+		return nil, 500 + status, " -STR008 " + stgError, false, err
 	}
 	return createdAppln, 200, "", true, nil
 }

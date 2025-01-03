@@ -1345,6 +1345,8 @@ type ReApplicationPMPA struct {
 	WorkingOfficePincode            int32          `json:"WorkingOfficePincode" binding:"required"`
 	WorkingOfficeRegionFacilityID   string         `json:"WorkingOfficeRegionFacilityID" `
 	WorkingOfficeRegionName         string         `json:"WorkingOfficeRegionName"`
+	CandidatePhoto                  []byte         `json:"CandidatePhoto"`
+	CandidateSignature              []byte         `json:"CandidateSignature"`
 	ApplicationCorrectionLastDate   time.Time      `json:"ApplicationCorrectionLastDate"`
 }
 
@@ -2028,7 +2030,7 @@ type NAVerifyApplicationIp struct {
 	RecommendedStatus      string                  `json:"RecommendedStatus"`
 }
 
-type ResponseVerifyCandidateUserLogin struct {
+type ResponseVerifyCandidateUserLogin struct { 
 	UserID           int64  `json:"UserID" `
 	EmployeeID       int64  `json:"EmployeeID" `
 	EmployeeName     string `json:"EmployeeName" `
