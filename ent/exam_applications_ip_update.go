@@ -1353,6 +1353,30 @@ func (eaiu *ExamApplicationsIPUpdate) ClearPhotoPath() *ExamApplicationsIPUpdate
 	return eaiu
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eaiu *ExamApplicationsIPUpdate) SetCandidatePhoto(b []byte) *ExamApplicationsIPUpdate {
+	eaiu.mutation.SetCandidatePhoto(b)
+	return eaiu
+}
+
+// ClearCandidatePhoto clears the value of the "CandidatePhoto" field.
+func (eaiu *ExamApplicationsIPUpdate) ClearCandidatePhoto() *ExamApplicationsIPUpdate {
+	eaiu.mutation.ClearCandidatePhoto()
+	return eaiu
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eaiu *ExamApplicationsIPUpdate) SetCandidateSignature(b []byte) *ExamApplicationsIPUpdate {
+	eaiu.mutation.SetCandidateSignature(b)
+	return eaiu
+}
+
+// ClearCandidateSignature clears the value of the "CandidateSignature" field.
+func (eaiu *ExamApplicationsIPUpdate) ClearCandidateSignature() *ExamApplicationsIPUpdate {
+	eaiu.mutation.ClearCandidateSignature()
+	return eaiu
+}
+
 // SetTempHallTicket sets the "TempHallTicket" field.
 func (eaiu *ExamApplicationsIPUpdate) SetTempHallTicket(s string) *ExamApplicationsIPUpdate {
 	eaiu.mutation.SetTempHallTicket(s)
@@ -3340,6 +3364,18 @@ func (eaiu *ExamApplicationsIPUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if eaiu.mutation.PhotoPathCleared() {
 		_spec.ClearField(exam_applications_ip.FieldPhotoPath, field.TypeString)
+	}
+	if value, ok := eaiu.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_ip.FieldCandidatePhoto, field.TypeBytes, value)
+	}
+	if eaiu.mutation.CandidatePhotoCleared() {
+		_spec.ClearField(exam_applications_ip.FieldCandidatePhoto, field.TypeBytes)
+	}
+	if value, ok := eaiu.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_ip.FieldCandidateSignature, field.TypeBytes, value)
+	}
+	if eaiu.mutation.CandidateSignatureCleared() {
+		_spec.ClearField(exam_applications_ip.FieldCandidateSignature, field.TypeBytes)
 	}
 	if value, ok := eaiu.mutation.TempHallTicket(); ok {
 		_spec.SetField(exam_applications_ip.FieldTempHallTicket, field.TypeString, value)
@@ -5409,6 +5445,30 @@ func (eaiuo *ExamApplicationsIPUpdateOne) ClearPhotoPath() *ExamApplicationsIPUp
 	return eaiuo
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eaiuo *ExamApplicationsIPUpdateOne) SetCandidatePhoto(b []byte) *ExamApplicationsIPUpdateOne {
+	eaiuo.mutation.SetCandidatePhoto(b)
+	return eaiuo
+}
+
+// ClearCandidatePhoto clears the value of the "CandidatePhoto" field.
+func (eaiuo *ExamApplicationsIPUpdateOne) ClearCandidatePhoto() *ExamApplicationsIPUpdateOne {
+	eaiuo.mutation.ClearCandidatePhoto()
+	return eaiuo
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eaiuo *ExamApplicationsIPUpdateOne) SetCandidateSignature(b []byte) *ExamApplicationsIPUpdateOne {
+	eaiuo.mutation.SetCandidateSignature(b)
+	return eaiuo
+}
+
+// ClearCandidateSignature clears the value of the "CandidateSignature" field.
+func (eaiuo *ExamApplicationsIPUpdateOne) ClearCandidateSignature() *ExamApplicationsIPUpdateOne {
+	eaiuo.mutation.ClearCandidateSignature()
+	return eaiuo
+}
+
 // SetTempHallTicket sets the "TempHallTicket" field.
 func (eaiuo *ExamApplicationsIPUpdateOne) SetTempHallTicket(s string) *ExamApplicationsIPUpdateOne {
 	eaiuo.mutation.SetTempHallTicket(s)
@@ -7426,6 +7486,18 @@ func (eaiuo *ExamApplicationsIPUpdateOne) sqlSave(ctx context.Context) (_node *E
 	}
 	if eaiuo.mutation.PhotoPathCleared() {
 		_spec.ClearField(exam_applications_ip.FieldPhotoPath, field.TypeString)
+	}
+	if value, ok := eaiuo.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_ip.FieldCandidatePhoto, field.TypeBytes, value)
+	}
+	if eaiuo.mutation.CandidatePhotoCleared() {
+		_spec.ClearField(exam_applications_ip.FieldCandidatePhoto, field.TypeBytes)
+	}
+	if value, ok := eaiuo.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_ip.FieldCandidateSignature, field.TypeBytes, value)
+	}
+	if eaiuo.mutation.CandidateSignatureCleared() {
+		_spec.ClearField(exam_applications_ip.FieldCandidateSignature, field.TypeBytes)
 	}
 	if value, ok := eaiuo.mutation.TempHallTicket(); ok {
 		_spec.SetField(exam_applications_ip.FieldTempHallTicket, field.TypeString, value)

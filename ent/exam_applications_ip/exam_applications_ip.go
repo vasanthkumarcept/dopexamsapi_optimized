@@ -142,6 +142,10 @@ const (
 	FieldSignaturePath = "signature_path"
 	// FieldPhotoPath holds the string denoting the photopath field in the database.
 	FieldPhotoPath = "photo_path"
+	// FieldCandidatePhoto holds the string denoting the candidatephoto field in the database.
+	FieldCandidatePhoto = "candidate_photo"
+	// FieldCandidateSignature holds the string denoting the candidatesignature field in the database.
+	FieldCandidateSignature = "candidate_signature"
 	// FieldTempHallTicket holds the string denoting the temphallticket field in the database.
 	FieldTempHallTicket = "temp_hall_ticket"
 	// FieldCandidateRemarks holds the string denoting the candidateremarks field in the database.
@@ -436,6 +440,8 @@ var Columns = []string{
 	FieldPhoto,
 	FieldSignaturePath,
 	FieldPhotoPath,
+	FieldCandidatePhoto,
+	FieldCandidateSignature,
 	FieldTempHallTicket,
 	FieldCandidateRemarks,
 	FieldVAGeneralRemarks,

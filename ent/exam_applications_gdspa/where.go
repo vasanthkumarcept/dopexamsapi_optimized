@@ -380,6 +380,16 @@ func PhotoPath(v string) predicate.Exam_Applications_GDSPA {
 	return predicate.Exam_Applications_GDSPA(sql.FieldEQ(FieldPhotoPath, v))
 }
 
+// CandidatePhoto applies equality check predicate on the "CandidatePhoto" field. It's identical to CandidatePhotoEQ.
+func CandidatePhoto(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldEQ(FieldCandidatePhoto, v))
+}
+
+// CandidateSignature applies equality check predicate on the "CandidateSignature" field. It's identical to CandidateSignatureEQ.
+func CandidateSignature(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldEQ(FieldCandidateSignature, v))
+}
+
 // TempHallTicket applies equality check predicate on the "TempHallTicket" field. It's identical to TempHallTicketEQ.
 func TempHallTicket(v string) predicate.Exam_Applications_GDSPA {
 	return predicate.Exam_Applications_GDSPA(sql.FieldEQ(FieldTempHallTicket, v))
@@ -5318,6 +5328,106 @@ func PhotoPathEqualFold(v string) predicate.Exam_Applications_GDSPA {
 // PhotoPathContainsFold applies the ContainsFold predicate on the "PhotoPath" field.
 func PhotoPathContainsFold(v string) predicate.Exam_Applications_GDSPA {
 	return predicate.Exam_Applications_GDSPA(sql.FieldContainsFold(FieldPhotoPath, v))
+}
+
+// CandidatePhotoEQ applies the EQ predicate on the "CandidatePhoto" field.
+func CandidatePhotoEQ(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldEQ(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoNEQ applies the NEQ predicate on the "CandidatePhoto" field.
+func CandidatePhotoNEQ(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldNEQ(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoIn applies the In predicate on the "CandidatePhoto" field.
+func CandidatePhotoIn(vs ...[]byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldIn(FieldCandidatePhoto, vs...))
+}
+
+// CandidatePhotoNotIn applies the NotIn predicate on the "CandidatePhoto" field.
+func CandidatePhotoNotIn(vs ...[]byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldNotIn(FieldCandidatePhoto, vs...))
+}
+
+// CandidatePhotoGT applies the GT predicate on the "CandidatePhoto" field.
+func CandidatePhotoGT(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldGT(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoGTE applies the GTE predicate on the "CandidatePhoto" field.
+func CandidatePhotoGTE(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldGTE(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoLT applies the LT predicate on the "CandidatePhoto" field.
+func CandidatePhotoLT(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldLT(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoLTE applies the LTE predicate on the "CandidatePhoto" field.
+func CandidatePhotoLTE(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldLTE(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoIsNil applies the IsNil predicate on the "CandidatePhoto" field.
+func CandidatePhotoIsNil() predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldIsNull(FieldCandidatePhoto))
+}
+
+// CandidatePhotoNotNil applies the NotNil predicate on the "CandidatePhoto" field.
+func CandidatePhotoNotNil() predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldNotNull(FieldCandidatePhoto))
+}
+
+// CandidateSignatureEQ applies the EQ predicate on the "CandidateSignature" field.
+func CandidateSignatureEQ(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldEQ(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureNEQ applies the NEQ predicate on the "CandidateSignature" field.
+func CandidateSignatureNEQ(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldNEQ(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureIn applies the In predicate on the "CandidateSignature" field.
+func CandidateSignatureIn(vs ...[]byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldIn(FieldCandidateSignature, vs...))
+}
+
+// CandidateSignatureNotIn applies the NotIn predicate on the "CandidateSignature" field.
+func CandidateSignatureNotIn(vs ...[]byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldNotIn(FieldCandidateSignature, vs...))
+}
+
+// CandidateSignatureGT applies the GT predicate on the "CandidateSignature" field.
+func CandidateSignatureGT(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldGT(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureGTE applies the GTE predicate on the "CandidateSignature" field.
+func CandidateSignatureGTE(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldGTE(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureLT applies the LT predicate on the "CandidateSignature" field.
+func CandidateSignatureLT(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldLT(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureLTE applies the LTE predicate on the "CandidateSignature" field.
+func CandidateSignatureLTE(v []byte) predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldLTE(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureIsNil applies the IsNil predicate on the "CandidateSignature" field.
+func CandidateSignatureIsNil() predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldIsNull(FieldCandidateSignature))
+}
+
+// CandidateSignatureNotNil applies the NotNil predicate on the "CandidateSignature" field.
+func CandidateSignatureNotNil() predicate.Exam_Applications_GDSPA {
+	return predicate.Exam_Applications_GDSPA(sql.FieldNotNull(FieldCandidateSignature))
 }
 
 // TempHallTicketEQ applies the EQ predicate on the "TempHallTicket" field.

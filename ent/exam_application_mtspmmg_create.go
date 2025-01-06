@@ -925,6 +925,18 @@ func (eamc *ExamApplicationMTSPMMGCreate) SetNillablePhotoPath(s *string) *ExamA
 	return eamc
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eamc *ExamApplicationMTSPMMGCreate) SetCandidatePhoto(b []byte) *ExamApplicationMTSPMMGCreate {
+	eamc.mutation.SetCandidatePhoto(b)
+	return eamc
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eamc *ExamApplicationMTSPMMGCreate) SetCandidateSignature(b []byte) *ExamApplicationMTSPMMGCreate {
+	eamc.mutation.SetCandidateSignature(b)
+	return eamc
+}
+
 // SetTempHallTicket sets the "TempHallTicket" field.
 func (eamc *ExamApplicationMTSPMMGCreate) SetTempHallTicket(s string) *ExamApplicationMTSPMMGCreate {
 	eamc.mutation.SetTempHallTicket(s)
@@ -2267,6 +2279,14 @@ func (eamc *ExamApplicationMTSPMMGCreate) createSpec() (*Exam_Application_MTSPMM
 	if value, ok := eamc.mutation.PhotoPath(); ok {
 		_spec.SetField(exam_application_mtspmmg.FieldPhotoPath, field.TypeString, value)
 		_node.PhotoPath = value
+	}
+	if value, ok := eamc.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_application_mtspmmg.FieldCandidatePhoto, field.TypeBytes, value)
+		_node.CandidatePhoto = value
+	}
+	if value, ok := eamc.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_application_mtspmmg.FieldCandidateSignature, field.TypeBytes, value)
+		_node.CandidateSignature = value
 	}
 	if value, ok := eamc.mutation.TempHallTicket(); ok {
 		_spec.SetField(exam_application_mtspmmg.FieldTempHallTicket, field.TypeString, value)

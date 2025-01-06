@@ -1367,6 +1367,30 @@ func (eagu *ExamApplicationsGDSPAUpdate) ClearPhotoPath() *ExamApplicationsGDSPA
 	return eagu
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eagu *ExamApplicationsGDSPAUpdate) SetCandidatePhoto(b []byte) *ExamApplicationsGDSPAUpdate {
+	eagu.mutation.SetCandidatePhoto(b)
+	return eagu
+}
+
+// ClearCandidatePhoto clears the value of the "CandidatePhoto" field.
+func (eagu *ExamApplicationsGDSPAUpdate) ClearCandidatePhoto() *ExamApplicationsGDSPAUpdate {
+	eagu.mutation.ClearCandidatePhoto()
+	return eagu
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eagu *ExamApplicationsGDSPAUpdate) SetCandidateSignature(b []byte) *ExamApplicationsGDSPAUpdate {
+	eagu.mutation.SetCandidateSignature(b)
+	return eagu
+}
+
+// ClearCandidateSignature clears the value of the "CandidateSignature" field.
+func (eagu *ExamApplicationsGDSPAUpdate) ClearCandidateSignature() *ExamApplicationsGDSPAUpdate {
+	eagu.mutation.ClearCandidateSignature()
+	return eagu
+}
+
 // SetTempHallTicket sets the "TempHallTicket" field.
 func (eagu *ExamApplicationsGDSPAUpdate) SetTempHallTicket(s string) *ExamApplicationsGDSPAUpdate {
 	eagu.mutation.SetTempHallTicket(s)
@@ -3365,6 +3389,18 @@ func (eagu *ExamApplicationsGDSPAUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if eagu.mutation.PhotoPathCleared() {
 		_spec.ClearField(exam_applications_gdspa.FieldPhotoPath, field.TypeString)
+	}
+	if value, ok := eagu.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_gdspa.FieldCandidatePhoto, field.TypeBytes, value)
+	}
+	if eagu.mutation.CandidatePhotoCleared() {
+		_spec.ClearField(exam_applications_gdspa.FieldCandidatePhoto, field.TypeBytes)
+	}
+	if value, ok := eagu.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_gdspa.FieldCandidateSignature, field.TypeBytes, value)
+	}
+	if eagu.mutation.CandidateSignatureCleared() {
+		_spec.ClearField(exam_applications_gdspa.FieldCandidateSignature, field.TypeBytes)
 	}
 	if value, ok := eagu.mutation.TempHallTicket(); ok {
 		_spec.SetField(exam_applications_gdspa.FieldTempHallTicket, field.TypeString, value)
@@ -5483,6 +5519,30 @@ func (eaguo *ExamApplicationsGDSPAUpdateOne) ClearPhotoPath() *ExamApplicationsG
 	return eaguo
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eaguo *ExamApplicationsGDSPAUpdateOne) SetCandidatePhoto(b []byte) *ExamApplicationsGDSPAUpdateOne {
+	eaguo.mutation.SetCandidatePhoto(b)
+	return eaguo
+}
+
+// ClearCandidatePhoto clears the value of the "CandidatePhoto" field.
+func (eaguo *ExamApplicationsGDSPAUpdateOne) ClearCandidatePhoto() *ExamApplicationsGDSPAUpdateOne {
+	eaguo.mutation.ClearCandidatePhoto()
+	return eaguo
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eaguo *ExamApplicationsGDSPAUpdateOne) SetCandidateSignature(b []byte) *ExamApplicationsGDSPAUpdateOne {
+	eaguo.mutation.SetCandidateSignature(b)
+	return eaguo
+}
+
+// ClearCandidateSignature clears the value of the "CandidateSignature" field.
+func (eaguo *ExamApplicationsGDSPAUpdateOne) ClearCandidateSignature() *ExamApplicationsGDSPAUpdateOne {
+	eaguo.mutation.ClearCandidateSignature()
+	return eaguo
+}
+
 // SetTempHallTicket sets the "TempHallTicket" field.
 func (eaguo *ExamApplicationsGDSPAUpdateOne) SetTempHallTicket(s string) *ExamApplicationsGDSPAUpdateOne {
 	eaguo.mutation.SetTempHallTicket(s)
@@ -7511,6 +7571,18 @@ func (eaguo *ExamApplicationsGDSPAUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if eaguo.mutation.PhotoPathCleared() {
 		_spec.ClearField(exam_applications_gdspa.FieldPhotoPath, field.TypeString)
+	}
+	if value, ok := eaguo.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_gdspa.FieldCandidatePhoto, field.TypeBytes, value)
+	}
+	if eaguo.mutation.CandidatePhotoCleared() {
+		_spec.ClearField(exam_applications_gdspa.FieldCandidatePhoto, field.TypeBytes)
+	}
+	if value, ok := eaguo.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_gdspa.FieldCandidateSignature, field.TypeBytes, value)
+	}
+	if eaguo.mutation.CandidateSignatureCleared() {
+		_spec.ClearField(exam_applications_gdspa.FieldCandidateSignature, field.TypeBytes)
 	}
 	if value, ok := eaguo.mutation.TempHallTicket(); ok {
 		_spec.SetField(exam_applications_gdspa.FieldTempHallTicket, field.TypeString, value)

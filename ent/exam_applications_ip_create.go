@@ -924,6 +924,18 @@ func (eaic *ExamApplicationsIPCreate) SetNillablePhotoPath(s *string) *ExamAppli
 	return eaic
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eaic *ExamApplicationsIPCreate) SetCandidatePhoto(b []byte) *ExamApplicationsIPCreate {
+	eaic.mutation.SetCandidatePhoto(b)
+	return eaic
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eaic *ExamApplicationsIPCreate) SetCandidateSignature(b []byte) *ExamApplicationsIPCreate {
+	eaic.mutation.SetCandidateSignature(b)
+	return eaic
+}
+
 // SetTempHallTicket sets the "TempHallTicket" field.
 func (eaic *ExamApplicationsIPCreate) SetTempHallTicket(s string) *ExamApplicationsIPCreate {
 	eaic.mutation.SetTempHallTicket(s)
@@ -2279,6 +2291,14 @@ func (eaic *ExamApplicationsIPCreate) createSpec() (*Exam_Applications_IP, *sqlg
 	if value, ok := eaic.mutation.PhotoPath(); ok {
 		_spec.SetField(exam_applications_ip.FieldPhotoPath, field.TypeString, value)
 		_node.PhotoPath = value
+	}
+	if value, ok := eaic.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_ip.FieldCandidatePhoto, field.TypeBytes, value)
+		_node.CandidatePhoto = value
+	}
+	if value, ok := eaic.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_ip.FieldCandidateSignature, field.TypeBytes, value)
+		_node.CandidateSignature = value
 	}
 	if value, ok := eaic.mutation.TempHallTicket(); ok {
 		_spec.SetField(exam_applications_ip.FieldTempHallTicket, field.TypeString, value)

@@ -629,6 +629,8 @@ type ApplicationIp struct {
 	WorkingOfficeRegionFacilityID   string          `json:"WorkingOfficeRegionFacilityID" `
 	WorkingOfficeRegionName         string          `json:"WorkingOfficeRegionName" `
 	Cadre                           string          `json:"Cadre"`
+	CandidatePhoto                  []byte          `json:"CandidatePhoto" binding:"required"`
+	CandidateSignature              []byte          `json:"CandidateSignature" binding:"required"`
 	ApplicationLastDate             time.Time       `json:"ApplicationLastDate"`
 }
 type UpdateExamCentersInIP struct {
@@ -773,6 +775,8 @@ type ApplicationGroupB struct {
 	WorkingOfficeRegionFacilityID   string                 `json:"WorkingOfficeRegionFacilityID"`
 	WorkingOfficeRegionName         string                 `json:"WorkingOfficeRegionName"`
 	ApplicationLastDate             time.Time              `json:"ApplicationLastDate" binding:"required"`
+	CandidatePhoto                  []byte                 `json:"CandidatePhoto" binding:"required"`
+	CandidateSignature              []byte                 `json:"CandidateSignature" binding:"required"`
 }
 
 type ResubmitApplicationIp struct {
@@ -847,6 +851,8 @@ type ResubmitApplicationIp struct {
 	WorkingOfficeRegionName         string          `json:"WorkingOfficeRegionName" `
 	Cadre                           string          `json:"Cadre"`
 	ApplicationCorrectionLastDate   time.Time       `json:"ApplicationCorrectionLastDate"`
+	CandidatePhoto                  []byte          `json:"CandidatePhoto" `
+	CandidateSignature              []byte          `json:"CandidateSignature" `
 }
 
 type ReApplicationGroupB struct {
@@ -922,6 +928,8 @@ type ReApplicationGroupB struct {
 	WorkingOfficeRegionFacilityID   string                 `json:"WorkingOfficeRegionFacilityID"`
 	WorkingOfficeRegionName         string                 `json:"WorkingOfficeRegionName"`
 	ApplicationCorrectionLastDate   time.Time              `json:"ApplicationCorrectionLastDate"`
+	CandidatePhoto                  []byte                 `json:"CandidatePhoto"`
+	CandidateSignature              []byte                 `json:"CandidateSignature"`
 }
 
 type VerifyApplicationGroupB struct {
@@ -1064,6 +1072,8 @@ type ApplicationGDStoPA struct {
 	WorkingOfficePincode            int32          `json:"WorkingOfficePincode" binding:"required"`
 	WorkingOfficeRegionFacilityID   string         `json:"WorkingOfficeRegionFacilityID" `
 	WorkingOfficeRegionName         string         `json:"WorkingOfficeRegionName"`
+	CandidatePhoto                  []byte         `json:"CandidatePhoto" binding:"required"`
+	CandidateSignature              []byte         `json:"CandidateSignature" binding:"required"`
 }
 
 type ReApplicationGDStoPA struct {
@@ -1144,6 +1154,8 @@ type ReApplicationGDStoPA struct {
 	WorkingOfficeRegionFacilityID   string         `json:"WorkingOfficeRegionFacilityID" `
 	WorkingOfficeRegionName         string         `json:"WorkingOfficeRegionName"`
 	ApplicationCorrectionLastDate   time.Time      `json:"ApplicationCorrectionLastDate" binding:"required"`
+	CandidatePhoto                  []byte         `json:"CandidatePhoto"`
+	CandidateSignature              []byte         `json:"CandidateSignature"`
 }
 
 type VerifyApplicationGDStoPA struct {
@@ -1477,6 +1489,8 @@ type ApplicationGDSPM struct {
 	WorkingOfficeRegionName         string         `json:"WorkingOfficeRegionName" `
 	GDSEngagement                   *[]interface{} `json:"GDSEngagement" `
 	PMMailGuardMTSEngagement        *[]interface{} `json:"PMMailGuardMTSEngagement"`
+	CandidatePhoto                  []byte         `json:"CandidatePhoto" binding:"required"`
+	CandidateSignature              []byte         `json:"CandidateSignature" binding:"required"`
 	ApplicationLastDate             time.Time      `json:"ApplicationLastDate" binding:"required"`
 }
 type ApplicationGDSPMforUpdateExamCenters struct {
@@ -1635,6 +1649,8 @@ type ReApplicationGDSPM struct {
 	PostPreferences                 *[]interface{} `json:"PostPreferences" binding:"required"`
 	UnitPreferences                 *[]interface{} `json:"UnitPreferences" binding:"required"`
 	ApplicationCorrectionLastDate   time.Time      `json:"ApplicationCorrectionLastDate" binding:"required"`
+	CandidatePhoto                  []byte         `json:"CandidatePhoto" `
+	CandidateSignature              []byte         `json:"CandidateSignature"`
 }
 
 type VerifyApplicationGDSPM struct {
@@ -1754,6 +1770,8 @@ type ApplicationMTSPM struct {
 	WorkingOfficePincode            int32          `json:"WorkingOfficePincode" binding:"required"`
 	WorkingOfficeRegionFacilityID   string         `json:"WorkingOfficeRegionFacilityID" `
 	WorkingOfficeRegionName         string         `json:"WorkingOfficeRegionName" `
+	CandidatePhoto                  []byte         `json:"CandidatePhoto" binding:"required"`
+	CandidateSignature              []byte         `json:"CandidateSignature" binding:"required"`
 }
 type ApplicationMTSPMUpdatecenter struct {
 	Cadre                           string         `json:"Cadre"`
@@ -2030,7 +2048,7 @@ type NAVerifyApplicationIp struct {
 	RecommendedStatus      string                  `json:"RecommendedStatus"`
 }
 
-type ResponseVerifyCandidateUserLogin struct { 
+type ResponseVerifyCandidateUserLogin struct {
 	UserID           int64  `json:"UserID" `
 	EmployeeID       int64  `json:"EmployeeID" `
 	EmployeeName     string `json:"EmployeeName" `

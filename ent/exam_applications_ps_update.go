@@ -1307,6 +1307,30 @@ func (eapu *ExamApplicationsPSUpdate) ClearPhoto() *ExamApplicationsPSUpdate {
 	return eapu
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eapu *ExamApplicationsPSUpdate) SetCandidatePhoto(b []byte) *ExamApplicationsPSUpdate {
+	eapu.mutation.SetCandidatePhoto(b)
+	return eapu
+}
+
+// ClearCandidatePhoto clears the value of the "CandidatePhoto" field.
+func (eapu *ExamApplicationsPSUpdate) ClearCandidatePhoto() *ExamApplicationsPSUpdate {
+	eapu.mutation.ClearCandidatePhoto()
+	return eapu
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eapu *ExamApplicationsPSUpdate) SetCandidateSignature(b []byte) *ExamApplicationsPSUpdate {
+	eapu.mutation.SetCandidateSignature(b)
+	return eapu
+}
+
+// ClearCandidateSignature clears the value of the "CandidateSignature" field.
+func (eapu *ExamApplicationsPSUpdate) ClearCandidateSignature() *ExamApplicationsPSUpdate {
+	eapu.mutation.ClearCandidateSignature()
+	return eapu
+}
+
 // SetSignaturePath sets the "SignaturePath" field.
 func (eapu *ExamApplicationsPSUpdate) SetSignaturePath(s string) *ExamApplicationsPSUpdate {
 	eapu.mutation.SetSignaturePath(s)
@@ -3271,6 +3295,18 @@ func (eapu *ExamApplicationsPSUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if eapu.mutation.PhotoCleared() {
 		_spec.ClearField(exam_applications_ps.FieldPhoto, field.TypeString)
+	}
+	if value, ok := eapu.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_ps.FieldCandidatePhoto, field.TypeBytes, value)
+	}
+	if eapu.mutation.CandidatePhotoCleared() {
+		_spec.ClearField(exam_applications_ps.FieldCandidatePhoto, field.TypeBytes)
+	}
+	if value, ok := eapu.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_ps.FieldCandidateSignature, field.TypeBytes, value)
+	}
+	if eapu.mutation.CandidateSignatureCleared() {
+		_spec.ClearField(exam_applications_ps.FieldCandidateSignature, field.TypeBytes)
 	}
 	if value, ok := eapu.mutation.SignaturePath(); ok {
 		_spec.SetField(exam_applications_ps.FieldSignaturePath, field.TypeString, value)
@@ -5313,6 +5349,30 @@ func (eapuo *ExamApplicationsPSUpdateOne) ClearPhoto() *ExamApplicationsPSUpdate
 	return eapuo
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eapuo *ExamApplicationsPSUpdateOne) SetCandidatePhoto(b []byte) *ExamApplicationsPSUpdateOne {
+	eapuo.mutation.SetCandidatePhoto(b)
+	return eapuo
+}
+
+// ClearCandidatePhoto clears the value of the "CandidatePhoto" field.
+func (eapuo *ExamApplicationsPSUpdateOne) ClearCandidatePhoto() *ExamApplicationsPSUpdateOne {
+	eapuo.mutation.ClearCandidatePhoto()
+	return eapuo
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eapuo *ExamApplicationsPSUpdateOne) SetCandidateSignature(b []byte) *ExamApplicationsPSUpdateOne {
+	eapuo.mutation.SetCandidateSignature(b)
+	return eapuo
+}
+
+// ClearCandidateSignature clears the value of the "CandidateSignature" field.
+func (eapuo *ExamApplicationsPSUpdateOne) ClearCandidateSignature() *ExamApplicationsPSUpdateOne {
+	eapuo.mutation.ClearCandidateSignature()
+	return eapuo
+}
+
 // SetSignaturePath sets the "SignaturePath" field.
 func (eapuo *ExamApplicationsPSUpdateOne) SetSignaturePath(s string) *ExamApplicationsPSUpdateOne {
 	eapuo.mutation.SetSignaturePath(s)
@@ -7307,6 +7367,18 @@ func (eapuo *ExamApplicationsPSUpdateOne) sqlSave(ctx context.Context) (_node *E
 	}
 	if eapuo.mutation.PhotoCleared() {
 		_spec.ClearField(exam_applications_ps.FieldPhoto, field.TypeString)
+	}
+	if value, ok := eapuo.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_ps.FieldCandidatePhoto, field.TypeBytes, value)
+	}
+	if eapuo.mutation.CandidatePhotoCleared() {
+		_spec.ClearField(exam_applications_ps.FieldCandidatePhoto, field.TypeBytes)
+	}
+	if value, ok := eapuo.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_ps.FieldCandidateSignature, field.TypeBytes, value)
+	}
+	if eapuo.mutation.CandidateSignatureCleared() {
+		_spec.ClearField(exam_applications_ps.FieldCandidateSignature, field.TypeBytes)
 	}
 	if value, ok := eapuo.mutation.SignaturePath(); ok {
 		_spec.SetField(exam_applications_ps.FieldSignaturePath, field.TypeString, value)

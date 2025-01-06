@@ -939,6 +939,18 @@ func (eagc *ExamApplicationsGDSPACreate) SetNillablePhotoPath(s *string) *ExamAp
 	return eagc
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eagc *ExamApplicationsGDSPACreate) SetCandidatePhoto(b []byte) *ExamApplicationsGDSPACreate {
+	eagc.mutation.SetCandidatePhoto(b)
+	return eagc
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eagc *ExamApplicationsGDSPACreate) SetCandidateSignature(b []byte) *ExamApplicationsGDSPACreate {
+	eagc.mutation.SetCandidateSignature(b)
+	return eagc
+}
+
 // SetTempHallTicket sets the "TempHallTicket" field.
 func (eagc *ExamApplicationsGDSPACreate) SetTempHallTicket(s string) *ExamApplicationsGDSPACreate {
 	eagc.mutation.SetTempHallTicket(s)
@@ -2293,6 +2305,14 @@ func (eagc *ExamApplicationsGDSPACreate) createSpec() (*Exam_Applications_GDSPA,
 	if value, ok := eagc.mutation.PhotoPath(); ok {
 		_spec.SetField(exam_applications_gdspa.FieldPhotoPath, field.TypeString, value)
 		_node.PhotoPath = value
+	}
+	if value, ok := eagc.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_gdspa.FieldCandidatePhoto, field.TypeBytes, value)
+		_node.CandidatePhoto = value
+	}
+	if value, ok := eagc.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_gdspa.FieldCandidateSignature, field.TypeBytes, value)
+		_node.CandidateSignature = value
 	}
 	if value, ok := eagc.mutation.TempHallTicket(); ok {
 		_spec.SetField(exam_applications_gdspa.FieldTempHallTicket, field.TypeString, value)

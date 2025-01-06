@@ -365,6 +365,16 @@ func Photo(v string) predicate.Exam_Applications_PS {
 	return predicate.Exam_Applications_PS(sql.FieldEQ(FieldPhoto, v))
 }
 
+// CandidatePhoto applies equality check predicate on the "CandidatePhoto" field. It's identical to CandidatePhotoEQ.
+func CandidatePhoto(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldEQ(FieldCandidatePhoto, v))
+}
+
+// CandidateSignature applies equality check predicate on the "CandidateSignature" field. It's identical to CandidateSignatureEQ.
+func CandidateSignature(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldEQ(FieldCandidateSignature, v))
+}
+
 // SignaturePath applies equality check predicate on the "SignaturePath" field. It's identical to SignaturePathEQ.
 func SignaturePath(v string) predicate.Exam_Applications_PS {
 	return predicate.Exam_Applications_PS(sql.FieldEQ(FieldSignaturePath, v))
@@ -5083,6 +5093,106 @@ func PhotoEqualFold(v string) predicate.Exam_Applications_PS {
 // PhotoContainsFold applies the ContainsFold predicate on the "Photo" field.
 func PhotoContainsFold(v string) predicate.Exam_Applications_PS {
 	return predicate.Exam_Applications_PS(sql.FieldContainsFold(FieldPhoto, v))
+}
+
+// CandidatePhotoEQ applies the EQ predicate on the "CandidatePhoto" field.
+func CandidatePhotoEQ(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldEQ(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoNEQ applies the NEQ predicate on the "CandidatePhoto" field.
+func CandidatePhotoNEQ(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldNEQ(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoIn applies the In predicate on the "CandidatePhoto" field.
+func CandidatePhotoIn(vs ...[]byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldIn(FieldCandidatePhoto, vs...))
+}
+
+// CandidatePhotoNotIn applies the NotIn predicate on the "CandidatePhoto" field.
+func CandidatePhotoNotIn(vs ...[]byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldNotIn(FieldCandidatePhoto, vs...))
+}
+
+// CandidatePhotoGT applies the GT predicate on the "CandidatePhoto" field.
+func CandidatePhotoGT(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldGT(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoGTE applies the GTE predicate on the "CandidatePhoto" field.
+func CandidatePhotoGTE(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldGTE(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoLT applies the LT predicate on the "CandidatePhoto" field.
+func CandidatePhotoLT(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldLT(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoLTE applies the LTE predicate on the "CandidatePhoto" field.
+func CandidatePhotoLTE(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldLTE(FieldCandidatePhoto, v))
+}
+
+// CandidatePhotoIsNil applies the IsNil predicate on the "CandidatePhoto" field.
+func CandidatePhotoIsNil() predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldIsNull(FieldCandidatePhoto))
+}
+
+// CandidatePhotoNotNil applies the NotNil predicate on the "CandidatePhoto" field.
+func CandidatePhotoNotNil() predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldNotNull(FieldCandidatePhoto))
+}
+
+// CandidateSignatureEQ applies the EQ predicate on the "CandidateSignature" field.
+func CandidateSignatureEQ(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldEQ(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureNEQ applies the NEQ predicate on the "CandidateSignature" field.
+func CandidateSignatureNEQ(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldNEQ(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureIn applies the In predicate on the "CandidateSignature" field.
+func CandidateSignatureIn(vs ...[]byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldIn(FieldCandidateSignature, vs...))
+}
+
+// CandidateSignatureNotIn applies the NotIn predicate on the "CandidateSignature" field.
+func CandidateSignatureNotIn(vs ...[]byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldNotIn(FieldCandidateSignature, vs...))
+}
+
+// CandidateSignatureGT applies the GT predicate on the "CandidateSignature" field.
+func CandidateSignatureGT(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldGT(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureGTE applies the GTE predicate on the "CandidateSignature" field.
+func CandidateSignatureGTE(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldGTE(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureLT applies the LT predicate on the "CandidateSignature" field.
+func CandidateSignatureLT(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldLT(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureLTE applies the LTE predicate on the "CandidateSignature" field.
+func CandidateSignatureLTE(v []byte) predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldLTE(FieldCandidateSignature, v))
+}
+
+// CandidateSignatureIsNil applies the IsNil predicate on the "CandidateSignature" field.
+func CandidateSignatureIsNil() predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldIsNull(FieldCandidateSignature))
+}
+
+// CandidateSignatureNotNil applies the NotNil predicate on the "CandidateSignature" field.
+func CandidateSignatureNotNil() predicate.Exam_Applications_PS {
+	return predicate.Exam_Applications_PS(sql.FieldNotNull(FieldCandidateSignature))
 }
 
 // SignaturePathEQ applies the EQ predicate on the "SignaturePath" field.

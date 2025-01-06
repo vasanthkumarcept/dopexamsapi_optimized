@@ -151,6 +151,10 @@ type Exam_Application_MTSPMMG struct {
 	SignaturePath string `json:"SignaturePath,omitempty"`
 	// PhotoPath holds the value of the "PhotoPath" field.
 	PhotoPath string `json:"PhotoPath,omitempty"`
+	// CandidatePhoto holds the value of the "CandidatePhoto" field.
+	CandidatePhoto []byte `json:"CandidatePhoto,omitempty"`
+	// CandidateSignature holds the value of the "CandidateSignature" field.
+	CandidateSignature []byte `json:"CandidateSignature,omitempty"`
 	// TempHallTicket holds the value of the "TempHallTicket" field.
 	TempHallTicket string `json:"TempHallTicket,omitempty"`
 	// CandidateRemarks holds the value of the "CandidateRemarks" field.
@@ -423,7 +427,7 @@ func (*Exam_Application_MTSPMMG) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case exam_application_mtspmmg.FieldCadrePreferences, exam_application_mtspmmg.FieldDivisionPreferences, exam_application_mtspmmg.FieldGDSEngagement, exam_application_mtspmmg.FieldServiceLength, exam_application_mtspmmg.FieldNonQualifyingService, exam_application_mtspmmg.FieldPostPreferences, exam_application_mtspmmg.FieldUnitPreferences:
+		case exam_application_mtspmmg.FieldCandidatePhoto, exam_application_mtspmmg.FieldCandidateSignature, exam_application_mtspmmg.FieldCadrePreferences, exam_application_mtspmmg.FieldDivisionPreferences, exam_application_mtspmmg.FieldGDSEngagement, exam_application_mtspmmg.FieldServiceLength, exam_application_mtspmmg.FieldNonQualifyingService, exam_application_mtspmmg.FieldPostPreferences, exam_application_mtspmmg.FieldUnitPreferences:
 			values[i] = new([]byte)
 		case exam_application_mtspmmg.FieldPunishmentStatus, exam_application_mtspmmg.FieldDisciplinaryCaseStatus, exam_application_mtspmmg.FieldGenerateHallTicketFlag, exam_application_mtspmmg.FieldHallTicketGeneratedFlag, exam_application_mtspmmg.FieldGenerateHallTicketFlagByNO:
 			values[i] = new(sql.NullBool)
@@ -837,6 +841,18 @@ func (eam *Exam_Application_MTSPMMG) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field PhotoPath", values[i])
 			} else if value.Valid {
 				eam.PhotoPath = value.String
+			}
+		case exam_application_mtspmmg.FieldCandidatePhoto:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field CandidatePhoto", values[i])
+			} else if value != nil {
+				eam.CandidatePhoto = *value
+			}
+		case exam_application_mtspmmg.FieldCandidateSignature:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field CandidateSignature", values[i])
+			} else if value != nil {
+				eam.CandidateSignature = *value
 			}
 		case exam_application_mtspmmg.FieldTempHallTicket:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1504,6 +1520,12 @@ func (eam *Exam_Application_MTSPMMG) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("PhotoPath=")
 	builder.WriteString(eam.PhotoPath)
+	builder.WriteString(", ")
+	builder.WriteString("CandidatePhoto=")
+	builder.WriteString(fmt.Sprintf("%v", eam.CandidatePhoto))
+	builder.WriteString(", ")
+	builder.WriteString("CandidateSignature=")
+	builder.WriteString(fmt.Sprintf("%v", eam.CandidateSignature))
 	builder.WriteString(", ")
 	builder.WriteString("TempHallTicket=")
 	builder.WriteString(eam.TempHallTicket)

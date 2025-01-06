@@ -145,6 +145,8 @@ func saveApplication(tx *ent.Tx, newAppln any, applicationNumber string, examcod
 			SetWorkingOfficeRegionName(applicationIp.WorkingOfficeRegionName).
 			SetDisabilityTypeID(applicationIp.DisabilityTypeID).
 			SetDesignationID(applicationIp.DesignationID).
+			SetCandidatePhoto(applicationIp.CandidatePhoto).
+			SetCandidateSignature(applicationIp.CandidateSignature).
 			SetEducationCode(applicationIp.EducationCode).
 			Save(ctx)
 
@@ -255,6 +257,8 @@ func saveApplication(tx *ent.Tx, newAppln any, applicationNumber string, examcod
 			SetDisabilityTypeID(applicationGroupB.DisabilityTypeID).
 			SetDesignationID(applicationGroupB.DesignationID).
 			SetEducationCode(applicationGroupB.EducationCode).
+			SetCandidatePhoto(applicationGroupB.CandidatePhoto).
+			SetCandidateSignature(applicationGroupB.CandidateSignature).
 			Save(ctx)
 
 		if err != nil {
@@ -432,6 +436,8 @@ func saveApplication(tx *ent.Tx, newAppln any, applicationNumber string, examcod
 			SetWorkingOfficePincode(applicationMtsPmMg.WorkingOfficePincode).
 			SetWorkingOfficeRegionFacilityID(applicationMtsPmMg.WorkingOfficeRegionFacilityID).
 			SetWorkingOfficeRegionName(applicationMtsPmMg.WorkingOfficeRegionName).
+			SetCandidatePhoto(applicationMtsPmMg.CandidatePhoto).
+			SetCandidateSignature(applicationMtsPmMg.CandidateSignature).
 			Save(ctx)
 		if err != nil {
 			return nil, 422, " -SUB012", fmt.Errorf("failed to save application: %w", err)
@@ -520,6 +526,8 @@ func saveApplication(tx *ent.Tx, newAppln any, applicationNumber string, examcod
 			SetWorkingOfficeRegionName(applicationGdsPM.WorkingOfficeRegionName).
 			SetGDSEngagement(*applicationGdsPM.GDSEngagement).
 			SetPMMailGuardMTSEngagement(*applicationGdsPM.PMMailGuardMTSEngagement).
+			SetCandidatePhoto(applicationGdsPM.CandidatePhoto).
+			SetCandidateSignature(applicationGdsPM.CandidateSignature).
 			Save(ctx)
 		if err != nil {
 			return nil, 422, " -SUB014", fmt.Errorf("failed to save application: %w", err)
@@ -606,6 +614,8 @@ func saveApplication(tx *ent.Tx, newAppln any, applicationNumber string, examcod
 			SetWorkingOfficePincode(applicationGdsPa.WorkingOfficePincode).
 			SetWorkingOfficeRegionFacilityID(applicationGdsPa.WorkingOfficeRegionFacilityID).
 			SetWorkingOfficeRegionName(applicationGdsPa.WorkingOfficeRegionName).
+			SetCandidatePhoto(applicationGdsPa.CandidatePhoto).
+			SetCandidateSignature(applicationGdsPa.CandidateSignature).
 			Save(ctx)
 		if err != nil {
 			return nil, 422, " -SUB016", fmt.Errorf("failed to save application: %w", err)
@@ -1417,6 +1427,8 @@ func createUpdatePmpaApplication(ctx context.Context, tx *ent.Tx, oldAppln *ent.
 		SetCAUserName(newAppln.CA_UserName).
 		SetRecommendedStatus(newAppln.RecommendedStatus).
 		SetCadre(oldAppln.Cadre).
+		SetCandidatePhoto(oldAppln.CandidatePhoto).
+		SetCandidateSignature(oldAppln.CandidateSignature).
 		SetCandidateRemarks(oldAppln.CandidateRemarks).
 		SetCategoryCode(oldAppln.CategoryCode).
 		SetCategoryDescription(oldAppln.CategoryDescription).
@@ -1532,6 +1544,8 @@ func createUpdateGdspaApplication(ctx context.Context, tx *ent.Tx, oldAppln *ent
 		SetCenterFacilityId(oldAppln.CenterFacilityId).
 		SetCenterId(oldAppln.CenterId).
 		SetCentrePreference(oldAppln.CentrePreference).
+		SetCandidatePhoto(oldAppln.CandidatePhoto).
+		SetCandidateSignature(oldAppln.CandidateSignature).
 		SetClaimingQualifyingService(oldAppln.ClaimingQualifyingService).
 		SetControllingOfficeFacilityID(oldAppln.ControllingOfficeFacilityID).
 		SetControllingOfficeName(oldAppln.ControllingOfficeName).
@@ -1629,6 +1643,8 @@ func createUpdatemtspmApplication(ctx context.Context, tx *ent.Tx, oldAppln *ent
 		SetApplicationNumber(oldAppln.ApplicationNumber).
 		SetApplicationStatus(applicationStatus).
 		SetApplnSubmittedDate(oldAppln.ApplnSubmittedDate).
+		SetCandidatePhoto(oldAppln.CandidatePhoto).
+		SetCandidateSignature(oldAppln.CandidateSignature).
 		SetCADate(currentTime).
 		SetCAEmployeeDesignation(newAppln.CA_EmployeeDesignation).
 		SetCAEmployeeID(newAppln.CA_EmployeeID).
@@ -1745,6 +1761,8 @@ func createUpdategdspmApplication(ctx context.Context, tx *ent.Tx, oldAppln *ent
 		SetCAGeneralRemarks(newAppln.CA_GeneralRemarks).
 		SetCARemarks(newAppln.CA_Remarks).
 		SetCAUserName(newAppln.CA_UserName).
+		SetCandidatePhoto(oldAppln.CandidatePhoto).
+		SetCandidateSignature(oldAppln.CandidateSignature).
 		SetCadre(oldAppln.Cadre).
 		SetCandidateRemarks(oldAppln.CandidateRemarks).
 		SetCategoryCode(oldAppln.CategoryCode).
@@ -2451,6 +2469,8 @@ func createNewResubmitApplication(ctx context.Context, tx *ent.Tx, oldAppln *ent
 		SetSignature(newAppln.Signature).
 		SetSignaturePath(newAppln.SignaturePath).
 		SetTempHallTicket(newAppln.TempHallTicket).
+		SetCandidatePhoto(newAppln.CandidatePhoto).
+		SetCandidateSignature(newAppln.CandidateSignature).
 		SetUserID(newAppln.UserID).
 		SetWorkingOfficeCircleFacilityID(newAppln.WorkingOfficeCircleFacilityID).
 		SetWorkingOfficeCircleName(newAppln.WorkingOfficeCircleName).
@@ -2558,6 +2578,8 @@ func createGdsPmResubmitApplication(ctx context.Context, tx *ent.Tx, oldAppln *e
 		SetWorkingOfficePincode(newAppln.WorkingOfficePincode).
 		SetWorkingOfficeRegionFacilityID(newAppln.WorkingOfficeRegionFacilityID).
 		SetWorkingOfficeRegionName(newAppln.WorkingOfficeRegionName).
+		SetCandidatePhoto(newAppln.CandidatePhoto).
+		SetCandidateSignature(newAppln.CandidateSignature).
 		Save(ctx)
 
 	if err != nil {
@@ -2655,6 +2677,8 @@ func createGdsPaResubmitApplication(ctx context.Context, tx *ent.Tx, oldAppln *e
 		SetWorkingOfficePincode(newAppln.WorkingOfficePincode).
 		SetWorkingOfficeRegionFacilityID(newAppln.WorkingOfficeRegionFacilityID).
 		SetWorkingOfficeRegionName(newAppln.WorkingOfficeRegionName).
+		SetCandidatePhoto(newAppln.CandidatePhoto).
+		SetCandidateSignature(newAppln.CandidateSignature).
 		Save(ctx)
 
 	if err != nil {
@@ -2752,6 +2776,8 @@ func createPmPaResubmitApplication(ctx context.Context, tx *ent.Tx, oldAppln *en
 		SetWorkingOfficePincode(newAppln.WorkingOfficePincode).
 		SetWorkingOfficeRegionFacilityID(newAppln.WorkingOfficeRegionFacilityID).
 		SetWorkingOfficeRegionName(newAppln.WorkingOfficeRegionName).
+		SetCandidatePhoto(newAppln.CandidatePhoto).
+		SetCandidateSignature(newAppln.CandidateSignature).
 		Save(ctx)
 
 	if err != nil {
@@ -2847,6 +2873,8 @@ func createMtsPmResubmitApplication(ctx context.Context, tx *ent.Tx, oldAppln *e
 		SetWorkingOfficePincode(newAppln.WorkingOfficePincode).
 		SetWorkingOfficeRegionFacilityID(newAppln.WorkingOfficeRegionFacilityID).
 		SetWorkingOfficeRegionName(newAppln.WorkingOfficeRegionName).
+		SetCandidatePhoto(newAppln.CandidatePhoto).
+		SetCandidateSignature(newAppln.CandidateSignature).
 		Save(ctx)
 
 	if err != nil {
@@ -2936,6 +2964,8 @@ func createNewResubmitPsApplication(ctx context.Context, tx *ent.Tx, oldAppln *e
 		SetWorkingOfficePincode(newAppln.WorkingOfficePincode).
 		SetWorkingOfficeRegionFacilityID(newAppln.WorkingOfficeRegionFacilityID).
 		SetWorkingOfficeRegionName(newAppln.WorkingOfficeRegionName).
+		SetCandidatePhoto(newAppln.CandidatePhoto).
+		SetCandidateSignature(newAppln.CandidateSignature).
 		Save(ctx)
 
 	if err != nil {

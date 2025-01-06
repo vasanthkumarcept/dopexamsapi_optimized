@@ -683,6 +683,8 @@ func createUpdatedMtspmAppln(tx *ent.Tx, applicationRecord *ca_reg.NAVerifyAppli
 		SetStatus("active").
 		SetAppliactionRemarks(updatedRecord.AppliactionRemarks).
 		SetCADate(currentTime).
+		SetCandidatePhoto(updatedRecord.CandidatePhoto).
+		SetCandidateSignature(updatedRecord.CandidateSignature).
 		SetRecommendedStatus(applicationRecord.RecommendedStatus).
 		SetUserID(updatedRecord.UserID).
 		SetExamName(updatedRecord.ExamName).
@@ -816,6 +818,8 @@ func createUpdatedGdspaAppln(tx *ent.Tx, applicationRecord *ca_reg.NAVerifyAppli
 		SetClaimingQualifyingService(updatedRecord.ClaimingQualifyingService).
 		SetDeputationOfficePincode(updatedRecord.DeputationOfficePincode).
 		SetGender(updatedRecord.Gender).
+		SetCandidatePhoto(updatedRecord.CandidatePhoto).
+		SetCandidateSignature(updatedRecord.CandidateSignature).
 		SetMobileNumber(updatedRecord.MobileNumber).
 		SetPostPreferences(updatedRecord.PostPreferences).
 		SetUnitPreferences(updatedRecord.UnitPreferences).
@@ -926,6 +930,8 @@ func createUpdatedPmpaAppln(tx *ent.Tx, applicationRecord *ca_reg.NAVerifyApplic
 		SetGenerateHallTicketFlag(applicationRecord.GenerateHallTicketFlag).
 		SetHallTicketNumber(updatedRecord.HallTicketNumber).
 		SetEmployeeName(updatedRecord.EmployeeName).
+		SetCandidatePhoto(updatedRecord.CandidatePhoto).
+		SetCandidateSignature(updatedRecord.CandidateSignature).
 		SetCAEmployeeID(updatedRecord.CAEmployeeID).
 		SetCAEmployeeDesignation(updatedRecord.CAEmployeeDesignation).
 		SetDOB(updatedRecord.DOB).
@@ -1048,6 +1054,8 @@ func createUpdatedGdspmAppln(tx *ent.Tx, applicationRecord *ca_reg.NAVerifyAppli
 		SetNAEmployeeID(applicationRecord.NA_EmployeeID).
 		SetNAEmployeeDesignation(applicationRecord.NA_EmployeeDesignation).
 		SetNAUserName(applicationRecord.NA_UserName).
+		SetCandidatePhoto(updatedRecord.CandidatePhoto).
+		SetCandidateSignature(updatedRecord.CandidateSignature).
 		SetCAEmployeeDesignation(updatedRecord.CAEmployeeDesignation).
 		SetDOB(updatedRecord.DOB).
 		SetGender(updatedRecord.Gender).

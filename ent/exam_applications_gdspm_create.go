@@ -925,6 +925,18 @@ func (eagc *ExamApplicationsGDSPMCreate) SetNillablePhoto(s *string) *ExamApplic
 	return eagc
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eagc *ExamApplicationsGDSPMCreate) SetCandidatePhoto(b []byte) *ExamApplicationsGDSPMCreate {
+	eagc.mutation.SetCandidatePhoto(b)
+	return eagc
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eagc *ExamApplicationsGDSPMCreate) SetCandidateSignature(b []byte) *ExamApplicationsGDSPMCreate {
+	eagc.mutation.SetCandidateSignature(b)
+	return eagc
+}
+
 // SetSignaturePath sets the "SignaturePath" field.
 func (eagc *ExamApplicationsGDSPMCreate) SetSignaturePath(s string) *ExamApplicationsGDSPMCreate {
 	eagc.mutation.SetSignaturePath(s)
@@ -2301,6 +2313,14 @@ func (eagc *ExamApplicationsGDSPMCreate) createSpec() (*Exam_Applications_GDSPM,
 	if value, ok := eagc.mutation.Photo(); ok {
 		_spec.SetField(exam_applications_gdspm.FieldPhoto, field.TypeString, value)
 		_node.Photo = value
+	}
+	if value, ok := eagc.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_gdspm.FieldCandidatePhoto, field.TypeBytes, value)
+		_node.CandidatePhoto = value
+	}
+	if value, ok := eagc.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_gdspm.FieldCandidateSignature, field.TypeBytes, value)
+		_node.CandidateSignature = value
 	}
 	if value, ok := eagc.mutation.SignaturePath(); ok {
 		_spec.SetField(exam_applications_gdspm.FieldSignaturePath, field.TypeString, value)

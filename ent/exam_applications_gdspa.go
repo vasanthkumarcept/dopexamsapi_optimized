@@ -153,6 +153,10 @@ type Exam_Applications_GDSPA struct {
 	SignaturePath string `json:"SignaturePath,omitempty"`
 	// PhotoPath holds the value of the "PhotoPath" field.
 	PhotoPath string `json:"PhotoPath,omitempty"`
+	// CandidatePhoto holds the value of the "CandidatePhoto" field.
+	CandidatePhoto []byte `json:"CandidatePhoto,omitempty"`
+	// CandidateSignature holds the value of the "CandidateSignature" field.
+	CandidateSignature []byte `json:"CandidateSignature,omitempty"`
 	// TempHallTicket holds the value of the "TempHallTicket" field.
 	TempHallTicket string `json:"TempHallTicket,omitempty"`
 	// CandidateRemarks holds the value of the "CandidateRemarks" field.
@@ -426,7 +430,7 @@ func (*Exam_Applications_GDSPA) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case exam_applications_gdspa.FieldCadrePreferences, exam_applications_gdspa.FieldDivisionPreferences, exam_applications_gdspa.FieldServiceLength, exam_applications_gdspa.FieldNonQualifyingService, exam_applications_gdspa.FieldPostPreferences, exam_applications_gdspa.FieldUnitPreferences:
+		case exam_applications_gdspa.FieldCandidatePhoto, exam_applications_gdspa.FieldCandidateSignature, exam_applications_gdspa.FieldCadrePreferences, exam_applications_gdspa.FieldDivisionPreferences, exam_applications_gdspa.FieldServiceLength, exam_applications_gdspa.FieldNonQualifyingService, exam_applications_gdspa.FieldPostPreferences, exam_applications_gdspa.FieldUnitPreferences:
 			values[i] = new([]byte)
 		case exam_applications_gdspa.FieldGenerateHallTicketFlag, exam_applications_gdspa.FieldPunishmentStatus, exam_applications_gdspa.FieldDisciplinaryCaseStatus, exam_applications_gdspa.FieldHallTicketGeneratedFlag, exam_applications_gdspa.FieldGenerateHallTicketFlagByNO:
 			values[i] = new(sql.NullBool)
@@ -848,6 +852,18 @@ func (eag *Exam_Applications_GDSPA) assignValues(columns []string, values []any)
 				return fmt.Errorf("unexpected type %T for field PhotoPath", values[i])
 			} else if value.Valid {
 				eag.PhotoPath = value.String
+			}
+		case exam_applications_gdspa.FieldCandidatePhoto:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field CandidatePhoto", values[i])
+			} else if value != nil {
+				eag.CandidatePhoto = *value
+			}
+		case exam_applications_gdspa.FieldCandidateSignature:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field CandidateSignature", values[i])
+			} else if value != nil {
+				eag.CandidateSignature = *value
 			}
 		case exam_applications_gdspa.FieldTempHallTicket:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1523,6 +1539,12 @@ func (eag *Exam_Applications_GDSPA) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("PhotoPath=")
 	builder.WriteString(eag.PhotoPath)
+	builder.WriteString(", ")
+	builder.WriteString("CandidatePhoto=")
+	builder.WriteString(fmt.Sprintf("%v", eag.CandidatePhoto))
+	builder.WriteString(", ")
+	builder.WriteString("CandidateSignature=")
+	builder.WriteString(fmt.Sprintf("%v", eag.CandidateSignature))
 	builder.WriteString(", ")
 	builder.WriteString("TempHallTicket=")
 	builder.WriteString(eag.TempHallTicket)

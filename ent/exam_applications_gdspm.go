@@ -151,6 +151,10 @@ type Exam_Applications_GDSPM struct {
 	Signature string `json:"Signature,omitempty"`
 	// Photo holds the value of the "Photo" field.
 	Photo string `json:"Photo,omitempty"`
+	// CandidatePhoto holds the value of the "CandidatePhoto" field.
+	CandidatePhoto []byte `json:"CandidatePhoto,omitempty"`
+	// CandidateSignature holds the value of the "CandidateSignature" field.
+	CandidateSignature []byte `json:"CandidateSignature,omitempty"`
 	// SignaturePath holds the value of the "SignaturePath" field.
 	SignaturePath string `json:"SignaturePath,omitempty"`
 	// PhotoPath holds the value of the "PhotoPath" field.
@@ -430,7 +434,7 @@ func (*Exam_Applications_GDSPM) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case exam_applications_gdspm.FieldCadrePreferences, exam_applications_gdspm.FieldDivisionPreferences, exam_applications_gdspm.FieldServiceLength, exam_applications_gdspm.FieldNonQualifyingService, exam_applications_gdspm.FieldPostPreferences, exam_applications_gdspm.FieldUnitPreferences, exam_applications_gdspm.FieldGDSEngagement, exam_applications_gdspm.FieldPMMailGuardMTSEngagement:
+		case exam_applications_gdspm.FieldCandidatePhoto, exam_applications_gdspm.FieldCandidateSignature, exam_applications_gdspm.FieldCadrePreferences, exam_applications_gdspm.FieldDivisionPreferences, exam_applications_gdspm.FieldServiceLength, exam_applications_gdspm.FieldNonQualifyingService, exam_applications_gdspm.FieldPostPreferences, exam_applications_gdspm.FieldUnitPreferences, exam_applications_gdspm.FieldGDSEngagement, exam_applications_gdspm.FieldPMMailGuardMTSEngagement:
 			values[i] = new([]byte)
 		case exam_applications_gdspm.FieldPunishmentStatus, exam_applications_gdspm.FieldDisciplinaryCaseStatus, exam_applications_gdspm.FieldGenerateHallTicketFlag, exam_applications_gdspm.FieldHallTicketGeneratedFlag, exam_applications_gdspm.FieldGenerateHallTicketFlagByNO:
 			values[i] = new(sql.NullBool)
@@ -846,6 +850,18 @@ func (eag *Exam_Applications_GDSPM) assignValues(columns []string, values []any)
 				return fmt.Errorf("unexpected type %T for field Photo", values[i])
 			} else if value.Valid {
 				eag.Photo = value.String
+			}
+		case exam_applications_gdspm.FieldCandidatePhoto:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field CandidatePhoto", values[i])
+			} else if value != nil {
+				eag.CandidatePhoto = *value
+			}
+		case exam_applications_gdspm.FieldCandidateSignature:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field CandidateSignature", values[i])
+			} else if value != nil {
+				eag.CandidateSignature = *value
 			}
 		case exam_applications_gdspm.FieldSignaturePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1540,6 +1556,12 @@ func (eag *Exam_Applications_GDSPM) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("Photo=")
 	builder.WriteString(eag.Photo)
+	builder.WriteString(", ")
+	builder.WriteString("CandidatePhoto=")
+	builder.WriteString(fmt.Sprintf("%v", eag.CandidatePhoto))
+	builder.WriteString(", ")
+	builder.WriteString("CandidateSignature=")
+	builder.WriteString(fmt.Sprintf("%v", eag.CandidateSignature))
 	builder.WriteString(", ")
 	builder.WriteString("SignaturePath=")
 	builder.WriteString(eag.SignaturePath)

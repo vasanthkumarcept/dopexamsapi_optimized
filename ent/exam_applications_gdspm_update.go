@@ -1347,6 +1347,30 @@ func (eagu *ExamApplicationsGDSPMUpdate) ClearPhoto() *ExamApplicationsGDSPMUpda
 	return eagu
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eagu *ExamApplicationsGDSPMUpdate) SetCandidatePhoto(b []byte) *ExamApplicationsGDSPMUpdate {
+	eagu.mutation.SetCandidatePhoto(b)
+	return eagu
+}
+
+// ClearCandidatePhoto clears the value of the "CandidatePhoto" field.
+func (eagu *ExamApplicationsGDSPMUpdate) ClearCandidatePhoto() *ExamApplicationsGDSPMUpdate {
+	eagu.mutation.ClearCandidatePhoto()
+	return eagu
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eagu *ExamApplicationsGDSPMUpdate) SetCandidateSignature(b []byte) *ExamApplicationsGDSPMUpdate {
+	eagu.mutation.SetCandidateSignature(b)
+	return eagu
+}
+
+// ClearCandidateSignature clears the value of the "CandidateSignature" field.
+func (eagu *ExamApplicationsGDSPMUpdate) ClearCandidateSignature() *ExamApplicationsGDSPMUpdate {
+	eagu.mutation.ClearCandidateSignature()
+	return eagu
+}
+
 // SetSignaturePath sets the "SignaturePath" field.
 func (eagu *ExamApplicationsGDSPMUpdate) SetSignaturePath(s string) *ExamApplicationsGDSPMUpdate {
 	eagu.mutation.SetSignaturePath(s)
@@ -3395,6 +3419,18 @@ func (eagu *ExamApplicationsGDSPMUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if eagu.mutation.PhotoCleared() {
 		_spec.ClearField(exam_applications_gdspm.FieldPhoto, field.TypeString)
+	}
+	if value, ok := eagu.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_gdspm.FieldCandidatePhoto, field.TypeBytes, value)
+	}
+	if eagu.mutation.CandidatePhotoCleared() {
+		_spec.ClearField(exam_applications_gdspm.FieldCandidatePhoto, field.TypeBytes)
+	}
+	if value, ok := eagu.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_gdspm.FieldCandidateSignature, field.TypeBytes, value)
+	}
+	if eagu.mutation.CandidateSignatureCleared() {
+		_spec.ClearField(exam_applications_gdspm.FieldCandidateSignature, field.TypeBytes)
 	}
 	if value, ok := eagu.mutation.SignaturePath(); ok {
 		_spec.SetField(exam_applications_gdspm.FieldSignaturePath, field.TypeString, value)
@@ -5521,6 +5557,30 @@ func (eaguo *ExamApplicationsGDSPMUpdateOne) ClearPhoto() *ExamApplicationsGDSPM
 	return eaguo
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eaguo *ExamApplicationsGDSPMUpdateOne) SetCandidatePhoto(b []byte) *ExamApplicationsGDSPMUpdateOne {
+	eaguo.mutation.SetCandidatePhoto(b)
+	return eaguo
+}
+
+// ClearCandidatePhoto clears the value of the "CandidatePhoto" field.
+func (eaguo *ExamApplicationsGDSPMUpdateOne) ClearCandidatePhoto() *ExamApplicationsGDSPMUpdateOne {
+	eaguo.mutation.ClearCandidatePhoto()
+	return eaguo
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eaguo *ExamApplicationsGDSPMUpdateOne) SetCandidateSignature(b []byte) *ExamApplicationsGDSPMUpdateOne {
+	eaguo.mutation.SetCandidateSignature(b)
+	return eaguo
+}
+
+// ClearCandidateSignature clears the value of the "CandidateSignature" field.
+func (eaguo *ExamApplicationsGDSPMUpdateOne) ClearCandidateSignature() *ExamApplicationsGDSPMUpdateOne {
+	eaguo.mutation.ClearCandidateSignature()
+	return eaguo
+}
+
 // SetSignaturePath sets the "SignaturePath" field.
 func (eaguo *ExamApplicationsGDSPMUpdateOne) SetSignaturePath(s string) *ExamApplicationsGDSPMUpdateOne {
 	eaguo.mutation.SetSignaturePath(s)
@@ -7599,6 +7659,18 @@ func (eaguo *ExamApplicationsGDSPMUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if eaguo.mutation.PhotoCleared() {
 		_spec.ClearField(exam_applications_gdspm.FieldPhoto, field.TypeString)
+	}
+	if value, ok := eaguo.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_applications_gdspm.FieldCandidatePhoto, field.TypeBytes, value)
+	}
+	if eaguo.mutation.CandidatePhotoCleared() {
+		_spec.ClearField(exam_applications_gdspm.FieldCandidatePhoto, field.TypeBytes)
+	}
+	if value, ok := eaguo.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_applications_gdspm.FieldCandidateSignature, field.TypeBytes, value)
+	}
+	if eaguo.mutation.CandidateSignatureCleared() {
+		_spec.ClearField(exam_applications_gdspm.FieldCandidateSignature, field.TypeBytes)
 	}
 	if value, ok := eaguo.mutation.SignaturePath(); ok {
 		_spec.SetField(exam_applications_gdspm.FieldSignaturePath, field.TypeString, value)

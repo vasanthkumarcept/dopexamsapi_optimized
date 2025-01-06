@@ -86,6 +86,8 @@ func (Exam_Applications_PS) Fields() []ent.Field {
 		field.String("CentrePreference").Optional(),
 		field.String("Signature").Optional(),
 		field.String("Photo").Optional(),
+		field.Bytes("CandidatePhoto").Optional(),
+		field.Bytes("CandidateSignature").Optional(),
 		field.String("SignaturePath").Optional(),
 		field.String("PhotoPath").Optional(),
 		field.String("TempHallTicket").Optional(),

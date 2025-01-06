@@ -1347,6 +1347,30 @@ func (eamu *ExamApplicationMTSPMMGUpdate) ClearPhotoPath() *ExamApplicationMTSPM
 	return eamu
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eamu *ExamApplicationMTSPMMGUpdate) SetCandidatePhoto(b []byte) *ExamApplicationMTSPMMGUpdate {
+	eamu.mutation.SetCandidatePhoto(b)
+	return eamu
+}
+
+// ClearCandidatePhoto clears the value of the "CandidatePhoto" field.
+func (eamu *ExamApplicationMTSPMMGUpdate) ClearCandidatePhoto() *ExamApplicationMTSPMMGUpdate {
+	eamu.mutation.ClearCandidatePhoto()
+	return eamu
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eamu *ExamApplicationMTSPMMGUpdate) SetCandidateSignature(b []byte) *ExamApplicationMTSPMMGUpdate {
+	eamu.mutation.SetCandidateSignature(b)
+	return eamu
+}
+
+// ClearCandidateSignature clears the value of the "CandidateSignature" field.
+func (eamu *ExamApplicationMTSPMMGUpdate) ClearCandidateSignature() *ExamApplicationMTSPMMGUpdate {
+	eamu.mutation.ClearCandidateSignature()
+	return eamu
+}
+
 // SetTempHallTicket sets the "TempHallTicket" field.
 func (eamu *ExamApplicationMTSPMMGUpdate) SetTempHallTicket(s string) *ExamApplicationMTSPMMGUpdate {
 	eamu.mutation.SetTempHallTicket(s)
@@ -3337,6 +3361,18 @@ func (eamu *ExamApplicationMTSPMMGUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	if eamu.mutation.PhotoPathCleared() {
 		_spec.ClearField(exam_application_mtspmmg.FieldPhotoPath, field.TypeString)
+	}
+	if value, ok := eamu.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_application_mtspmmg.FieldCandidatePhoto, field.TypeBytes, value)
+	}
+	if eamu.mutation.CandidatePhotoCleared() {
+		_spec.ClearField(exam_application_mtspmmg.FieldCandidatePhoto, field.TypeBytes)
+	}
+	if value, ok := eamu.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_application_mtspmmg.FieldCandidateSignature, field.TypeBytes, value)
+	}
+	if eamu.mutation.CandidateSignatureCleared() {
+		_spec.ClearField(exam_application_mtspmmg.FieldCandidateSignature, field.TypeBytes)
 	}
 	if value, ok := eamu.mutation.TempHallTicket(); ok {
 		_spec.SetField(exam_application_mtspmmg.FieldTempHallTicket, field.TypeString, value)
@@ -5440,6 +5476,30 @@ func (eamuo *ExamApplicationMTSPMMGUpdateOne) ClearPhotoPath() *ExamApplicationM
 	return eamuo
 }
 
+// SetCandidatePhoto sets the "CandidatePhoto" field.
+func (eamuo *ExamApplicationMTSPMMGUpdateOne) SetCandidatePhoto(b []byte) *ExamApplicationMTSPMMGUpdateOne {
+	eamuo.mutation.SetCandidatePhoto(b)
+	return eamuo
+}
+
+// ClearCandidatePhoto clears the value of the "CandidatePhoto" field.
+func (eamuo *ExamApplicationMTSPMMGUpdateOne) ClearCandidatePhoto() *ExamApplicationMTSPMMGUpdateOne {
+	eamuo.mutation.ClearCandidatePhoto()
+	return eamuo
+}
+
+// SetCandidateSignature sets the "CandidateSignature" field.
+func (eamuo *ExamApplicationMTSPMMGUpdateOne) SetCandidateSignature(b []byte) *ExamApplicationMTSPMMGUpdateOne {
+	eamuo.mutation.SetCandidateSignature(b)
+	return eamuo
+}
+
+// ClearCandidateSignature clears the value of the "CandidateSignature" field.
+func (eamuo *ExamApplicationMTSPMMGUpdateOne) ClearCandidateSignature() *ExamApplicationMTSPMMGUpdateOne {
+	eamuo.mutation.ClearCandidateSignature()
+	return eamuo
+}
+
 // SetTempHallTicket sets the "TempHallTicket" field.
 func (eamuo *ExamApplicationMTSPMMGUpdateOne) SetTempHallTicket(s string) *ExamApplicationMTSPMMGUpdateOne {
 	eamuo.mutation.SetTempHallTicket(s)
@@ -7460,6 +7520,18 @@ func (eamuo *ExamApplicationMTSPMMGUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if eamuo.mutation.PhotoPathCleared() {
 		_spec.ClearField(exam_application_mtspmmg.FieldPhotoPath, field.TypeString)
+	}
+	if value, ok := eamuo.mutation.CandidatePhoto(); ok {
+		_spec.SetField(exam_application_mtspmmg.FieldCandidatePhoto, field.TypeBytes, value)
+	}
+	if eamuo.mutation.CandidatePhotoCleared() {
+		_spec.ClearField(exam_application_mtspmmg.FieldCandidatePhoto, field.TypeBytes)
+	}
+	if value, ok := eamuo.mutation.CandidateSignature(); ok {
+		_spec.SetField(exam_application_mtspmmg.FieldCandidateSignature, field.TypeBytes, value)
+	}
+	if eamuo.mutation.CandidateSignatureCleared() {
+		_spec.ClearField(exam_application_mtspmmg.FieldCandidateSignature, field.TypeBytes)
 	}
 	if value, ok := eamuo.mutation.TempHallTicket(); ok {
 		_spec.SetField(exam_application_mtspmmg.FieldTempHallTicket, field.TypeString, value)

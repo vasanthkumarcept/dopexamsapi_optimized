@@ -89,6 +89,8 @@ func (Exam_Applications_IP) Fields() []ent.Field {
 		field.String("Photo").Optional(),
 		field.String("SignaturePath").Optional(),
 		field.String("PhotoPath").Optional(),
+		field.Bytes("CandidatePhoto").Optional(),
+		field.Bytes("CandidateSignature").Optional(),
 		field.String("TempHallTicket").Optional(),
 		field.String("CandidateRemarks").Optional(),
 		field.String("VAGeneralRemarks").Optional(),

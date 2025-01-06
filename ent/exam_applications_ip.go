@@ -150,6 +150,10 @@ type Exam_Applications_IP struct {
 	SignaturePath string `json:"SignaturePath,omitempty"`
 	// PhotoPath holds the value of the "PhotoPath" field.
 	PhotoPath string `json:"PhotoPath,omitempty"`
+	// CandidatePhoto holds the value of the "CandidatePhoto" field.
+	CandidatePhoto []byte `json:"CandidatePhoto,omitempty"`
+	// CandidateSignature holds the value of the "CandidateSignature" field.
+	CandidateSignature []byte `json:"CandidateSignature,omitempty"`
 	// TempHallTicket holds the value of the "TempHallTicket" field.
 	TempHallTicket string `json:"TempHallTicket,omitempty"`
 	// CandidateRemarks holds the value of the "CandidateRemarks" field.
@@ -409,7 +413,7 @@ func (*Exam_Applications_IP) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case exam_applications_ip.FieldCadrePreferences, exam_applications_ip.FieldDivisionPreferences, exam_applications_ip.FieldServiceLength, exam_applications_ip.FieldNonQualifyingService:
+		case exam_applications_ip.FieldCandidatePhoto, exam_applications_ip.FieldCandidateSignature, exam_applications_ip.FieldCadrePreferences, exam_applications_ip.FieldDivisionPreferences, exam_applications_ip.FieldServiceLength, exam_applications_ip.FieldNonQualifyingService:
 			values[i] = new([]byte)
 		case exam_applications_ip.FieldPunishmentStatus, exam_applications_ip.FieldDisciplinaryCaseStatus, exam_applications_ip.FieldGenerateHallTicketFlag, exam_applications_ip.FieldHallTicketGeneratedFlag, exam_applications_ip.FieldGenerateHallTicketFlagByNO:
 			values[i] = new(sql.NullBool)
@@ -827,6 +831,18 @@ func (eai *Exam_Applications_IP) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field PhotoPath", values[i])
 			} else if value.Valid {
 				eai.PhotoPath = value.String
+			}
+		case exam_applications_ip.FieldCandidatePhoto:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field CandidatePhoto", values[i])
+			} else if value != nil {
+				eai.CandidatePhoto = *value
+			}
+		case exam_applications_ip.FieldCandidateSignature:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field CandidateSignature", values[i])
+			} else if value != nil {
+				eai.CandidateSignature = *value
 			}
 		case exam_applications_ip.FieldTempHallTicket:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1497,6 +1513,12 @@ func (eai *Exam_Applications_IP) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("PhotoPath=")
 	builder.WriteString(eai.PhotoPath)
+	builder.WriteString(", ")
+	builder.WriteString("CandidatePhoto=")
+	builder.WriteString(fmt.Sprintf("%v", eai.CandidatePhoto))
+	builder.WriteString(", ")
+	builder.WriteString("CandidateSignature=")
+	builder.WriteString(fmt.Sprintf("%v", eai.CandidateSignature))
 	builder.WriteString(", ")
 	builder.WriteString("TempHallTicket=")
 	builder.WriteString(eai.TempHallTicket)
