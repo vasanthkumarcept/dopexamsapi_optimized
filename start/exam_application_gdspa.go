@@ -564,11 +564,11 @@ func UpdateGDSPANodalRecommendationsByEmpID(client *ent.Client, applicationRecor
 }
 
 // Get All CA Pending records ...
-func QueryGDSPAApplicationsByCAVerificationsPending(ctx context.Context, client *ent.Client, facilityID string, examYear string) ([]*ent.Exam_Applications_GDSPA, error) {
+func QueryGDSPAApplicationsByCAVerificationsPending(ctx context.Context, client *ent.Client, facilityID string, examYear string) ([]*ent.Exam_Applications_GDSPA, int32, string, bool, error) {
 	// Array of exams
 
 	if facilityID == "" || examYear == "" {
-		return nil, fmt.Errorf("facility ID and Examyear cannot be null")
+		return nil, 422, " -STR001", false, fmt.Errorf("facility ID and Examyear cannot be null")
 	}
 	log.Println("Input Facility ID:", facilityID, "Examyear:", examYear) // Log the facility ID and Examyear
 
@@ -589,22 +589,22 @@ func QueryGDSPAApplicationsByCAVerificationsPending(ctx context.Context, client 
 		All(ctx)
 	if err != nil {
 		log.Println("error at GDSPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf("failed querying GDSPA exams Applications: %w", err)
+		return nil, 422, " -STR002", false, fmt.Errorf("failed querying GDSPA exams Applications: %w", err)
 	}
 	//for _, record := range records {
 	//	log.Println("Reporting Facility ID:", record.ReportingOfficeID)
 	//}
 	if len(records) == 0 {
-		return nil, fmt.Errorf(" nil Applications for the CA pending verification for the Office ID %s", facilityID)
+		return nil, 422, " -STR003", false, fmt.Errorf(" nil Applications for the CA pending verification for the Office ID %s", facilityID)
 	} //log.Println("CA verifications pending returned: ", records)
 
-	return records, nil
+	return records, 200, "", true, nil
 }
 
 // Get All CA verified records
-func QueryGDSPAApplicationsByCAVerified(ctx context.Context, client *ent.Client, facilityID string, examYear string) ([]*ent.Exam_Applications_GDSPA, error) {
+func QueryGDSPAApplicationsByCAVerified(ctx context.Context, client *ent.Client, facilityID string, examYear string) ([]*ent.Exam_Applications_GDSPA, int32, string, bool, error) {
 	if facilityID == "" || examYear == "" {
-		return nil, errors.New(" facility ID  and Exam Year cannot be null")
+		return nil, 422, " -STR001", false, errors.New(" facility ID  and Exam Year cannot be null")
 	}
 	records, err := client.Exam_Applications_GDSPA.Query().
 		Where(
@@ -620,16 +620,16 @@ func QueryGDSPAApplicationsByCAVerified(ctx context.Context, client *ent.Client,
 		All(ctx)
 	if err != nil {
 		log.Println("error at GDSPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf("failed querying GDSPA exams Applications for NA Verified records: %w", err)
+		return nil, 422, " -STR002", false, fmt.Errorf("failed querying GDSPA exams Applications for NA Verified records: %w", err)
 	}
 	//for _, record := range records {
 	//	log.Println("Reporting Facility ID:", record.ReportingOfficeID)
 	//}
 	if len(records) == 0 {
-		return nil, fmt.Errorf("nil Applications for the CA verified for the Office ID %s", facilityID)
+		return nil, 422, " -STR003", false, fmt.Errorf("nil Applications for the CA verified for the Office ID %s", facilityID)
 	}
 	//log.Println("CA verified records returned: ", records)
-	return records, nil
+	return records, 200, " ", true, nil
 }
 
 // Get CA Verified with Emp ID
@@ -795,10 +795,10 @@ func GetGDSPARecommendationsByEmpID(client *ent.Client, empID int64) ([]*ent.Rec
 }
 
 // Get All NA Verified Records
-func QueryGDSPAApplicationsByNAVerified(ctx context.Context, client *ent.Client, facilityID string, examYear string) ([]*ent.Exam_Applications_GDSPA, error) {
+func QueryGDSPAApplicationsByNAVerified(ctx context.Context, client *ent.Client, facilityID string, examYear string) ([]*ent.Exam_Applications_GDSPA, int32, string, bool, error) {
 	// Array of exams
 	if facilityID == "" || examYear == "" {
-		return nil, fmt.Errorf("facility ID cannot be null")
+		return nil, 422, " -STR001", false, fmt.Errorf("facility ID cannot be null")
 	}
 	records, err := client.Exam_Applications_GDSPA.Query().
 		Where(
@@ -813,16 +813,16 @@ func QueryGDSPAApplicationsByNAVerified(ctx context.Context, client *ent.Client,
 		All(ctx)
 	if err != nil {
 		log.Println("error at GDSPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf("failed querying GDSPA exams Applications for NA Verified records: %w", err)
+		return nil, 422, " -STR002", false, fmt.Errorf("failed querying GDSPA exams Applications for NA Verified records: %w", err)
 	}
 	//for _, record := range records {
 	//	log.Println("Reporting Facility ID:", record.ReportingOfficeID)
 	//}
 	if len(records) == 0 {
-		return nil, fmt.Errorf("nil Applications for the NA verified for the Office ID %s", facilityID)
+		return nil, 422, " -STR003", false, fmt.Errorf("nil Applications for the NA verified for the Office ID %s", facilityID)
 	}
 	//log.Println("CA verified records returned: ", records)
-	return records, nil
+	return records, 200, "", true, nil
 }
 
 // Get All NA Verified Records with Emp ID
@@ -2061,9 +2061,9 @@ func GetGDSPAExamStatisticsCircleWise(ctx context.Context, client *ent.Client, e
 
 // // Get All Pending with Candidate
 // Assuming Exam_Applications_GDSPA has a field named EmployeeID, you might adapt the code like this:
-func QueryGDSPAApplicationsByPendingWithCandidate(ctx context.Context, client *ent.Client, facilityID string, examYear string) ([]*ent.Exam_Applications_GDSPA, error) {
+func QueryGDSPAApplicationsByPendingWithCandidate(ctx context.Context, client *ent.Client, facilityID string, examYear string) ([]*ent.Exam_Applications_GDSPA, int32, string, bool, error) {
 	if facilityID == "" || examYear == "" {
-		return nil, errors.New(" facility ID and ExamYear cannot be empty")
+		return nil, 422, " -STR001", false, errors.New(" facility ID and ExamYear cannot be empty")
 	}
 
 	// Fetch all applications matching the criteria
@@ -2077,7 +2077,7 @@ func QueryGDSPAApplicationsByPendingWithCandidate(ctx context.Context, client *e
 		Order(ent.Asc("employee_id")). /*, ent.Desc("application_number"))*/ // Order by employee_id and application_number
 		All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed querying GDSPA exams Applications: %w", err)
+		return nil, 422, " -STR002", false, fmt.Errorf("failed querying GDSPA exams Applications: %w", err)
 	}
 
 	// Create a map to store the latest applications for each employee
@@ -2111,10 +2111,10 @@ func QueryGDSPAApplicationsByPendingWithCandidate(ctx context.Context, client *e
 	// }
 
 	if len(records) == 0 {
-		return nil, fmt.Errorf("no Applications matching criteria for the Office ID %s", facilityID)
+		return nil, 422, " -STR003", false, fmt.Errorf("no Applications matching criteria for the Office ID %s", facilityID)
 	}
 
-	return records, nil
+	return records, 200, " ", true, nil
 }
 
 func GetGDSPAExamStatisticsDOOfficeWiseLatests(ctx context.Context, client *ent.Client, examCode int32, facilityID string, examYear string) ([]map[string]interface{}, error) {

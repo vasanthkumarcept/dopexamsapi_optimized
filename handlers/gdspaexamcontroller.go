@@ -204,17 +204,24 @@ func GetAllGDSPACAPendingVerifications(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
+		var mainFunction string = " main - GetAllPMPACAPendingVerifications "
+		var startFunction string = " - start - QueryPMPAApplicationsByCAVerificationsPending "
 		facilityID := gctx.Param("facilityid")
 		examYear := gctx.Param("examyear")
 
-		circles, err := start.QueryGDSPAApplicationsByCAVerificationsPending(ctx, client, facilityID, examYear)
+		circles, status, stgError, dataStatus, err := start.QueryGDSPAApplicationsByCAVerificationsPending(ctx, client, facilityID, examYear)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetched pending application with CA",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
-
 	return gin.HandlerFunc(fn)
 }
 
@@ -270,15 +277,23 @@ func GetAllGDSPACAVerified(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
+		var mainFunction string = " main - GetAllPSCAVerified "
+		var startFunction string = " - start - QueryPSApplicationsByCAVerified "
 		facilityID := gctx.Param("facilityid")
 		examYear := gctx.Param("examyear")
 
-		circles, err := start.QueryGDSPAApplicationsByCAVerified(ctx, client, facilityID, examYear)
+		circles, status, stgError, dataStatus, err := start.QueryGDSPAApplicationsByCAVerified(ctx, client, facilityID, examYear)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetched CA Verified applications",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
 
 	return gin.HandlerFunc(fn)
@@ -405,16 +420,23 @@ func GetGDSPAAllNAVerified(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
-
+		var mainFunction string = " main - GetGDSPAAllNAVerified "
+		var startFunction string = " - start - QueryGDSPAApplicationsByNAVerified "
 		facilityID := gctx.Param("facilityid")
 		examYear := gctx.Param("examyear")
 
-		circles, err := start.QueryGDSPAApplicationsByNAVerified(ctx, client, facilityID, examYear)
+		circles, status, stgError, dataStatus, err := start.QueryGDSPAApplicationsByNAVerified(ctx, client, facilityID, examYear)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching all NA Verified application",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
 
 	return gin.HandlerFunc(fn)
@@ -532,15 +554,23 @@ func GetAllGDSPAPendingWithCandidate(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
+		var mainFunction string = " main - GetAllGDSPAPendingWithCandidate "
+		var startFunction string = " - start - QueryGDSPAApplicationsByPendingWithCandidate "
 		facilityID := gctx.Param("facilityid")
 		examYear := gctx.Param("examyear")
 
-		circles, err := start.QueryGDSPAApplicationsByPendingWithCandidate(ctx, client, facilityID, examYear)
+		circles, status, stgError, dataStatus, err := start.QueryGDSPAApplicationsByPendingWithCandidate(ctx, client, facilityID, examYear)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching application pending with candidate ",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
 
 	return gin.HandlerFunc(fn)
