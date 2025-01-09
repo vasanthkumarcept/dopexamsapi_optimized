@@ -174,16 +174,24 @@ func GetAllPMPACAPendingVerifications(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
+		var mainFunction string = " main - GetAllPMPACAPendingVerifications "
+		var startFunction string = " - start - QueryPMPAApplicationsByCAVerificationsPending "
 		//facilityID := gctx.Query("facilityID") // Get the facilityID from the query parameter
 		facilityID := gctx.Param("id")
 		id1 := gctx.Param("id1")
 
-		circles, err := start.QueryPMPAApplicationsByCAVerificationsPending(ctx, client, facilityID, id1)
+		circles, status, stgError, dataStatus, err := start.QueryPMPAApplicationsByCAVerificationsPending(ctx, client, facilityID, id1)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetched pending application with CA",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
 
 	return gin.HandlerFunc(fn)
@@ -240,18 +248,25 @@ func GetAllPMPACAVerified(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
+		var mainFunction string = " main - GetAllPMPACAVerified "
+		var startFunction string = " - start - QueryPMPAApplicationsByCAVerified "
 		//facilityID := gctx.Query("facilityID") // Get the facilityID from the query parameter
 		facilityID := gctx.Param("id")
 		id1 := gctx.Param("id1")
 
-		circles, err := start.QueryPMPAApplicationsByCAVerified(ctx, client, facilityID, id1)
+		circles, status, stgError, dataStatus, err := start.QueryPMPAApplicationsByCAVerified(ctx, client, facilityID, id1)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetched CA Verified applications",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
-
 	return gin.HandlerFunc(fn)
 
 }
@@ -375,16 +390,24 @@ func GetPMPAAllNAVerified(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
+		var mainFunction string = " main - GetPMPAAllNAVerified "
+		var startFunction string = " - start - QueryPMPAApplicationsByNAVerified "
 		//facilityID := gctx.Query("facilityID") // Get the facilityID from the query parameter
 		facilityID := gctx.Param("id")
 		id1 := gctx.Param("id1")
 
-		circles, err := start.QueryPMPAApplicationsByNAVerified(ctx, client, facilityID, id1)
+		circles, status, stgError, dataStatus, err := start.QueryPMPAApplicationsByNAVerified(ctx, client, facilityID, id1)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching all NA Verified application",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
 
 	return gin.HandlerFunc(fn)
@@ -503,15 +526,23 @@ func GetAllPMPAPendingWithCandidate(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
+		var mainFunction string = " main - GetAllPMPAPendingWithCandidate "
+		var startFunction string = " - start - QueryPMPAApplicationsByPendingWithCandidate "
 		facilityID := gctx.Param("id")
 		id1 := gctx.Param("id1")
 
-		circles, err := start.QueryPMPAApplicationsByPendingWithCandidate(ctx, client, facilityID, id1)
+		circles, status, stgError, dataStatus, err := start.QueryPMPAApplicationsByPendingWithCandidate(ctx, client, facilityID, id1)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching application pending with candidate ",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
 
 	return gin.HandlerFunc(fn)

@@ -405,7 +405,7 @@ func initRoutes(client *ent.Client) {
 
 	r.GET(apiSubPath+"ipexams/candiadatesexamcenterhall/:cityid/:examyear/:examcode/:centerid/:hallname", util.TokenValidationMiddlewareNew(client), h.GetIPCandiadatesExamcenterhallBycityid(client)) //---vasanth
 	r.POST(apiSubPath+"ipexams/ExamCenterHall/create", util.TokenValidationMiddlewareNew(client), h.CreateExamCenterHall(client))                                                                      //---vasanth
-	r.POST(apiSubPath+"ipexams/applications/submit", util.TokenValidationMiddlewareNew(client), h.CreateNewIPApplications(client))                                                                     //---vasanth
+	r.POST(apiSubPath+"ipexams/applications/submit", h.CreateNewIPApplications(client))                                                                                                                //---vasanth
 	r.PUT(apiSubPath+"ipexams/applications/resubmit", util.TokenValidationMiddlewareNew(client), h.ResubmitApplication(client))
 	r.PUT(apiSubPath+"ipexams/ExamCenterHall/reset", util.TokenValidationMiddlewareNew(client), h.ResetExamCenterHall(client)) //---vasanth
 	r.PUT(apiSubPath+"ipexams/applications/verify", util.TokenValidationMiddlewareNew(client), h.VerifyIPApplication(client))

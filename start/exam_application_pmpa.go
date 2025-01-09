@@ -1076,11 +1076,11 @@ func UpdatePMPANodalRecommendationsByEmpID(client *ent.Client, applicationRecord
 }
 
 // Get All CA Pending records ...
-func QueryPMPAApplicationsByCAVerificationsPending(ctx context.Context, client *ent.Client, facilityID string, id1 string) ([]*ent.Exam_Applications_PMPA, error) {
+func QueryPMPAApplicationsByCAVerificationsPending(ctx context.Context, client *ent.Client, facilityID string, id1 string) ([]*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	// Array of exams
 
 	if facilityID == "" || id1 == "" {
-		return nil, errors.New(" facility ID and Examyear cannot be null")
+		return nil, 422, " -STR001", false, errors.New(" facility ID and Examyear cannot be null")
 	}
 	log.Println("Input Facility ID:", facilityID, "Examyear:", id1) // Log the facility ID and Examyear
 
@@ -1103,22 +1103,22 @@ func QueryPMPAApplicationsByCAVerificationsPending(ctx context.Context, client *
 		All(ctx)
 	if err != nil {
 		log.Println("error at PMPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf("failed querying PMPA exams Applications: %w", err)
+		return nil, 422, " -STR002", false, fmt.Errorf("failed querying PMPA exams Applications: %w", err)
 	}
 	//for _, record := range records {
 	//	log.Println("Reporting Facility ID:", record.ReportingOfficeID)
 	//}
 	if len(records) == 0 {
-		return nil, fmt.Errorf(" nil Applications for the CA pending verification for the Office ID %s", facilityID)
+		return nil, 422, " -STR003", false, fmt.Errorf(" nil Applications for the CA pending verification for the Office ID %s", facilityID)
 	} //log.Println("CA verifications pending returned: ", records)
 
-	return records, nil
+	return records, 200, " ", true, nil
 }
 
 // Get All CA verified records
-func QueryPMPAApplicationsByCAVerified(ctx context.Context, client *ent.Client, facilityID string, id1 string) ([]*ent.Exam_Applications_PMPA, error) {
+func QueryPMPAApplicationsByCAVerified(ctx context.Context, client *ent.Client, facilityID string, id1 string) ([]*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	if facilityID == "" || id1 == "" {
-		return nil, errors.New(" facility ID and Exam Year cannot be null")
+		return nil, 422, " -STR001", false, errors.New(" facility ID and Exam Year cannot be null")
 	}
 	records, err := client.Exam_Applications_PMPA.Query().
 		Where(
@@ -1134,16 +1134,16 @@ func QueryPMPAApplicationsByCAVerified(ctx context.Context, client *ent.Client, 
 		All(ctx)
 	if err != nil {
 		log.Println("error at PMPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf(" failed querying PMPA exams Applications for NA Verified records: %w", err)
+		return nil, 422, " -STR002", false, fmt.Errorf(" failed querying PMPA exams Applications for NA Verified records: %w", err)
 	}
 	//for _, record := range records {
 	//	log.Println("Reporting Facility ID:", record.ReportingOfficeID)
 	//}
 	if len(records) == 0 {
-		return nil, fmt.Errorf(" nil Applications for the CA verified for the Office ID %s", facilityID)
+		return nil, 422, " -STR003", false, fmt.Errorf(" nil Applications for the CA verified for the Office ID %s", facilityID)
 	}
 	//log.Println("CA verified records returned: ", records)
-	return records, nil
+	return records, 200, "", true, nil
 }
 
 // Get CA Verified with Emp ID
@@ -1330,10 +1330,10 @@ func GetPMPARecommendationsByEmpID(client *ent.Client, empID int64) ([]*ent.Reco
 }
 
 // Get All NA Verified Records
-func QueryPMPAApplicationsByNAVerified(ctx context.Context, client *ent.Client, facilityID string, id1 string) ([]*ent.Exam_Applications_PMPA, error) {
+func QueryPMPAApplicationsByNAVerified(ctx context.Context, client *ent.Client, facilityID string, id1 string) ([]*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	// Array of exams
 	if facilityID == "" || id1 == "" {
-		return nil, errors.New(" facility ID  and ExamYearcannot be null")
+		return nil, 422, " -STR001", false, errors.New(" facility ID  and ExamYearcannot be null")
 	}
 	records, err := client.Exam_Applications_PMPA.Query().
 		Where(
@@ -1348,16 +1348,16 @@ func QueryPMPAApplicationsByNAVerified(ctx context.Context, client *ent.Client, 
 		All(ctx)
 	if err != nil {
 		log.Println("error at PMPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf(" failed querying PMPA exams Applications for NA Verified records: %w", err)
+		return nil, 422, " -STR002", false, fmt.Errorf(" failed querying PMPA exams Applications for NA Verified records: %w", err)
 	}
 	//for _, record := range records {
 	//	log.Println("Reporting Facility ID:", record.ReportingOfficeID)
 	//}
 	if len(records) == 0 {
-		return nil, fmt.Errorf(" nil Applications for the NA verified for the Office ID %s", facilityID)
+		return nil, 422, " -STR003", false, fmt.Errorf(" nil Applications for the NA verified for the Office ID %s", facilityID)
 	}
 	//log.Println("CA verified records returned: ", records)
-	return records, nil
+	return records, 200, "", true, nil
 }
 
 // Get All NA Verified Records with Emp ID
@@ -2621,9 +2621,9 @@ type DOOfficeWiseSummaryPMPA struct {
 
 // // Get All Pending with Candidate
 // Assuming Exam_Applications_PMPA has a field named EmployeeID, you might adapt the code like this:
-func QueryPMPAApplicationsByPendingWithCandidate(ctx context.Context, client *ent.Client, facilityID string, id1 string) ([]*ent.Exam_Applications_PMPA, error) {
+func QueryPMPAApplicationsByPendingWithCandidate(ctx context.Context, client *ent.Client, facilityID string, id1 string) ([]*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	if facilityID == "" || id1 == "" {
-		return nil, errors.New(" facility ID  and ExamYear cannot be empty")
+		return nil, 422, " -STR001", false, errors.New(" facility ID  and ExamYear cannot be empty")
 	}
 
 	// Fetch all applications matching the criteria
@@ -2636,7 +2636,7 @@ func QueryPMPAApplicationsByPendingWithCandidate(ctx context.Context, client *en
 		Order(ent.Asc("employee_id")). /*, ent.Desc("application_number"))*/ // Order by employee_id and application_number
 		All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed querying PMPA exams Applications: %w", err)
+		return nil, 422, " -STR002", false, fmt.Errorf("failed querying PMPA exams Applications: %w", err)
 	}
 
 	// Create a map to store the latest applications for each employee
@@ -2670,10 +2670,10 @@ func QueryPMPAApplicationsByPendingWithCandidate(ctx context.Context, client *en
 	}
 
 	if len(result) == 0 {
-		return nil, fmt.Errorf(" no Applications matching criteria for the Office ID %s", facilityID)
+		return nil, 422, " -STR003", false, fmt.Errorf(" no Applications matching criteria for the Office ID %s", facilityID)
 	}
 
-	return result, nil
+	return result, 200, "", true, nil
 }
 
 // func GetPMPAExamStatisticsDOOfficeWiseLatests(ctx context.Context, client *ent.Client, examCode int32, facilityID string) ([]map[string]interface{}, error) {
