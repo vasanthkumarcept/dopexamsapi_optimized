@@ -131417,6 +131417,8 @@ type ExamApplicationsPMPAMutation struct {
 	_UpdatedBy                       *string
 	_ExamCenterHall                  *int32
 	add_ExamCenterHall               *int32
+	_HallIdentificationNumber        *int32
+	add_HallIdentificationNumber     *int32
 	_HallName                        *string
 	clearedFields                    map[string]struct{}
 	_UsersPMPARef                    map[int64]struct{}
@@ -138385,6 +138387,76 @@ func (m *ExamApplicationsPMPAMutation) ResetExamCenterHall() {
 	delete(m.clearedFields, exam_applications_pmpa.FieldExamCenterHall)
 }
 
+// SetHallIdentificationNumber sets the "HallIdentificationNumber" field.
+func (m *ExamApplicationsPMPAMutation) SetHallIdentificationNumber(i int32) {
+	m._HallIdentificationNumber = &i
+	m.add_HallIdentificationNumber = nil
+}
+
+// HallIdentificationNumber returns the value of the "HallIdentificationNumber" field in the mutation.
+func (m *ExamApplicationsPMPAMutation) HallIdentificationNumber() (r int32, exists bool) {
+	v := m._HallIdentificationNumber
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHallIdentificationNumber returns the old "HallIdentificationNumber" field's value of the Exam_Applications_PMPA entity.
+// If the Exam_Applications_PMPA object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ExamApplicationsPMPAMutation) OldHallIdentificationNumber(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHallIdentificationNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHallIdentificationNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHallIdentificationNumber: %w", err)
+	}
+	return oldValue.HallIdentificationNumber, nil
+}
+
+// AddHallIdentificationNumber adds i to the "HallIdentificationNumber" field.
+func (m *ExamApplicationsPMPAMutation) AddHallIdentificationNumber(i int32) {
+	if m.add_HallIdentificationNumber != nil {
+		*m.add_HallIdentificationNumber += i
+	} else {
+		m.add_HallIdentificationNumber = &i
+	}
+}
+
+// AddedHallIdentificationNumber returns the value that was added to the "HallIdentificationNumber" field in this mutation.
+func (m *ExamApplicationsPMPAMutation) AddedHallIdentificationNumber() (r int32, exists bool) {
+	v := m.add_HallIdentificationNumber
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearHallIdentificationNumber clears the value of the "HallIdentificationNumber" field.
+func (m *ExamApplicationsPMPAMutation) ClearHallIdentificationNumber() {
+	m._HallIdentificationNumber = nil
+	m.add_HallIdentificationNumber = nil
+	m.clearedFields[exam_applications_pmpa.FieldHallIdentificationNumber] = struct{}{}
+}
+
+// HallIdentificationNumberCleared returns if the "HallIdentificationNumber" field was cleared in this mutation.
+func (m *ExamApplicationsPMPAMutation) HallIdentificationNumberCleared() bool {
+	_, ok := m.clearedFields[exam_applications_pmpa.FieldHallIdentificationNumber]
+	return ok
+}
+
+// ResetHallIdentificationNumber resets all changes to the "HallIdentificationNumber" field.
+func (m *ExamApplicationsPMPAMutation) ResetHallIdentificationNumber() {
+	m._HallIdentificationNumber = nil
+	m.add_HallIdentificationNumber = nil
+	delete(m.clearedFields, exam_applications_pmpa.FieldHallIdentificationNumber)
+}
+
 // SetHallName sets the "HallName" field.
 func (m *ExamApplicationsPMPAMutation) SetHallName(s string) {
 	m._HallName = &s
@@ -138933,7 +139005,7 @@ func (m *ExamApplicationsPMPAMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ExamApplicationsPMPAMutation) Fields() []string {
-	fields := make([]string, 0, 133)
+	fields := make([]string, 0, 134)
 	if m._ApplicationNumber != nil {
 		fields = append(fields, exam_applications_pmpa.FieldApplicationNumber)
 	}
@@ -139330,6 +139402,9 @@ func (m *ExamApplicationsPMPAMutation) Fields() []string {
 	if m._ExamCenterHall != nil {
 		fields = append(fields, exam_applications_pmpa.FieldExamCenterHall)
 	}
+	if m._HallIdentificationNumber != nil {
+		fields = append(fields, exam_applications_pmpa.FieldHallIdentificationNumber)
+	}
 	if m._HallName != nil {
 		fields = append(fields, exam_applications_pmpa.FieldHallName)
 	}
@@ -139605,6 +139680,8 @@ func (m *ExamApplicationsPMPAMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case exam_applications_pmpa.FieldExamCenterHall:
 		return m.ExamCenterHall()
+	case exam_applications_pmpa.FieldHallIdentificationNumber:
+		return m.HallIdentificationNumber()
 	case exam_applications_pmpa.FieldHallName:
 		return m.HallName()
 	}
@@ -139880,6 +139957,8 @@ func (m *ExamApplicationsPMPAMutation) OldField(ctx context.Context, name string
 		return m.OldUpdatedBy(ctx)
 	case exam_applications_pmpa.FieldExamCenterHall:
 		return m.OldExamCenterHall(ctx)
+	case exam_applications_pmpa.FieldHallIdentificationNumber:
+		return m.OldHallIdentificationNumber(ctx)
 	case exam_applications_pmpa.FieldHallName:
 		return m.OldHallName(ctx)
 	}
@@ -140815,6 +140894,13 @@ func (m *ExamApplicationsPMPAMutation) SetField(name string, value ent.Value) er
 		}
 		m.SetExamCenterHall(v)
 		return nil
+	case exam_applications_pmpa.FieldHallIdentificationNumber:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHallIdentificationNumber(v)
+		return nil
 	case exam_applications_pmpa.FieldHallName:
 		v, ok := value.(string)
 		if !ok {
@@ -140866,6 +140952,9 @@ func (m *ExamApplicationsPMPAMutation) AddedFields() []string {
 	if m.add_ExamCenterHall != nil {
 		fields = append(fields, exam_applications_pmpa.FieldExamCenterHall)
 	}
+	if m.add_HallIdentificationNumber != nil {
+		fields = append(fields, exam_applications_pmpa.FieldHallIdentificationNumber)
+	}
 	return fields
 }
 
@@ -140898,6 +140987,8 @@ func (m *ExamApplicationsPMPAMutation) AddedField(name string) (ent.Value, bool)
 		return m.AddedCenterId()
 	case exam_applications_pmpa.FieldExamCenterHall:
 		return m.AddedExamCenterHall()
+	case exam_applications_pmpa.FieldHallIdentificationNumber:
+		return m.AddedHallIdentificationNumber()
 	}
 	return nil, false
 }
@@ -140990,6 +141081,13 @@ func (m *ExamApplicationsPMPAMutation) AddField(name string, value ent.Value) er
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddExamCenterHall(v)
+		return nil
+	case exam_applications_pmpa.FieldHallIdentificationNumber:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddHallIdentificationNumber(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Exam_Applications_PMPA numeric field %s", name)
@@ -141394,6 +141492,9 @@ func (m *ExamApplicationsPMPAMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(exam_applications_pmpa.FieldExamCenterHall) {
 		fields = append(fields, exam_applications_pmpa.FieldExamCenterHall)
+	}
+	if m.FieldCleared(exam_applications_pmpa.FieldHallIdentificationNumber) {
+		fields = append(fields, exam_applications_pmpa.FieldHallIdentificationNumber)
 	}
 	if m.FieldCleared(exam_applications_pmpa.FieldHallName) {
 		fields = append(fields, exam_applications_pmpa.FieldHallName)
@@ -141808,6 +141909,9 @@ func (m *ExamApplicationsPMPAMutation) ClearField(name string) error {
 	case exam_applications_pmpa.FieldExamCenterHall:
 		m.ClearExamCenterHall()
 		return nil
+	case exam_applications_pmpa.FieldHallIdentificationNumber:
+		m.ClearHallIdentificationNumber()
+		return nil
 	case exam_applications_pmpa.FieldHallName:
 		m.ClearHallName()
 		return nil
@@ -142214,6 +142318,9 @@ func (m *ExamApplicationsPMPAMutation) ResetField(name string) error {
 		return nil
 	case exam_applications_pmpa.FieldExamCenterHall:
 		m.ResetExamCenterHall()
+		return nil
+	case exam_applications_pmpa.FieldHallIdentificationNumber:
+		m.ResetHallIdentificationNumber()
 		return nil
 	case exam_applications_pmpa.FieldHallName:
 		m.ResetHallName()

@@ -287,6 +287,8 @@ type Exam_Applications_PMPA struct {
 	UpdatedBy string `json:"UpdatedBy,omitempty"`
 	// ExamCenterHall holds the value of the "ExamCenterHall" field.
 	ExamCenterHall int32 `json:"ExamCenterHall,omitempty"`
+	// HallIdentificationNumber holds the value of the "HallIdentificationNumber" field.
+	HallIdentificationNumber int32 `json:"HallIdentificationNumber,omitempty"`
 	// HallName holds the value of the "HallName" field.
 	HallName string `json:"HallName,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -442,7 +444,7 @@ func (*Exam_Applications_PMPA) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case exam_applications_pmpa.FieldPunishmentStatus, exam_applications_pmpa.FieldDisciplinaryCaseStatus, exam_applications_pmpa.FieldGenerateHallTicketFlag, exam_applications_pmpa.FieldHallTicketGeneratedFlag, exam_applications_pmpa.FieldGenerateHallTicketFlagByNO:
 			values[i] = new(sql.NullBool)
-		case exam_applications_pmpa.FieldID, exam_applications_pmpa.FieldExamCode, exam_applications_pmpa.FieldUserID, exam_applications_pmpa.FieldEmployeeID, exam_applications_pmpa.FieldDisabilityPercentage, exam_applications_pmpa.FieldWorkingOfficePincode, exam_applications_pmpa.FieldExamCityCenterCode, exam_applications_pmpa.FieldVAUserId, exam_applications_pmpa.FieldCAUserId, exam_applications_pmpa.FieldNAUserId, exam_applications_pmpa.FieldRoleUserCode, exam_applications_pmpa.FieldCircleSID, exam_applications_pmpa.FieldCircleID, exam_applications_pmpa.FieldRegionID, exam_applications_pmpa.FieldDivisionID, exam_applications_pmpa.FieldCenterId, exam_applications_pmpa.FieldCenterCode, exam_applications_pmpa.FieldExamCenterHall:
+		case exam_applications_pmpa.FieldID, exam_applications_pmpa.FieldExamCode, exam_applications_pmpa.FieldUserID, exam_applications_pmpa.FieldEmployeeID, exam_applications_pmpa.FieldDisabilityPercentage, exam_applications_pmpa.FieldWorkingOfficePincode, exam_applications_pmpa.FieldExamCityCenterCode, exam_applications_pmpa.FieldVAUserId, exam_applications_pmpa.FieldCAUserId, exam_applications_pmpa.FieldNAUserId, exam_applications_pmpa.FieldRoleUserCode, exam_applications_pmpa.FieldCircleSID, exam_applications_pmpa.FieldCircleID, exam_applications_pmpa.FieldRegionID, exam_applications_pmpa.FieldDivisionID, exam_applications_pmpa.FieldCenterId, exam_applications_pmpa.FieldCenterCode, exam_applications_pmpa.FieldExamCenterHall, exam_applications_pmpa.FieldHallIdentificationNumber:
 			values[i] = new(sql.NullInt64)
 		case exam_applications_pmpa.FieldApplicationNumber, exam_applications_pmpa.FieldExamShortName, exam_applications_pmpa.FieldExamName, exam_applications_pmpa.FieldSmsExamShortName, exam_applications_pmpa.FieldExamYear, exam_applications_pmpa.FieldEmployeeName, exam_applications_pmpa.FieldDOB, exam_applications_pmpa.FieldGender, exam_applications_pmpa.FieldMobileNumber, exam_applications_pmpa.FieldEmailID, exam_applications_pmpa.FieldCategoryCode, exam_applications_pmpa.FieldCategoryDescription, exam_applications_pmpa.FieldDisabilityTypeID, exam_applications_pmpa.FieldDisabilityTypeCode, exam_applications_pmpa.FieldDisabilityTypeDescription, exam_applications_pmpa.FieldDCCS, exam_applications_pmpa.FieldEntryPostCode, exam_applications_pmpa.FieldEntryPostDescription, exam_applications_pmpa.FieldPresentPostCode, exam_applications_pmpa.FieldPresentPostDescription, exam_applications_pmpa.FieldFeederPostCode, exam_applications_pmpa.FieldFeederPostDescription, exam_applications_pmpa.FieldFeederPostJoiningDate, exam_applications_pmpa.FieldDesignationID, exam_applications_pmpa.FieldPresentDesignation, exam_applications_pmpa.FieldEducationCode, exam_applications_pmpa.FieldEducationDescription, exam_applications_pmpa.FieldFacilityUniqueID, exam_applications_pmpa.FieldWorkingOfficeFacilityID, exam_applications_pmpa.FieldWorkingOfficeName, exam_applications_pmpa.FieldWorkingOfficeCircleFacilityID, exam_applications_pmpa.FieldWorkingOfficeCircleName, exam_applications_pmpa.FieldWorkingOfficeRegionFacilityID, exam_applications_pmpa.FieldWorkingOfficeRegionName, exam_applications_pmpa.FieldWorkingOfficeDivisionFacilityID, exam_applications_pmpa.FieldWorkingOfficeDivisionName, exam_applications_pmpa.FieldReportingOfficeFacilityID, exam_applications_pmpa.FieldReportingOfficeName, exam_applications_pmpa.FieldLienControllingOfficeID, exam_applications_pmpa.FieldLienControllingOfficeName, exam_applications_pmpa.FieldInDeputation, exam_applications_pmpa.FieldDeputationType, exam_applications_pmpa.FieldDeputationOfficeUniqueId, exam_applications_pmpa.FieldDeputationOfficeFacilityID, exam_applications_pmpa.FieldDeputationOfficeName, exam_applications_pmpa.FieldDeputationControllingOfficeID, exam_applications_pmpa.FieldDeputationControllingOfficeName, exam_applications_pmpa.FieldControllingOfficeFacilityID, exam_applications_pmpa.FieldControllingOfficeName, exam_applications_pmpa.FieldNodalOfficeFacilityID, exam_applications_pmpa.FieldNodalOfficeName, exam_applications_pmpa.FieldCenterFacilityId, exam_applications_pmpa.FieldCentrePreference, exam_applications_pmpa.FieldSignature, exam_applications_pmpa.FieldPhoto, exam_applications_pmpa.FieldSignaturePath, exam_applications_pmpa.FieldPhotoPath, exam_applications_pmpa.FieldTempHallTicket, exam_applications_pmpa.FieldCandidateRemarks, exam_applications_pmpa.FieldVAGeneralRemarks, exam_applications_pmpa.FieldCAGeneralRemarks, exam_applications_pmpa.FieldNAGeneralRemarks, exam_applications_pmpa.FieldApplicationStatus, exam_applications_pmpa.FieldStatus, exam_applications_pmpa.FieldVAUserName, exam_applications_pmpa.FieldVAEmployeeID, exam_applications_pmpa.FieldVAEmployeeDesignation, exam_applications_pmpa.FieldVARemarks, exam_applications_pmpa.FieldCAUserName, exam_applications_pmpa.FieldCAEmployeeID, exam_applications_pmpa.FieldCAEmployeeDesignation, exam_applications_pmpa.FieldCARemarks, exam_applications_pmpa.FieldNAUserName, exam_applications_pmpa.FieldNAEmployeeID, exam_applications_pmpa.FieldNAEmployeeDesignation, exam_applications_pmpa.FieldNARemarks, exam_applications_pmpa.FieldAppliactionRemarks, exam_applications_pmpa.FieldCAPreviousRemarks, exam_applications_pmpa.FieldHallTicketNumber, exam_applications_pmpa.FieldTemporaryHallTicket, exam_applications_pmpa.FieldOptionUsed, exam_applications_pmpa.FieldRemarks, exam_applications_pmpa.FieldCadre, exam_applications_pmpa.FieldEmployeePost, exam_applications_pmpa.FieldDOJInEligiblePost, exam_applications_pmpa.FieldIpAddress, exam_applications_pmpa.FieldLatitudeLongitude, exam_applications_pmpa.FieldFacilityName, exam_applications_pmpa.FieldDCInPresentCadre, exam_applications_pmpa.FieldReportingOfficeID, exam_applications_pmpa.FieldClaimingQualifyingService, exam_applications_pmpa.FieldDeputationOfficePincode, exam_applications_pmpa.FieldRecommendedStatus, exam_applications_pmpa.FieldUpdatedBy, exam_applications_pmpa.FieldHallName:
 			values[i] = new(sql.NullString)
@@ -1280,6 +1282,12 @@ func (eap *Exam_Applications_PMPA) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				eap.ExamCenterHall = int32(value.Int64)
 			}
+		case exam_applications_pmpa.FieldHallIdentificationNumber:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field HallIdentificationNumber", values[i])
+			} else if value.Valid {
+				eap.HallIdentificationNumber = int32(value.Int64)
+			}
 		case exam_applications_pmpa.FieldHallName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field HallName", values[i])
@@ -1780,6 +1788,9 @@ func (eap *Exam_Applications_PMPA) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("ExamCenterHall=")
 	builder.WriteString(fmt.Sprintf("%v", eap.ExamCenterHall))
+	builder.WriteString(", ")
+	builder.WriteString("HallIdentificationNumber=")
+	builder.WriteString(fmt.Sprintf("%v", eap.HallIdentificationNumber))
 	builder.WriteString(", ")
 	builder.WriteString("HallName=")
 	builder.WriteString(eap.HallName)

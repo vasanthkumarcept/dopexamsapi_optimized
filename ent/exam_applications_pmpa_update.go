@@ -2733,6 +2733,33 @@ func (eapu *ExamApplicationsPMPAUpdate) ClearExamCenterHall() *ExamApplicationsP
 	return eapu
 }
 
+// SetHallIdentificationNumber sets the "HallIdentificationNumber" field.
+func (eapu *ExamApplicationsPMPAUpdate) SetHallIdentificationNumber(i int32) *ExamApplicationsPMPAUpdate {
+	eapu.mutation.ResetHallIdentificationNumber()
+	eapu.mutation.SetHallIdentificationNumber(i)
+	return eapu
+}
+
+// SetNillableHallIdentificationNumber sets the "HallIdentificationNumber" field if the given value is not nil.
+func (eapu *ExamApplicationsPMPAUpdate) SetNillableHallIdentificationNumber(i *int32) *ExamApplicationsPMPAUpdate {
+	if i != nil {
+		eapu.SetHallIdentificationNumber(*i)
+	}
+	return eapu
+}
+
+// AddHallIdentificationNumber adds i to the "HallIdentificationNumber" field.
+func (eapu *ExamApplicationsPMPAUpdate) AddHallIdentificationNumber(i int32) *ExamApplicationsPMPAUpdate {
+	eapu.mutation.AddHallIdentificationNumber(i)
+	return eapu
+}
+
+// ClearHallIdentificationNumber clears the value of the "HallIdentificationNumber" field.
+func (eapu *ExamApplicationsPMPAUpdate) ClearHallIdentificationNumber() *ExamApplicationsPMPAUpdate {
+	eapu.mutation.ClearHallIdentificationNumber()
+	return eapu
+}
+
 // SetHallName sets the "HallName" field.
 func (eapu *ExamApplicationsPMPAUpdate) SetHallName(s string) *ExamApplicationsPMPAUpdate {
 	eapu.mutation.SetHallName(s)
@@ -3931,6 +3958,15 @@ func (eapu *ExamApplicationsPMPAUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	if eapu.mutation.ExamCenterHallCleared() {
 		_spec.ClearField(exam_applications_pmpa.FieldExamCenterHall, field.TypeInt32)
+	}
+	if value, ok := eapu.mutation.HallIdentificationNumber(); ok {
+		_spec.SetField(exam_applications_pmpa.FieldHallIdentificationNumber, field.TypeInt32, value)
+	}
+	if value, ok := eapu.mutation.AddedHallIdentificationNumber(); ok {
+		_spec.AddField(exam_applications_pmpa.FieldHallIdentificationNumber, field.TypeInt32, value)
+	}
+	if eapu.mutation.HallIdentificationNumberCleared() {
+		_spec.ClearField(exam_applications_pmpa.FieldHallIdentificationNumber, field.TypeInt32)
 	}
 	if value, ok := eapu.mutation.HallName(); ok {
 		_spec.SetField(exam_applications_pmpa.FieldHallName, field.TypeString, value)
@@ -7022,6 +7058,33 @@ func (eapuo *ExamApplicationsPMPAUpdateOne) ClearExamCenterHall() *ExamApplicati
 	return eapuo
 }
 
+// SetHallIdentificationNumber sets the "HallIdentificationNumber" field.
+func (eapuo *ExamApplicationsPMPAUpdateOne) SetHallIdentificationNumber(i int32) *ExamApplicationsPMPAUpdateOne {
+	eapuo.mutation.ResetHallIdentificationNumber()
+	eapuo.mutation.SetHallIdentificationNumber(i)
+	return eapuo
+}
+
+// SetNillableHallIdentificationNumber sets the "HallIdentificationNumber" field if the given value is not nil.
+func (eapuo *ExamApplicationsPMPAUpdateOne) SetNillableHallIdentificationNumber(i *int32) *ExamApplicationsPMPAUpdateOne {
+	if i != nil {
+		eapuo.SetHallIdentificationNumber(*i)
+	}
+	return eapuo
+}
+
+// AddHallIdentificationNumber adds i to the "HallIdentificationNumber" field.
+func (eapuo *ExamApplicationsPMPAUpdateOne) AddHallIdentificationNumber(i int32) *ExamApplicationsPMPAUpdateOne {
+	eapuo.mutation.AddHallIdentificationNumber(i)
+	return eapuo
+}
+
+// ClearHallIdentificationNumber clears the value of the "HallIdentificationNumber" field.
+func (eapuo *ExamApplicationsPMPAUpdateOne) ClearHallIdentificationNumber() *ExamApplicationsPMPAUpdateOne {
+	eapuo.mutation.ClearHallIdentificationNumber()
+	return eapuo
+}
+
 // SetHallName sets the "HallName" field.
 func (eapuo *ExamApplicationsPMPAUpdateOne) SetHallName(s string) *ExamApplicationsPMPAUpdateOne {
 	eapuo.mutation.SetHallName(s)
@@ -8250,6 +8313,15 @@ func (eapuo *ExamApplicationsPMPAUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if eapuo.mutation.ExamCenterHallCleared() {
 		_spec.ClearField(exam_applications_pmpa.FieldExamCenterHall, field.TypeInt32)
+	}
+	if value, ok := eapuo.mutation.HallIdentificationNumber(); ok {
+		_spec.SetField(exam_applications_pmpa.FieldHallIdentificationNumber, field.TypeInt32, value)
+	}
+	if value, ok := eapuo.mutation.AddedHallIdentificationNumber(); ok {
+		_spec.AddField(exam_applications_pmpa.FieldHallIdentificationNumber, field.TypeInt32, value)
+	}
+	if eapuo.mutation.HallIdentificationNumberCleared() {
+		_spec.ClearField(exam_applications_pmpa.FieldHallIdentificationNumber, field.TypeInt32)
 	}
 	if value, ok := eapuo.mutation.HallName(); ok {
 		_spec.SetField(exam_applications_pmpa.FieldHallName, field.TypeString, value)

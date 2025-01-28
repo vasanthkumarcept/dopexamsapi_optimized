@@ -71,9 +71,11 @@ func CreateIPApplications(client *ent.Client, newAppln *ca_reg.ApplicationIp) (*
 	applicationLastDate := newAppln.ApplicationLastDate.UTC().Truncate(time.Second)
 
 	fmt.Print("current time: ", currentTime, " application last date: ", applicationLastDate, "date from payload", newAppln.ApplicationLastDate)
+
 	if currentTime.After(applicationLastDate) {
 		return nil, 422, " -STR007", false, fmt.Errorf("application submission deadline has passed as current time is %v", currentTime)
 	}
+	
 	applicationNumber, err := util.GenerateApplicationNumber(client, newAppln.EmployeeID, newAppln.ExamYear, "IP") //ExamGenCode = IP
 	if err != nil {
 		return nil, 500, " -STR007", false, err

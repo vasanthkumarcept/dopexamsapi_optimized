@@ -1805,6 +1805,20 @@ func (eapc *ExamApplicationsPMPACreate) SetNillableExamCenterHall(i *int32) *Exa
 	return eapc
 }
 
+// SetHallIdentificationNumber sets the "HallIdentificationNumber" field.
+func (eapc *ExamApplicationsPMPACreate) SetHallIdentificationNumber(i int32) *ExamApplicationsPMPACreate {
+	eapc.mutation.SetHallIdentificationNumber(i)
+	return eapc
+}
+
+// SetNillableHallIdentificationNumber sets the "HallIdentificationNumber" field if the given value is not nil.
+func (eapc *ExamApplicationsPMPACreate) SetNillableHallIdentificationNumber(i *int32) *ExamApplicationsPMPACreate {
+	if i != nil {
+		eapc.SetHallIdentificationNumber(*i)
+	}
+	return eapc
+}
+
 // SetHallName sets the "HallName" field.
 func (eapc *ExamApplicationsPMPACreate) SetHallName(s string) *ExamApplicationsPMPACreate {
 	eapc.mutation.SetHallName(s)
@@ -2065,6 +2079,10 @@ func (eapc *ExamApplicationsPMPACreate) defaults() {
 	if _, ok := eapc.mutation.UpdatedBy(); !ok {
 		v := exam_applications_pmpa.DefaultUpdatedBy
 		eapc.mutation.SetUpdatedBy(v)
+	}
+	if _, ok := eapc.mutation.HallIdentificationNumber(); !ok {
+		v := exam_applications_pmpa.DefaultHallIdentificationNumber
+		eapc.mutation.SetHallIdentificationNumber(v)
 	}
 }
 
@@ -2609,6 +2627,10 @@ func (eapc *ExamApplicationsPMPACreate) createSpec() (*Exam_Applications_PMPA, *
 	if value, ok := eapc.mutation.ExamCenterHall(); ok {
 		_spec.SetField(exam_applications_pmpa.FieldExamCenterHall, field.TypeInt32, value)
 		_node.ExamCenterHall = value
+	}
+	if value, ok := eapc.mutation.HallIdentificationNumber(); ok {
+		_spec.SetField(exam_applications_pmpa.FieldHallIdentificationNumber, field.TypeInt32, value)
+		_node.HallIdentificationNumber = value
 	}
 	if value, ok := eapc.mutation.HallName(); ok {
 		_spec.SetField(exam_applications_pmpa.FieldHallName, field.TypeString, value)

@@ -10,6 +10,7 @@ import (
 
 	"recruit/ent"
 	"recruit/ent/center"
+	"recruit/ent/examcenterhall"
 
 	"recruit/ent/exam_applications_pmpa"
 	//"recruit/ent/exam_pa"
@@ -133,7 +134,7 @@ func getNextPMPAApplicationNumberFromDatabase(client *ent.Client) (int64, error)
 }
 */
 // Query PMPAExam Application with Emp ID.
-func QueryPMPAExamApplicationsByEmpID(ctx context.Context, client *ent.Client, empid int64, id1 string) (*ent.Exam_Applications_PMPA, error) {
+func QueryPMPAExamApplicationsByEmpID(ctx context.Context, client *ent.Client, empid int64, id1 string) (*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	newAppln, err := client.Exam_Applications_PMPA.
 		Query().
 		Where(
@@ -141,17 +142,19 @@ func QueryPMPAExamApplicationsByEmpID(ctx context.Context, client *ent.Client, e
 			(exam_applications_pmpa.ExamYearEQ(id1)),
 			(exam_applications_pmpa.StatusEQ("active")),
 		).
-		Order(ent.Desc(exam_applications_pmpa.FieldID)).
+		//Order(ent.Desc(exam_applications_pmpa.FieldID)).
 		//Order(ent.Asc(ent.Exam_Applications_PMPAColumnApplnSubmittedDate)).
 		WithCirclePrefRefPMPA().
 		WithPMPAApplicationsRef().
-		First(ctx)
+		Only(ctx)
 
 	if err != nil {
-		log.Println("error getting Emp ID Application Details: ", err)
-		return nil, fmt.Errorf("failed querying PMPA Exam Application details: %w", err)
+		if ent.IsNotFound(err) {
+			return nil, 422, " -STR006", false, errors.New("no application exists ")
+		} else {
+			return nil, 500, " -STR006", false, err
+		}
 	}
-
 	// Extract only the desired fields from the CirclePrefRefPMPA edge
 	var circlePrefs []*ent.Division_Choice_PMPA
 	for _, edge := range newAppln.Edges.CirclePrefRefPMPA {
@@ -187,7 +190,7 @@ func QueryPMPAExamApplicationsByEmpID(ctx context.Context, client *ent.Client, e
 	newAppln.UpdatedAt = newAppln.UpdatedAt.Truncate(24 * time.Hour)
 
 	// log.Println("details returned by PMPA Exam Applications for the Employee: ", newAppln)
-	return newAppln, nil
+	return newAppln, 200, "", true, nil
 }
 
 // Update / Verification of PMPA Exam Application By CA
@@ -1147,38 +1150,25 @@ func QueryPMPAApplicationsByCAVerified(ctx context.Context, client *ent.Client, 
 }
 
 // Get CA Verified with Emp ID
-func QueryPMPAApplicationsByCAVerifiedByEmpID(ctx context.Context, client *ent.Client, employeeID int64) (*ent.Exam_Applications_PMPA, error) {
-	employeeExists, err := client.Exam_Applications_PMPA.
-		Query().
-		Where(exam_applications_pmpa.EmployeeIDEQ(employeeID)).
-		Exist(ctx)
-	if err != nil {
-		log.Println("error checking employee existence: ", err)
-		return nil, fmt.Errorf(" failed checking employee existence: %w", err)
-	}
-	if !employeeExists {
-		return nil, fmt.Errorf(" employee not found with ID: %d", employeeID)
-	}
-
+func QueryPMPAApplicationsByCAVerifiedByEmpID(ctx context.Context, client *ent.Client, employeeID int64, examYear string) (*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	record, err := client.Exam_Applications_PMPA.
 		Query().
 		Where(
 			exam_applications_pmpa.ApplicationStatusEQ("VerifiedByCA"), // Check for "CAVerified" status
 			exam_applications_pmpa.EmployeeIDEQ(employeeID),
+			exam_applications_pmpa.ExamYearEQ(examYear),
+			exam_applications_pmpa.StatusEQ("active"),
 		).
 		WithPMPAApplicationsRef().
 		WithCirclePrefRefPMPA().
 		Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return nil, fmt.Errorf(" record not found for employee ID: %d with 'CAVerified' status", employeeID)
+			return nil, 422, " -STR001", false, fmt.Errorf("no application found for this employee ID: %d with 'CAVerified' status", employeeID)
 		}
-		log.Println("error at PMPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf(" failed querying PMPA exams Applications: %w", err)
+		return nil, 500, " -STR002", false, err
 	}
-
-	//log.Println("CA verified record returned: ", record)
-	return record, nil
+	return record, 200, "", true, nil
 }
 
 // Get CA Pending with EmpID
@@ -1226,27 +1216,8 @@ func QueryPMPAApplicationsByCAVerifiedByEmpID(ctx context.Context, client *ent.C
 // 	return record, nil
 // }
 
-func QueryPMPAApplicationsByCAPendingByEmpID(ctx context.Context, client *ent.Client, empID int64) (*ent.Exam_Applications_PMPA, error) {
+func QueryPMPAApplicationsByCAPendingByEmpID(ctx context.Context, client *ent.Client, empID int64, examYear string) (*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	// Check if employee ID exists
-	employeeExists, err := client.Exam_Applications_PMPA.
-		Query().
-		Where(
-			exam_applications_pmpa.EmployeeIDEQ(empID),
-			exam_applications_pmpa.Or(
-				exam_applications_pmpa.ApplicationStatusEQ("CAVerificationPending"),
-				exam_applications_pmpa.ApplicationStatusEQ("ResubmitCAVerificationPending"),
-			),
-		).
-		Exist(ctx)
-	if err != nil {
-		log.Println("error checking employee existence: ", err)
-		return nil, fmt.Errorf("failed checking employee existence: %w", err)
-	}
-	if !employeeExists {
-		return nil, fmt.Errorf("employee not found with ID: or the verification is not pending with CA %d", empID)
-	}
-
-	// Retrieve the latest record based on UpdatedAt timestamp
 	record, err := client.Exam_Applications_PMPA.
 		Query().
 		Where(
@@ -1254,6 +1225,8 @@ func QueryPMPAApplicationsByCAPendingByEmpID(ctx context.Context, client *ent.Cl
 			exam_applications_pmpa.Or(
 				exam_applications_pmpa.ApplicationStatusEQ("CAVerificationPending"),
 				exam_applications_pmpa.ApplicationStatusEQ("ResubmitCAVerificationPending"),
+				exam_applications_pmpa.ExamYearEQ(examYear),
+				exam_applications_pmpa.StatusEQ("active"),
 			),
 		).
 		Order(ent.Desc("updated_at")). // Order by UpdatedAt in descending order
@@ -1261,72 +1234,56 @@ func QueryPMPAApplicationsByCAPendingByEmpID(ctx context.Context, client *ent.Cl
 		WithCirclePrefRefPMPA().
 		First(ctx)
 	if err != nil {
-		log.Println("error at PMPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf("failed querying PMPA exams Applications: %w", err)
+		if ent.IsNotFound(err) {
+			return nil, 422, " -STR001", false, errors.New("no  ip application pending for CA verification ")
+		} else {
+			return nil, 500, " -STR002", false, err
+		}
 	}
 
-	return record, nil
+	return record, 200, "", true, nil
 }
 
 // Get latest old Application Remarks given to Candidate for CA Verification
-func GetOldPMPACAApplicationRemarksByEmployeeID(ctx context.Context, client *ent.Client, employeeID int64) (*ent.Exam_Applications_PMPA, error) {
+func GetOldPMPACAApplicationRemarksByEmployeeID(ctx context.Context, client *ent.Client, employeeID int64, examYear string) (*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	employeeExists, err := client.Exam_Applications_PMPA.
-		Query().
-		Where(exam_applications_pmpa.EmployeeIDEQ(employeeID)).
-		Exist(ctx)
-	if err != nil {
-		return nil, fmt.Errorf(" failed to check employee existence: %v", err)
-	}
-	if !employeeExists {
-		return nil, fmt.Errorf(" employee not found with ID: %d", employeeID)
-	}
-
-	application, err := client.Exam_Applications_PMPA.
 		Query().
 		Where(
 			exam_applications_pmpa.EmployeeIDEQ(employeeID),
 			exam_applications_pmpa.ApplicationStatusEQ("PendingWithCandidate"),
+			exam_applications_pmpa.ExamYearEQ(examYear),
+			exam_applications_pmpa.StatusEQ("active"),
 		).
-		Order(ent.Desc(exam_applications_pmpa.FieldID)).
-		First(ctx)
+		Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return nil, fmt.Errorf(" application not found for employee ID: %d with 'PendingWithCandidate' status", employeeID)
+			return nil, 422, " -STR001", false, fmt.Errorf("application not found for employee ID: %d with 'PendingWithCandidate' status", employeeID)
 		}
-		return nil, fmt.Errorf(" failed to retrieve application: %v", err)
+		return nil, 500, " -STR002", false, err
 	}
-
-	return application, nil
+	return employeeExists, 200, "", true, nil
 }
 
 // Get Recommendations/ Remarks with Emp ID
-func GetPMPARecommendationsByEmpID(client *ent.Client, empID int64) ([]*ent.RecommendationsPMPAApplications, error) {
+func GetPMPARecommendationsByEmpID(client *ent.Client, empID int64) ([]*ent.RecommendationsPMPAApplications, int32, string, bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 	defer cancel()
 	// Check if empID is null
 	if empID == 0 {
-		return nil, fmt.Errorf(" no employee ID provided to process")
-	}
-	// Check if empID exists
-	exists, err := client.RecommendationsPMPAApplications.Query().
-		Where(recommendationspmpaapplications.EmployeeIDEQ(empID)).
-		Exist(ctx)
-	if err != nil {
-		return nil, fmt.Errorf(" failed to check if employee with ID %d exists: %v", empID, err)
-	}
-	if !exists {
-		return nil, fmt.Errorf(" employee with ID %d does not exist", empID)
+		return nil, 422, " -STR001", false, fmt.Errorf(" no employee ID provided to process")
 	}
 
-	// Retrieve all records for the employee ID
 	records, err := client.RecommendationsPMPAApplications.Query().
 		Where(recommendationspmpaapplications.EmployeeIDEQ(empID)).
 		All(ctx)
 	if err != nil {
-		return nil, fmt.Errorf(" failed to retrieve records for employee with ID %d: %v", empID, err)
+		return nil, 500, " -STR002", false, err
+	}
+	if len(records) == 0 {
+		return nil, 422, " -STR003", false, fmt.Errorf("no recommendations found for this employee ID: %d", empID)
 	}
 
-	return records, nil
+	return records, 200, "", true, nil
 }
 
 // Get All NA Verified Records
@@ -1361,44 +1318,32 @@ func QueryPMPAApplicationsByNAVerified(ctx context.Context, client *ent.Client, 
 }
 
 // Get All NA Verified Records with Emp ID
-func QueryPMPAApplicationsByNAVerifiedByEmpID(ctx context.Context, client *ent.Client, employeeID int64) (*ent.Exam_Applications_PMPA, error) {
-	employeeExists, err := client.Exam_Applications_PMPA.
-		Query().
-		Where(exam_applications_pmpa.EmployeeIDEQ(employeeID)).
-		Exist(ctx)
-	if err != nil {
-		log.Println("error checking employee existence: ", err)
-		return nil, fmt.Errorf(" failed checking employee existence: %w", err)
-	}
-	if !employeeExists {
-		return nil, fmt.Errorf(" employee not found with ID: %d", employeeID)
-	}
-
+func QueryPMPAApplicationsByNAVerifiedByEmpID(ctx context.Context, client *ent.Client, employeeID int64, examYear string) (*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	record, err := client.Exam_Applications_PMPA.
 		Query().
 		Where(
 			exam_applications_pmpa.ApplicationStatusEQ("VerifiedByNA"), // Check for "CAVerified" status
 			exam_applications_pmpa.EmployeeIDEQ(employeeID),
-		).
+			exam_applications_pmpa.ExamYearEQ(examYear),
+			exam_applications_pmpa.StatusEQ("active")).
 		WithPMPAApplicationsRef().
 		WithCirclePrefRefPMPA().
 		Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return nil, fmt.Errorf(" record not found for employee ID: %d with 'CAVerified' status", employeeID)
+			return nil, 422, " -STR001", false, fmt.Errorf("no application pending with CA Verification for  employee ID: %d ", employeeID)
 		}
-		log.Println("error at PMPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf(" failed querying PMPA exams Applications: %w", err)
+		return nil, 500, " -STR002", false, err
 	}
 
 	//log.Println("CA verified record returned: ", record)
-	return record, nil
+	return record, 200, "", true, nil
 }
 
-func QueryPMPAApplicationsByNAVerifiedForNA(ctx context.Context, client *ent.Client, facilityID, facilityID1 string) ([]*ent.Exam_Applications_PMPA, error) {
+func QueryPMPAApplicationsByNAVerifiedForNA(ctx context.Context, client *ent.Client, facilityID, facilityID1 string) ([]*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	// Array of exams
 	if facilityID == "" || facilityID1 == "" {
-		return nil, errors.New(" facility ID and ExamYear cannot be null")
+		return nil, 422, " -STR001", false, errors.New(" facility ID and ExamYear cannot be null")
 	}
 	records, err := client.Exam_Applications_PMPA.Query().
 		Where(
@@ -1414,22 +1359,22 @@ func QueryPMPAApplicationsByNAVerifiedForNA(ctx context.Context, client *ent.Cli
 		All(ctx)
 	if err != nil {
 		log.Println("error at PMPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf(" failed querying PMPA exams Applications for NA Verified records: %w", err)
+		return nil, 422, " -STR002", false, fmt.Errorf(" failed querying PMPA exams Applications for NA Verified records: %w", err)
 	}
 	//for _, record := range records {
 	//	log.Println("Reporting Facility ID:", record.ReportingOfficeID)
 	//}
 	if len(records) == 0 {
-		return nil, fmt.Errorf(" nil Applications for the NA verified status for view by Nodal Officer of the Office ID %s", facilityID)
+		return nil, 422, " -STR003", false, fmt.Errorf(" nil Applications for the NA verified status for view by Nodal Officer of the Office ID %s", facilityID)
 	}
 	//log.Println("CA verified records returned: ", records)
-	return records, nil
+	return records, 200, "", true, nil
 }
 
 // // Get All CA verified records for NA
-func QueryPMPAApplicationsByCAVerifiedForNA(ctx context.Context, client *ent.Client, facilityID, facilityID1 string) ([]*ent.Exam_Applications_PMPA, error) {
+func QueryPMPAApplicationsByCAVerifiedForNA(ctx context.Context, client *ent.Client, facilityID, facilityID1 string) ([]*ent.Exam_Applications_PMPA, int32, string, bool, error) {
 	if facilityID == "" || facilityID1 == "" {
-		return nil, errors.New(" facility ID and ExamYear cannot be null")
+		return nil, 422, " -STR001", false, errors.New(" facility ID and ExamYear cannot be null")
 	}
 	records, err := client.Exam_Applications_PMPA.Query().
 		Where(
@@ -1444,17 +1389,12 @@ func QueryPMPAApplicationsByCAVerifiedForNA(ctx context.Context, client *ent.Cli
 		WithCirclePrefRefPMPA().
 		All(ctx)
 	if err != nil {
-		log.Println("error at PMPA Exam Applications fetching: ", err)
-		return nil, fmt.Errorf("failed querying PMPA exams Applications for CA Verified records: %w", err)
+		return nil, 500, " -STR002", false, err
 	}
-	//for _, record := range records {
-	//	log.Println("Reporting Facility ID:", record.ReportingOfficeID)
-	//}
 	if len(records) == 0 {
-		return nil, fmt.Errorf(" nil Applications for the CA verified for the Office ID %s", facilityID)
+		return nil, 422, " -STR003", false, fmt.Errorf("no application verified by CA/NA for the Office ID %s", facilityID)
 	}
-	//log.Println("CA verified records returned: ", records)
-	return records, nil
+	return records, 200, "", true, nil
 }
 
 // Get Recommendations with Emp ID ..
@@ -3285,4 +3225,620 @@ func GenerateHallticketNumberrPmPa(ctx context.Context, client *ent.Client, year
 
 	// Return success message
 	return fmt.Sprintf("Generated hall tickets successfully for %d eligible candidates", successCount), nil
+}
+func GetPMPAExamCenterHallbyCityID(client *ent.Client, cityID int32, examyear string, examcode int32, centerid int32) ([]*ent.ExamCenterHall, int32, string, bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
+	defer cancel()
+	// Check if empID is null
+	if cityID == 0 {
+		return nil, 422, " -STR001", false, fmt.Errorf("no city ID provided to process")
+	}
+
+	// Retrieve all records for the employee ID
+	records, err := client.ExamCenterHall.Query().
+		Where(examcenterhall.CityIDEQ(cityID),
+			examcenterhall.ExamYearEQ(examyear),
+			examcenterhall.ExamCodeEQ(examcode),
+			examcenterhall.CenterCodeEQ(centerid),
+			examcenterhall.StatusEQ("active"),
+		).
+		All(ctx)
+	if err != nil {
+		return nil, 500, " -STR002", false, err
+	}
+	if len(records) == 0 {
+		return nil, 422, " -STR003", false, fmt.Errorf("no examcenterhall found for this city ID: %d", cityID)
+	}
+
+	return records, 200, "", true, nil
+}
+func GetPMPACandidateExamCenterHallbyCityID(client *ent.Client, cityID int32, examyear string, examcode int32, centerid int32, hallname string) ([]*ent.Exam_Applications_PMPA, int32, string, bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
+	defer cancel()
+	// Check if empID is null
+	if cityID == 0 {
+		return nil, 422, " -STR001", false, fmt.Errorf("no city ID provided to process")
+	}
+
+	// Retrieve all records for the employee ID
+	records, err := client.Exam_Applications_PMPA.Query().
+		Where(exam_applications_pmpa.ExamCityCenterCodeEQ(cityID),
+			exam_applications_pmpa.ExamYearEQ(examyear),
+			exam_applications_pmpa.ExamCodeEQ(examcode),
+			exam_applications_pmpa.CenterCodeEQ(centerid),
+			exam_applications_pmpa.HallNameEQ(hallname),
+			exam_applications_pmpa.StatusEQ("active"),
+		).
+		All(ctx)
+	if err != nil {
+		return nil, 500, " -STR002", false, err
+	}
+	if len(records) == 0 {
+		return nil, 422, " -STR003", false, fmt.Errorf("no candidates in examcenterhall found for this city ID: %d", cityID)
+	}
+
+	return records, 200, "", true, nil
+}
+
+func SubPmPaCreateExamCenterHall(client *ent.Client, newExamcenterhall *ca_reg.StruExamCenterHall) ([]*StrucMappingIdentificationNumberResult, int32, string, bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
+	defer cancel()
+
+	//transaction implementation-------------
+
+	tx, err := client.Tx(ctx)
+	if err != nil {
+		return nil, 500, " -STR001", false, err
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			panic(r)
+		} else if err != nil {
+			tx.Rollback()
+		} else {
+			if err := tx.Commit(); err != nil {
+				tx.Rollback()
+			}
+		}
+	}()
+
+	existing, err := tx.ExamCenterHall.
+		Query().
+		Where(
+			examcenterhall.ExamYearEQ(newExamcenterhall.ExamYear),
+			examcenterhall.ExamCodeEQ(newExamcenterhall.ExamCode),
+			examcenterhall.AdminCircleOfficeIDEQ(newExamcenterhall.AdminCircleOfficeID),
+			examcenterhall.HallNameEQ(newExamcenterhall.HallName),
+			examcenterhall.StatusEQ("active"),
+		).
+		Exist(ctx)
+
+	if err != nil {
+		return nil, 500, " -STR002", false, err
+	}
+
+	if existing {
+		return nil, 422, " -STR003", false, errors.New("already this HallName mapped for candidates")
+	}
+
+	// Use the generated application number
+	currentTime := time.Now().Truncate(time.Second)
+
+	examCenterHall, err := tx.ExamCenterHall.
+		Create().
+		SetCenterCode(int32(newExamcenterhall.CenterCode)).
+		SetCityID(int32(newExamcenterhall.CityID)).
+		SetExamCenterName(newExamcenterhall.ExamCenterName).
+		SetExamYear(newExamcenterhall.ExamYear).
+		SetExamCode(int32(newExamcenterhall.ExamCode)).
+		SetExamName(newExamcenterhall.ExamName).
+		SetCenterCityName(newExamcenterhall.CenterCityName).
+		SetConductedByFacilityID(newExamcenterhall.ConductedByFacilityID).
+		SetConductedBy(newExamcenterhall.ConductedBy).
+		SetHallName(newExamcenterhall.HallName).
+		SetAdminCircleOfficeID(newExamcenterhall.AdminCircleOfficeID).
+		SetMappingIdentificationNumber(convertMappingIdentificationNumbers(newExamcenterhall.MappingIdentificationNumber)).
+		SetStatus("active").
+		SetCreatedById(newExamcenterhall.CreatedById).
+		SetCreatedByUserName(newExamcenterhall.CreatedByUserName).
+		SetCreatedByEmpId(newExamcenterhall.CreatedByEmpId).
+		SetCreatedByDesignation(newExamcenterhall.CreatedByDesignation).
+		SetCreatedDate(currentTime).
+		SetNoSeats(newExamcenterhall.NoSeats).
+		SetUpdatedAt(time.Now().UTC().Truncate(24 * time.Hour)).
+		Save(ctx)
+
+	if err != nil {
+		return nil, 500, " -STR04", false, err
+	}
+	var resultExamcenterhall []*StrucMappingIdentificationNumberResult
+
+	// Save the PlaceOfPreferenceIP records.
+	//circlePrefRefs := make([]*ent.PlaceOfPreferenceIP, len(newAppln.Edges.CircleData))
+	//for i, circlePrefRef := range newAppln.Edges.CircleData {
+	for i, circlePrefRef := range newExamcenterhall.MappingIdentificationNumber {
+
+		if len(circlePrefRef.NodalOfficeFacilityId) == 0 || circlePrefRef.StartNo == 0 || circlePrefRef.EndNo == 0 {
+			return nil, 400, " -STR005", false, fmt.Errorf("invalid mapping identification number at index %d", i)
+		}
+
+		//fmt.Println(newExamcenterhall.ExamYear, newExamcenterhall.ExamCode, newExamcenterhall.CenterCode, circlePrefRef.NodalOfficeFacilityId, circlePrefRef.StartNo, circlePrefRef.EndNo)
+		hallassigned, err := tx.Exam_Applications_PMPA.
+			Query().
+			Where(
+				exam_applications_pmpa.ExamYearEQ(newExamcenterhall.ExamYear),
+				exam_applications_pmpa.ApplicationStatusIn("VerifiedByCA", "VerifiedByNA"),
+				exam_applications_pmpa.HallTicketNumberNEQ(""),
+				exam_applications_pmpa.StatusEQ("active"),
+				exam_applications_pmpa.ExamCodeEQ(newExamcenterhall.ExamCode),
+				exam_applications_pmpa.CenterCodeEQ(newExamcenterhall.CenterCode),
+				exam_applications_pmpa.LienControllingOfficeIDEQ(circlePrefRef.NodalOfficeFacilityId),
+				exam_applications_pmpa.HallTicketGeneratedFlag(true),
+				exam_applications_pmpa.HallIdentificationNumberGTE(circlePrefRef.StartNo),
+				exam_applications_pmpa.HallIdentificationNumberLTE(circlePrefRef.EndNo),
+				exam_applications_pmpa.HallNameEQ(newExamcenterhall.HallName),
+			).
+			Exist(ctx)
+		if err != nil {
+			return nil, 500, " -STR006", false, err
+		}
+
+		if hallassigned {
+			return nil, 422, " -STR007", false, fmt.Errorf("already this identification numbers mapped for candidates")
+		}
+
+		_, err = tx.Exam_Applications_PMPA.
+			Update().
+			SetHallName(newExamcenterhall.HallName).
+			SetExamCenterHall(examCenterHall.ID).
+			Where(
+				exam_applications_pmpa.ExamYearEQ(newExamcenterhall.ExamYear),
+				exam_applications_pmpa.ApplicationStatusIn("VerifiedByCA", "VerifiedByNA"),
+				exam_applications_pmpa.HallTicketNumberNEQ(""),
+				exam_applications_pmpa.StatusEQ("active"),
+				exam_applications_pmpa.ExamCodeEQ(newExamcenterhall.ExamCode),
+				exam_applications_pmpa.CenterCodeEQ(newExamcenterhall.CenterCode),
+				exam_applications_pmpa.LienControllingOfficeIDEQ(circlePrefRef.NodalOfficeFacilityId),
+				exam_applications_pmpa.HallTicketGeneratedFlag(true),
+				exam_applications_pmpa.HallIdentificationNumberGTE(circlePrefRef.StartNo),
+				exam_applications_pmpa.HallIdentificationNumberLTE(circlePrefRef.EndNo),
+			).
+			Save(ctx)
+		if err != nil {
+			return nil, 500, " -STR008", false, err
+		}
+		resultExamcenterhall = append(resultExamcenterhall, &StrucMappingIdentificationNumberResult{
+			NodalOfficeFacilityId: circlePrefRef.NodalOfficeFacilityId,
+			StartNo:               circlePrefRef.StartNo,
+			EndNo:                 circlePrefRef.EndNo,
+			UpdateStatus:          true,
+		})
+	}
+	if err = tx.Commit(); err != nil {
+		tx.Rollback()
+		return nil, 500, " -STR009", false, err
+	}
+	return resultExamcenterhall, 200, "", true, nil
+}
+func SubResetPmpaExamCenterHall(client *ent.Client, newExamcenterhall *ca_reg.StruExamCenterHallReset) ([]*StrucMappingIdentificationNumberResult, int32, string, bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
+	defer cancel()
+
+	// Start transaction
+	tx, err := client.Tx(ctx)
+	if err != nil {
+		return nil, 500, " -STR001", false, err
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			panic(r)
+		} else if err != nil {
+			tx.Rollback()
+		} else {
+			if err := tx.Commit(); err != nil {
+				tx.Rollback()
+			}
+		}
+	}()
+
+	// Create status string with timestamp
+	stat := "inactive_" + time.Now().Format("20060102150405")
+
+	// Check if the ExamCenterHall already exists
+	existing, err := tx.ExamCenterHall.
+		Query().
+		Where(
+			examcenterhall.ExamYearEQ(newExamcenterhall.ExamYear),
+			examcenterhall.ExamCodeEQ(newExamcenterhall.ExamCode),
+			examcenterhall.AdminCircleOfficeIDEQ(newExamcenterhall.AdminCircleOfficeID),
+			examcenterhall.HallNameEQ(newExamcenterhall.HallName),
+			examcenterhall.StatusEQ("active"),
+		).
+		Only(ctx)
+
+	if err != nil && !ent.IsNotFound(err) {
+		return nil, 500, " -STR002", false, err
+	}
+
+	if existing != nil {
+		// Update existing ExamCenterHall record
+		_, err = tx.ExamCenterHall.
+			Update().
+			SetStatus(stat).
+			SetUpdatedAt(time.Now().UTC().Truncate(24 * time.Hour)).
+			Save(ctx)
+
+		if err != nil {
+			return nil, 500, " -STR003", false, err
+		}
+	}
+
+	var resultExamcenterhall []*StrucMappingIdentificationNumberResult
+
+	// for i, circlePrefRef := range newExamcenterhall.MappingIdentificationNumber {
+	// 	if len(circlePrefRef.NodalOfficeFacilityId) == 0 || circlePrefRef.StartNo == 0 || circlePrefRef.EndNo == 0 {
+	// 		return nil, 400, " -STR004", false, fmt.Errorf("invalid mapping identification number at index %d", i)
+	// 	}
+
+	// Fetch existing hall assignments
+	hallAssignments, err := tx.Exam_Applications_PMPA.
+		Query().
+		Where(
+			exam_applications_pmpa.ExamYearEQ(newExamcenterhall.ExamYear),
+			exam_applications_pmpa.ApplicationStatusIn("VerifiedByCA", "VerifiedByNA"),
+			exam_applications_pmpa.HallTicketNumberNEQ(""),
+			exam_applications_pmpa.StatusEQ("active"),
+			exam_applications_pmpa.ExamCodeEQ(newExamcenterhall.ExamCode),
+			exam_applications_pmpa.CenterCodeEQ(newExamcenterhall.CenterCode),
+			//exam_applications_ip.LienControllingOfficeIDEQ(circlePrefRef.NodalOfficeFacilityId),
+			exam_applications_pmpa.HallTicketGeneratedFlag(true),
+			//	exam_applications_ip.HallIdentificationNumberGTE(circlePrefRef.StartNo),
+			///	exam_applications_ip.HallIdentificationNumberLTE(circlePrefRef.EndNo),
+			exam_applications_pmpa.HallNameEQ(newExamcenterhall.HallName),
+		).
+		All(ctx)
+
+	if err != nil {
+		return nil, 500, " -STR005", false, err
+	}
+
+	if len(hallAssignments) > 0 {
+		for _, assignment := range hallAssignments {
+			_, err = tx.Exam_Applications_IP.
+				UpdateOneID(assignment.ID).
+				SetHallName("").
+				SetExamCenterHall(0).
+				Save(ctx)
+
+			if err != nil {
+
+				return nil, 500, " -STR006", false, err
+			}
+		}
+
+		resultExamcenterhall = append(resultExamcenterhall, &StrucMappingIdentificationNumberResult{
+			// NodalOfficeFacilityId: circlePrefRef.NodalOfficeFacilityId,
+			// StartNo:               circlePrefRef.StartNo,
+			// EndNo:                 circlePrefRef.EndNo,
+			UpdateStatus: true,
+		})
+	}
+
+	if err = tx.Commit(); err != nil {
+		tx.Rollback()
+		return nil, 500, " -STR009", false, err
+	}
+
+	return resultExamcenterhall, 200, "", true, nil
+}
+func SubResetPMPAApplicationNA(client *ent.Client, applicationRecord *ca_reg.NAVerifyApplicationPMPA) (*ent.Exam_Applications_PMPA, int32, string, bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
+	defer cancel()
+	if applicationRecord == nil {
+		return nil, 400, " -STR001", false, errors.New("payload received in empty")
+	}
+	empID := applicationRecord.EmployeeID
+	id1 := applicationRecord.ExamYear
+	if empID == 0 {
+		return nil, 422, " -STR002", false, errors.New("employee id should not be empty")
+	}
+	tx, err := client.Tx(ctx)
+	if err != nil {
+		return nil, 500, " -STR017", false, err
+	}
+
+	// Defer rollback in case anything fails.
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			panic(r)
+		} else if err != nil {
+			tx.Rollback()
+		} else {
+			if err := tx.Commit(); err != nil {
+				tx.Rollback()
+			}
+		}
+	}()
+
+	// Check if the EmployeeID exists.
+	exists, err := tx.Exam_Applications_PMPA.Query().
+		Where(
+			exam_applications_pmpa.EmployeeIDEQ(empID),
+			exam_applications_pmpa.ApplicationStatusIn("VerifiedByCA", "VerifiedByNA"),
+			exam_applications_pmpa.StatusEQ("active"),
+			exam_applications_pmpa.ExamYearEQ(id1),
+		).
+		Exist(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return nil, 422, " -STR003", false, fmt.Errorf("no active application avaiable for this emmployee id: %d in verified state ", empID)
+		} else {
+			return nil, 500, " -STR004", false, err
+		}
+	}
+	if !exists {
+		return nil, 422, " -STR003", false, fmt.Errorf("no active application avaiable for this emmployee id: %d in verified state ", empID)
+	}
+
+	records, err := tx.RecommendationsPMPAApplications.
+		Query().
+		Where(recommendationspmpaapplications.EmployeeIDEQ(empID)).
+		All(ctx)
+
+	// Retrieve all records for the employee ID from RecommendationsIPApplications
+
+	if err != nil {
+		return nil, 500, " -STR005", false, err
+	}
+	if len(records) == 0 {
+		return nil, 422, " -STR006", false, fmt.Errorf("no records found in recommendations for employee with ID %d", empID)
+	}
+
+	//currentTime := time.Now().Truncate(time.Second)
+	stat := "inactive_" + time.Now().Format("20060102150405")
+
+	// Update the retrieved record with the provided values
+
+	updatedRecord, err := tx.Exam_Applications_PMPA.
+		Query().
+		Where(
+			(exam_applications_pmpa.EmployeeIDEQ(empID)),
+			exam_applications_pmpa.ExamYear(id1),
+			exam_applications_pmpa.StatusEQ("active")).
+		WithCirclePrefRefPMPA().
+		WithPMPAApplicationsRef().
+		Only(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return nil, 422, " -STR007", false, errors.New("no application exists ")
+		} else {
+			return nil, 500, " -STR008", false, err
+		}
+	}
+
+	if updatedRecord == nil {
+		return nil, 422, " -STR007", false, errors.New("no application exists ")
+	}
+
+	if updatedRecord.HallTicketGeneratedFlag {
+		return nil, 422, " -STR007", false, errors.New("already Hall ticket generated hence reset not allowed")
+	}
+	// Extract only the desired fields from the CirclePrefRef edge
+	// var circlePrefs []*ent.PlaceOfPreference
+	// for _, edge := range updatedRecord.Edges.CirclePrefRef {
+	// 	circlePrefs = append(circlePrefs, &ent.PlaceOfPreferenceIP{
+	// 		PlacePrefNo:    edge.PlacePrefNo,
+	// 		PlacePrefValue: edge.PlacePrefValue,
+	// 	})
+	// }
+
+	// // Update the CirclePrefRef edge with the filtered values
+	// updatedRecord.Edges.CirclePrefRef = circlePrefs
+
+	var recomondPref []*ent.RecommendationsPMPAApplications
+	for _, edge := range updatedRecord.Edges.PMPAApplicationsRef {
+		recomondPref = append(recomondPref, &ent.RecommendationsPMPAApplications{
+			//RecommendationId:            edge.RecommendationId,
+			ApplicationID:     edge.ApplicationID,
+			EmployeeID:        edge.EmployeeID,
+			CARecommendations: edge.CARecommendations,
+			NORecommendations: edge.NORecommendations,
+			ApplicationStatus: edge.ApplicationStatus,
+			ExamNameCode:      edge.ExamNameCode,
+			CAUserName:        edge.CAUserName,
+			CARemarks:         edge.CARemarks,
+			CAUpdatedAt:       edge.CAUpdatedAt,
+			NOUpdatedAt:       edge.NOUpdatedAt,
+			NORemarks:         edge.NORemarks,
+			NOUserName:        edge.NOUserName,
+			VacancyYear:       edge.VacancyYear,
+		})
+	}
+	updatedRecord.Edges.PMPAApplicationsRef = recomondPref
+	updatedRecord.UpdatedAt = updatedRecord.UpdatedAt.Truncate(24 * time.Hour)
+
+	_, err = updatedRecord.
+		Update().
+		SetStatus(stat).
+		Save(ctx)
+	if err != nil {
+		return nil, 500, " -STR009", false, err
+	}
+	// Hall Ticket Generated Flag
+
+	updatedAppln := tx.Exam_Applications_PMPA.
+		Create().
+		SetApplicationNumber(updatedRecord.ApplicationNumber).
+		SetApplicationStatus("ResubmitCAVerificationPending").
+		SetApplnSubmittedDate(updatedRecord.ApplnSubmittedDate).
+		SetCAEmployeeDesignation(updatedRecord.CAEmployeeDesignation).
+		SetCADate(updatedRecord.CADate).
+		SetCAEmployeeID(updatedRecord.CAEmployeeID).
+		SetCAGeneralRemarks(updatedRecord.CAGeneralRemarks).
+		SetCAUserId(updatedRecord.CAUserId).
+		SetCAUserName(updatedRecord.CAUserName).
+		SetCadre(updatedRecord.Cadre).
+		SetCandidateRemarks(updatedRecord.CandidateRemarks).
+		SetCategoryCode(updatedRecord.CategoryCode).
+		SetCategoryDescription(updatedRecord.CategoryDescription).
+		SetCenterFacilityId(updatedRecord.CenterFacilityId).
+		SetCenterId(updatedRecord.CenterId).
+		SetCentrePreference(updatedRecord.CentrePreference).
+		SetCentrePreference(updatedRecord.CentrePreference).
+		SetClaimingQualifyingService(updatedRecord.ClaimingQualifyingService).
+		SetControllingOfficeFacilityID(updatedRecord.ControllingOfficeFacilityID).
+		SetControllingOfficeName(updatedRecord.ControllingOfficeName).
+		SetDCCS(updatedRecord.DCCS).
+		SetDOB(updatedRecord.DOB).
+		SetDeputationControllingOfficeID(updatedRecord.DeputationControllingOfficeID).
+		SetDeputationControllingOfficeName(updatedRecord.DeputationControllingOfficeName).
+		SetDeputationOfficeFacilityID(updatedRecord.DeputationOfficeFacilityID).
+		SetDeputationOfficeName(updatedRecord.DeputationOfficeName).
+		SetDeputationOfficePincode(updatedRecord.DeputationOfficePincode).
+		SetDeputationOfficeUniqueId(updatedRecord.DeputationOfficeUniqueId).
+		SetInDeputation(updatedRecord.InDeputation).
+		SetDeputationType(updatedRecord.DeputationType).
+		SetDesignationID(updatedRecord.DesignationID).
+		SetDisabilityPercentage(updatedRecord.DisabilityPercentage).
+		SetDisabilityTypeCode(updatedRecord.DisabilityTypeCode).
+		SetDisabilityTypeDescription(updatedRecord.DisabilityTypeDescription).
+		SetDisabilityTypeID(updatedRecord.DisabilityTypeID).
+		SetEducationCode(updatedRecord.EducationCode).
+		SetEducationDescription(updatedRecord.EducationDescription).
+		SetEmailID(updatedRecord.EmailID).
+		SetEmployeeID(updatedRecord.EmployeeID).
+		SetEmployeeName(updatedRecord.EmployeeName).
+		SetEntryPostCode(updatedRecord.EntryPostCode).
+		SetEntryPostDescription(updatedRecord.EntryPostDescription).
+		SetExamCode(updatedRecord.ExamCode).
+		SetExamName(updatedRecord.ExamName).
+		SetExamShortName(updatedRecord.ExamShortName).
+		SetExamYear(updatedRecord.ExamYear).
+		SetExamCityCenterCode(updatedRecord.CenterId).
+		SetFacilityUniqueID(updatedRecord.FacilityUniqueID).
+		SetFeederPostCode(updatedRecord.FeederPostCode).
+		SetFeederPostDescription(updatedRecord.FeederPostDescription).
+		SetFeederPostJoiningDate(updatedRecord.FeederPostJoiningDate).
+		SetGender(updatedRecord.Gender).
+		SetLienControllingOfficeID(updatedRecord.LienControllingOfficeID).
+		SetLienControllingOfficeName(updatedRecord.LienControllingOfficeName).
+		SetMobileNumber(updatedRecord.MobileNumber).
+		SetNodalOfficeFacilityID(updatedRecord.NodalOfficeFacilityID).
+		SetNodalOfficeName(updatedRecord.NodalOfficeName).
+		SetPhoto(updatedRecord.Photo).
+		SetPhotoPath(updatedRecord.PhotoPath).
+		SetPresentDesignation(updatedRecord.PresentDesignation).
+		SetPresentPostCode(updatedRecord.PresentPostCode).
+		SetPresentPostDescription(updatedRecord.PresentPostDescription).
+		SetReportingOfficeFacilityID(updatedRecord.ReportingOfficeFacilityID).
+		SetReportingOfficeName(updatedRecord.ReportingOfficeName).
+		SetServiceLength(updatedRecord.ServiceLength).
+		SetSignature(updatedRecord.Signature).
+		SetSignaturePath(updatedRecord.SignaturePath).
+		SetTempHallTicket(updatedRecord.TempHallTicket).
+		SetUserID(updatedRecord.UserID).
+		SetWorkingOfficeCircleFacilityID(updatedRecord.WorkingOfficeCircleFacilityID).
+		SetWorkingOfficeCircleName(updatedRecord.WorkingOfficeCircleName).
+		SetWorkingOfficeDivisionFacilityID(updatedRecord.WorkingOfficeDivisionFacilityID).
+		SetWorkingOfficeDivisionName(updatedRecord.WorkingOfficeDivisionName).
+		SetWorkingOfficeFacilityID(updatedRecord.WorkingOfficeFacilityID).
+		SetWorkingOfficeName(updatedRecord.WorkingOfficeName).
+		SetWorkingOfficePincode(updatedRecord.WorkingOfficePincode).
+		SetWorkingOfficeRegionFacilityID(updatedRecord.WorkingOfficeRegionFacilityID).
+		SetWorkingOfficeRegionName(updatedRecord.WorkingOfficeRegionName).
+		SaveX(ctx)
+	fmt.Println(updatedAppln.ID)
+	//new-------
+	// circlePrefRefs := make([]*ent.PlaceOfPreferenceIP, len(applicationRecord.Edges.CircleData))
+	// for i, circlePrefRef := range applicationRecord.Edges.CircleData {
+	// 	if circlePrefRef.PlacePrefNo == 0 {
+	// 		return nil, 422, " -STR011", false, fmt.Errorf("circle preference value at index %d is nil", i)
+	// 	}
+
+	// 	circlePrefRefEntity, err := tx.PlaceOfPreferenceIP.
+	// 		Create().
+	// 		SetPlacePrefNo(int32(circlePrefRef.PlacePrefNo)).
+	// 		SetApplicationID(updatedAppln.ID).
+	// 		SetEmployeeID(applicationRecord.EmployeeID).
+	// 		SetPlacePrefValue(circlePrefRef.PlacePrefValue).
+	// 		SetUpdatedAt(currentTime).
+	// 		Save(ctx)
+
+	// 	if err != nil {
+	// 		return nil, 500, " -STR012", false, err
+	// 	}
+	// 	circlePrefRefs[i] = circlePrefRefEntity
+	// }
+
+	// // Add the PlaceOfPreferenceIP references to the Exam_Applications_IP entity.
+	// _, err = updatedAppln.
+	// 	Update().
+	// 	AddCirclePrefRef(circlePrefRefs...).
+	// 	Save(ctx)
+
+	// if err != nil {
+	// 	return nil, 500, " -STR013", false, err
+	// }
+
+	// For Resubmission
+
+	// Insert into recommendations.
+	// Save the Recommendation records.
+
+	/* 	recommendationsRef := make([]*ent.RecommendationsIPApplications, len(applicationRecord.Edges.ApplicationDataN))
+	   	for i, recommendation := range applicationRecord.Edges.ApplicationDataN {
+	   		if recommendation.VacancyYear == 0 {
+	   			return nil, 422, " -STR014", false, fmt.Errorf(" recommendations value at index %d is nil", i)
+	   		}
+	   		prevRecommendation, err := tx.RecommendationsIPApplications.
+	   			Query().
+	   			Where(
+	   				recommendationsipapplications.And(
+	   					recommendationsipapplications.EmployeeID(updatedAppln.EmployeeID),
+	   					recommendationsipapplications.ApplicationID(applicationRecord.ID),
+	   				),
+	   			).
+	   			First(ctx)
+	   		if err != nil {
+	   			return nil, 500, " -STR018", false, err
+	   		}
+	   		RecommendationsRefEntity, err := tx.RecommendationsIPApplications.
+	   			Create().
+	   			SetApplicationID(updatedAppln.ID).
+	   			SetEmployeeID(updatedAppln.EmployeeID).
+	   			SetExamNameCode(updatedAppln.ExamShortName).
+	   			SetExamYear(updatedAppln.ExamYear).
+	   			SetVacancyYear(recommendation.VacancyYear).
+	   			SetCARecommendations(prevRecommendation.CARecommendations).
+	   			SetNORecommendations(recommendation.NO_Recommendations).
+	   			SetCAUserName(prevRecommendation.CAUserName). // Use newAppln.CAUserName instead of updatedAppln.CAUserName
+	   			SetCARemarks(prevRecommendation.CARemarks).   // Use newAppln.CARemarks instead of updatedAppln.CARemarks
+	   			SetCAUpdatedAt(prevRecommendation.CAUpdatedAt).
+	   			SetNOUpdatedAt(currentTime).
+	   			SetNOUserName(applicationRecord.NA_UserName). // Use newAppln.CAUserName instead of updatedAppln.CAUserName
+	   			SetNORemarks(recommendation.NO_Remarks).      // Use newAppln.CARemarks instead of updatedAppln.CARemarks
+
+	   			SetApplicationStatus("VerifiedRecommendationsByNA").
+	   			Save(ctx)
+	   		if err != nil {
+	   			return nil, 500, " -STR015", false, err
+	   		}
+
+	   		recommendationsRef[i] = RecommendationsRefEntity
+	   	}
+
+	updatedAppln.Update().
+		//ClearIPApplicationsRef().
+		AddIPApplicationsRef(recommendationsRef...).
+		Save(ctx)*/
+	if err := tx.Commit(); err != nil {
+		tx.Rollback()
+		return nil, 500, " -STR019", false, err
+	}
+	return updatedAppln, 200, "", true, nil
 }

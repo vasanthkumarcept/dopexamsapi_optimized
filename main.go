@@ -333,23 +333,31 @@ func initRoutes(client *ent.Client) {
 	r.PUT(apiSubPath+"MTSPMMGexams/Halltickets", util.TokenValidationMiddlewareNew(client), h.GenerateHallticketNumbersMtsPm(client)) // vasanth
 
 	r.GET(apiSubPath+"PMPAexams/applications/getbyempid/:id/:id1", util.TokenValidationMiddlewareNew(client), h.GetPMPAApplicationsByEmpId(client))
-	r.GET(apiSubPath+"PMPAexams/caprevremarks/:id", util.TokenValidationMiddlewareNew(client), h.GetPMPACAPendingOldRemarksByEmpId(client))
+	r.GET(apiSubPath+"PMPAexams/caprevremarks/:employeeid/:examyear", util.TokenValidationMiddlewareNew(client), h.GetPMPACAPendingOldRemarksByEmpId(client))
 	r.GET(apiSubPath+"PMPAexams/getAllPendingWithCandidate/:id/:id1", util.TokenValidationMiddlewareNew(client), h.GetAllPMPAPendingWithCandidate(client))
-	r.GET(apiSubPath+"PMPAexams/getallcapending/:id", util.TokenValidationMiddlewareNew(client), h.GetPMPACAPendingDetailsByEmpId(client))
+	r.GET(apiSubPath+"PMPAexams/getallcapending/:employeeid/:examyear", util.TokenValidationMiddlewareNew(client), h.GetPMPACAPendingDetailsByEmpId(client))
 	r.GET(apiSubPath+"PMPAexams/getallcapendingapplications/:id/:id1", util.TokenValidationMiddlewareNew(client), h.GetAllPMPACAPendingVerifications(client))
-	r.GET(apiSubPath+"PMPAexams/getallcaverified/:id", util.TokenValidationMiddlewareNew(client), h.GetPMPACAVerifiedDetailsByEmpId(client))
+
+	r.GET(apiSubPath+"PMPAexams/getallcaverified/:employeeid/:examyear", util.TokenValidationMiddlewareNew(client), h.GetPMPACAVerifiedDetailsByEmpId(client))
 	r.GET(apiSubPath+"PMPAexams/getallcaverifiedapplications/:id/:id1", util.TokenValidationMiddlewareNew(client), h.GetAllPMPACAVerified(client))
 	r.GET(apiSubPath+"PMPAexams/getallcaverifiedapplicationsforna/:id/:id1", util.TokenValidationMiddlewareNew(client), h.GetPMPAAllCAVerifiedForNA(client))
-	r.GET(apiSubPath+"PMPAexams/getallnaverified/:id", util.TokenValidationMiddlewareNew(client), h.GetPMPANAVerifiedDetailsByEmpId(client))
+	r.GET(apiSubPath+"PMPAexams/getallnaverified/:employeeid/:examyear", util.TokenValidationMiddlewareNew(client), h.GetPMPANAVerifiedDetailsByEmpId(client))
 	r.GET(apiSubPath+"PMPAexams/getallnaverifiedapplications/:id/:id1", util.TokenValidationMiddlewareNew(client), h.GetPMPAAllNAVerified(client))
 	r.GET(apiSubPath+"PMPAexams/getallnaverifiedapplicationsforna/:id/:id1", util.TokenValidationMiddlewareNew(client), h.GetPMPAAllNAVerifiedForNA(client))
 	r.GET(apiSubPath+"PMPAexams/hallticket/get/:id1/:id2", util.TokenValidationMiddlewareNew(client), h.GetPMPAHallTicketWithExamCodeEmpID(client))
 	r.GET(apiSubPath+"PMPAexams/recommendations/:id", util.TokenValidationMiddlewareNew(client), h.GetPMPAExamRecommendationsByEmpId(client))
 
-	r.POST(apiSubPath+"PMPAexams/applications/submit", util.TokenValidationMiddlewareNew(client), h.CreateNewPMPAApplications(client))
+	r.GET(apiSubPath+"PMPAexams/examcenterhall/:cityid/:examyear/:examcode/:centerid", util.TokenValidationMiddlewareNew(client), h.GetPMPAExamcenterhallBycityid(client))                  //---vasanth
+	r.GET(apiSubPath+"PMPAexams/checkexamcenterhall/:examyear/:examcode/:nafacilityid/:cofacilityid/:hallname", util.TokenValidationMiddlewareNew(client), h.CheckIPExamcenterhall(client)) //---vasanth
 
+	r.GET(apiSubPath+"PMPAexams/candiadatesexamcenterhall/:cityid/:examyear/:examcode/:centerid/:hallname", util.TokenValidationMiddlewareNew(client), h.GetPMPACandiadatesExamcenterhallBycityid(client)) //---vasanth
+	r.POST(apiSubPath+"PMPAexams/ExamCenterHall/create", util.TokenValidationMiddlewareNew(client), h.CreatePMPAExamCenterHall(client))
+	r.POST(apiSubPath+"PMPAexams/applications/submit", util.TokenValidationMiddlewareNew(client), h.CreateNewPMPAApplications(client))
+	r.PUT(apiSubPath+"PMPAexams/ExamCenterHall/reset", util.TokenValidationMiddlewareNew(client), h.ResetPmpaExamCenterHall(client)) //---vasanth
 	r.PUT(apiSubPath+"PMPAexams/applications/resubmit", util.TokenValidationMiddlewareNew(client), h.ResubmitPMPAApplication(client))
 	r.PUT(apiSubPath+"PMPAexams/applications/verify", util.TokenValidationMiddlewareNew(client), h.VerifyPMPAApplication(client))
+	r.PUT(apiSubPath+"PMPAexams/applications/nareset", util.TokenValidationMiddlewareNew(client), h.ResetPMPAApplicationNA(client))
+
 	r.PUT(apiSubPath+"PMPAexams/center/updatecenters", util.TokenValidationMiddlewareNew(client), h.UpdateExamCentersInPMPAApplsreturnstring(client))
 	r.PUT(apiSubPath+"PMPAexams/halltickets", util.TokenValidationMiddlewareNew(client), h.GetPMPAHallticketNumberscenter(client)) // just returns a string message generated successfully.
 	r.PUT(apiSubPath+"PMPAexams/noverify", util.TokenValidationMiddlewareNew(client), h.UpdateNodalRecommendationsPMPAByEmpID(client))
@@ -405,7 +413,7 @@ func initRoutes(client *ent.Client) {
 
 	r.GET(apiSubPath+"ipexams/candiadatesexamcenterhall/:cityid/:examyear/:examcode/:centerid/:hallname", util.TokenValidationMiddlewareNew(client), h.GetIPCandiadatesExamcenterhallBycityid(client)) //---vasanth
 	r.POST(apiSubPath+"ipexams/ExamCenterHall/create", util.TokenValidationMiddlewareNew(client), h.CreateExamCenterHall(client))                                                                      //---vasanth
-	r.POST(apiSubPath+"ipexams/applications/submit", h.CreateNewIPApplications(client))                                                                                                                //---vasanth
+	r.POST(apiSubPath+"ipexams/applications/submit", util.TokenValidationMiddlewareNew(client), h.CreateNewIPApplications(client))                                                                     //---vasanth
 	r.PUT(apiSubPath+"ipexams/applications/resubmit", util.TokenValidationMiddlewareNew(client), h.ResubmitApplication(client))
 	r.PUT(apiSubPath+"ipexams/ExamCenterHall/reset", util.TokenValidationMiddlewareNew(client), h.ResetExamCenterHall(client)) //---vasanth
 	r.PUT(apiSubPath+"ipexams/applications/verify", util.TokenValidationMiddlewareNew(client), h.VerifyIPApplication(client))

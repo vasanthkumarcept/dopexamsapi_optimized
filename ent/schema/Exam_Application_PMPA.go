@@ -182,6 +182,7 @@ func (Exam_Applications_PMPA) Fields() []ent.Field {
 		}).Default(time.Now).Optional(),
 		field.String("UpdatedBy").Default("API").Optional(),
 		field.Int32("ExamCenterHall").Optional(),
+		field.Int32("HallIdentificationNumber").Optional().Default(0),
 		field.String("HallName").Optional(),
 
 		}

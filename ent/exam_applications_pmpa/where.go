@@ -680,6 +680,11 @@ func ExamCenterHall(v int32) predicate.Exam_Applications_PMPA {
 	return predicate.Exam_Applications_PMPA(sql.FieldEQ(FieldExamCenterHall, v))
 }
 
+// HallIdentificationNumber applies equality check predicate on the "HallIdentificationNumber" field. It's identical to HallIdentificationNumberEQ.
+func HallIdentificationNumber(v int32) predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldEQ(FieldHallIdentificationNumber, v))
+}
+
 // HallName applies equality check predicate on the "HallName" field. It's identical to HallNameEQ.
 func HallName(v string) predicate.Exam_Applications_PMPA {
 	return predicate.Exam_Applications_PMPA(sql.FieldEQ(FieldHallName, v))
@@ -9103,6 +9108,56 @@ func ExamCenterHallIsNil() predicate.Exam_Applications_PMPA {
 // ExamCenterHallNotNil applies the NotNil predicate on the "ExamCenterHall" field.
 func ExamCenterHallNotNil() predicate.Exam_Applications_PMPA {
 	return predicate.Exam_Applications_PMPA(sql.FieldNotNull(FieldExamCenterHall))
+}
+
+// HallIdentificationNumberEQ applies the EQ predicate on the "HallIdentificationNumber" field.
+func HallIdentificationNumberEQ(v int32) predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldEQ(FieldHallIdentificationNumber, v))
+}
+
+// HallIdentificationNumberNEQ applies the NEQ predicate on the "HallIdentificationNumber" field.
+func HallIdentificationNumberNEQ(v int32) predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldNEQ(FieldHallIdentificationNumber, v))
+}
+
+// HallIdentificationNumberIn applies the In predicate on the "HallIdentificationNumber" field.
+func HallIdentificationNumberIn(vs ...int32) predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldIn(FieldHallIdentificationNumber, vs...))
+}
+
+// HallIdentificationNumberNotIn applies the NotIn predicate on the "HallIdentificationNumber" field.
+func HallIdentificationNumberNotIn(vs ...int32) predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldNotIn(FieldHallIdentificationNumber, vs...))
+}
+
+// HallIdentificationNumberGT applies the GT predicate on the "HallIdentificationNumber" field.
+func HallIdentificationNumberGT(v int32) predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldGT(FieldHallIdentificationNumber, v))
+}
+
+// HallIdentificationNumberGTE applies the GTE predicate on the "HallIdentificationNumber" field.
+func HallIdentificationNumberGTE(v int32) predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldGTE(FieldHallIdentificationNumber, v))
+}
+
+// HallIdentificationNumberLT applies the LT predicate on the "HallIdentificationNumber" field.
+func HallIdentificationNumberLT(v int32) predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldLT(FieldHallIdentificationNumber, v))
+}
+
+// HallIdentificationNumberLTE applies the LTE predicate on the "HallIdentificationNumber" field.
+func HallIdentificationNumberLTE(v int32) predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldLTE(FieldHallIdentificationNumber, v))
+}
+
+// HallIdentificationNumberIsNil applies the IsNil predicate on the "HallIdentificationNumber" field.
+func HallIdentificationNumberIsNil() predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldIsNull(FieldHallIdentificationNumber))
+}
+
+// HallIdentificationNumberNotNil applies the NotNil predicate on the "HallIdentificationNumber" field.
+func HallIdentificationNumberNotNil() predicate.Exam_Applications_PMPA {
+	return predicate.Exam_Applications_PMPA(sql.FieldNotNull(FieldHallIdentificationNumber))
 }
 
 // HallNameEQ applies the EQ predicate on the "HallName" field.

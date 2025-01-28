@@ -1109,6 +1109,10 @@ func init() {
 	exam_applications_pmpaDescUpdatedBy := exam_applications_pmpaFields[131].Descriptor()
 	// exam_applications_pmpa.DefaultUpdatedBy holds the default value on creation for the UpdatedBy field.
 	exam_applications_pmpa.DefaultUpdatedBy = exam_applications_pmpaDescUpdatedBy.Default.(string)
+	// exam_applications_pmpaDescHallIdentificationNumber is the schema descriptor for HallIdentificationNumber field.
+	exam_applications_pmpaDescHallIdentificationNumber := exam_applications_pmpaFields[133].Descriptor()
+	// exam_applications_pmpa.DefaultHallIdentificationNumber holds the default value on creation for the HallIdentificationNumber field.
+	exam_applications_pmpa.DefaultHallIdentificationNumber = exam_applications_pmpaDescHallIdentificationNumber.Default.(int32)
 	exam_applications_psFields := schema.Exam_Applications_PS{}.Fields()
 	_ = exam_applications_psFields
 	// exam_applications_psDescExamCityCenterCode is the schema descriptor for ExamCityCenterCode field.

@@ -278,6 +278,8 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldExamCenterHall holds the string denoting the examcenterhall field in the database.
 	FieldExamCenterHall = "exam_center_hall"
+	// FieldHallIdentificationNumber holds the string denoting the hallidentificationnumber field in the database.
+	FieldHallIdentificationNumber = "hall_identification_number"
 	// FieldHallName holds the string denoting the hallname field in the database.
 	FieldHallName = "hall_name"
 	// EdgeUsersPMPARef holds the string denoting the userspmparef edge name in mutations.
@@ -529,6 +531,7 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldUpdatedBy,
 	FieldExamCenterHall,
+	FieldHallIdentificationNumber,
 	FieldHallName,
 }
 
@@ -572,6 +575,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// DefaultUpdatedBy holds the default value on creation for the "UpdatedBy" field.
 	DefaultUpdatedBy string
+	// DefaultHallIdentificationNumber holds the default value on creation for the "HallIdentificationNumber" field.
+	DefaultHallIdentificationNumber int32
 )
 
 // OrderOption defines the ordering options for the Exam_Applications_PMPA queries.
@@ -1195,6 +1200,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByExamCenterHall orders the results by the ExamCenterHall field.
 func ByExamCenterHall(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExamCenterHall, opts...).ToFunc()
+}
+
+// ByHallIdentificationNumber orders the results by the HallIdentificationNumber field.
+func ByHallIdentificationNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHallIdentificationNumber, opts...).ToFunc()
 }
 
 // ByHallName orders the results by the HallName field.

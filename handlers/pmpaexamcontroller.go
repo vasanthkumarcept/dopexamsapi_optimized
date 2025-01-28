@@ -202,15 +202,25 @@ func GetPMPACAPendingDetailsByEmpId(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
-		id := gctx.Param("id")
+		var mainFunction string = " main - GetPMPACAPendingDetailsByEmpId "
+		var startFunction string = " - start - QueryPMPAApplicationsByCAPendingByEmpID "
+		id := gctx.Param("employeeid")
 		//var examID int32
 		empid, _ := strconv.ParseInt(id, 10, 64)
-		circles, err := start.QueryPMPAApplicationsByCAPendingByEmpID(ctx, client, int64(empid))
+		examYear := gctx.Param("selectedyear")
+		circles, status, stgError, dataStatus, err := start.QueryPMPAApplicationsByCAPendingByEmpID(ctx, client, int64(empid), examYear)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching application pending with CA",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
+
 	}
 	return gin.HandlerFunc(fn)
 }
@@ -220,24 +230,28 @@ func GetPMPACAPendingOldRemarksByEmpId(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
+		var mainFunction string = " main - GetPMPACAPendingOldRemarksByEmpId "
+		var startFunction string = " - start - GetOldPMPACAApplicationRemarksByEmployeeID "
 		//newAppln := new(ent.Exam_Applications_PMPA)
-		id := gctx.Param("id")
+		id := gctx.Param("employeeid")
 		//var examID int32
 		empid, _ := strconv.ParseInt(id, 10, 64)
-		circles, err := start.GetOldPMPACAApplicationRemarksByEmployeeID(ctx, client, int64(empid))
+		examYear := gctx.Param("selectedyear")
+		circles, status, stgError, dataStatus, err := start.GetOldPMPACAApplicationRemarksByEmployeeID(ctx, client, int64(empid), examYear)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		//gctx.JSON(http.StatusOK, gin.H{"data": circles})
-
 		gctx.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "Fetching applicatins pending with candiate with remarks",
 			"data": gin.H{
 				"EmployeeID":          circles.EmployeeID,
 				"ApplicationStatus":   circles.ApplicationStatus,
 				"Application Remarks": circles.AppliactionRemarks,
-				//	"CAOldRemarks":        application.CAPreviousRemarks,
 			},
+			"dataexists": dataStatus,
 		})
 	}
 	return gin.HandlerFunc(fn)
@@ -276,15 +290,25 @@ func GetPMPACAVerifiedDetailsByEmpId(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
-		id := gctx.Param("id")
+		var mainFunction string = " main - GetCAVerifiedDetailsByEmpId "
+		var startFunction string = " - start - QueryIPApplicationsByCAVerifiedByEmpID "
+		//employeeid
+		id := gctx.Param("employeeid")
+		examYear := gctx.Param("selectedyear")
 		//var examID int32
 		empid, _ := strconv.ParseInt(id, 10, 64)
-		circles, err := start.QueryPMPAApplicationsByCAVerifiedByEmpID(ctx, client, int64(empid))
+		circles,status, stgError, dataStatus, err := start.QueryPMPAApplicationsByCAVerifiedByEmpID(ctx, client, int64(empid),examYear)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetched data based on employeeid with Verified status",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
 	return gin.HandlerFunc(fn)
 }
@@ -295,17 +319,24 @@ func GetPMPAAllCAVerifiedForNA(client *ent.Client) gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
 		//facilityID := gctx.Query("facilityID") // Get the facilityID from the query parameter
+				var mainFunction string = " main - GetPMPAAllCAVerifiedForNA "
+		var startFunction string = " - start - QueryPMPAApplicationsByCAVerifiedForNA "
 		facilityID := gctx.Param("id")
 		facilityID1 := gctx.Param("id1")
 
-		circles, err := start.QueryPMPAApplicationsByCAVerifiedForNA(ctx, client, facilityID, facilityID1)
+		circles, status, stgError, dataStatus, err := start.QueryPMPAApplicationsByCAVerifiedForNA(ctx, client, facilityID, facilityID1)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching application verified by CA for NA",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
-
 	return gin.HandlerFunc(fn)
 
 }
@@ -373,14 +404,22 @@ func UpdateNodalRecommendationsPMPAByEmpID(client *ent.Client) gin.HandlerFunc {
 func GetPMPAExamRecommendationsByEmpId(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		id := gctx.Param("id")
+		var mainFunction string = " main - GetIPExamRecommendationsByEmpId "
+		var startFunction string = " - start - GetRecommendationsByEmpID "
 		//var examID int32
 		empid, _ := strconv.ParseInt(id, 10, 64)
-		records, err := start.GetPMPARecommendationsByEmpID(client, empid)
+		records, status, stgError, dataStatus, err := start.GetPMPARecommendationsByEmpID(client, empid)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": records})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching recommendations by employee ID",
+			"data":       records,
+			"dataexists": dataStatus,
+		})
 	}
 	return gin.HandlerFunc(fn)
 }
@@ -419,15 +458,24 @@ func GetPMPANAVerifiedDetailsByEmpId(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
-		id := gctx.Param("id")
+		var mainFunction string = " main - GetNAVerifiedDetailsByEmpId "
+		var startFunction string = " - start - QueryIPApplicationsByNAVerifiedByEmpID "
+		id := gctx.Param("employeeid")
 		//var examID int32
 		empid, _ := strconv.ParseInt(id, 10, 64)
-		circles, err := start.QueryPMPAApplicationsByNAVerifiedByEmpID(ctx, client, int64(empid))
+		examYear := gctx.Param("selectedyear")
+		circles, status, stgError, dataStatus, err := start.QueryPMPAApplicationsByNAVerifiedByEmpID(ctx, client, int64(empid), examYear)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching NA verified application by employee ID",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
 	return gin.HandlerFunc(fn)
 }
@@ -437,16 +485,24 @@ func GetPMPAAllNAVerifiedForNA(client *ent.Client) gin.HandlerFunc {
 	fn := func(gctx *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
 		defer cancel()
+		var mainFunction string = " main - GetAllNAVerifiedForNA "
+		var startFunction string = " - start - GetAllNAVerifiedForNA "
 		//facilityID := gctx.Query("facilityID") // Get the facilityID from the query parameter
 		facilityID := gctx.Param("id")
 		facilityID1 := gctx.Param("id1")
 
-		circles, err := start.QueryPMPAApplicationsByNAVerifiedForNA(ctx, client, facilityID, facilityID1)
+		circles, status, stgError, dataStatus,  err := start.QueryPMPAApplicationsByNAVerifiedForNA(ctx, client, facilityID, facilityID1)
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": circles})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching applications verified by NA",
+			"data":       circles,
+			"dataexists": dataStatus,
+		})
 	}
 
 	return gin.HandlerFunc(fn)
@@ -674,15 +730,22 @@ func GetPMPAApplicationsByEmpId(client *ent.Client) gin.HandlerFunc {
 		defer cancel()
 		id := gctx.Param("id")
 		id1 := gctx.Param("id1")
-
+		var mainFunction string = " main - GetIPApplicationsByEmpId "
+		var startFunction string = " - start - QueryIPExamApplicationsByEmpID "
 		//var examID int32
 		empid, _ := strconv.ParseInt(id, 10, 64)
-		paapplns, err := start.QueryPMPAExamApplicationsByEmpID(ctx, client, int64(empid), string(id1))
+		paapplns, status, stgError, dataStatus, err := start.QueryPMPAExamApplicationsByEmpID(ctx, client, int64(empid), string(id1))
 		if err != nil {
-			gctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
 			return
 		}
-		gctx.JSON(http.StatusOK, gin.H{"data": paapplns})
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Application details fetched successfully",
+			"data":       paapplns,
+			"dataexists": dataStatus,
+		})
 	}
 	return gin.HandlerFunc(fn)
 }
@@ -712,5 +775,198 @@ func UpdateExamCentersInPMPAAppls(client *ent.Client) gin.HandlerFunc {
 		gctx.JSON(http.StatusOK, gin.H{"data": updatedRecords})
 	}
 
+	return gin.HandlerFunc(fn)
+}
+func GetPMPAExamcenterhallBycityid(client *ent.Client) gin.HandlerFunc {
+	fn := func(gctx *gin.Context) {
+
+		id := gctx.Param("cityid")
+		examyear := gctx.Param("examyear")
+		id2 := gctx.Param("examcode")
+		id3 := gctx.Param("centerid")
+
+		var mainFunction string = " main - GetIPExamcenterhallBycityid "
+		var startFunction string = " - start - GetExamCenterHallbyCityID "
+
+		cityid, _ := strconv.ParseInt(id, 10, 32)
+		examcode, _ := strconv.ParseInt(id2, 10, 32)
+		centerid, _ := strconv.ParseInt(id3, 10, 32)
+
+		records, status, stgError, dataStatus, err := start.GetPMPAExamCenterHallbyCityID(client, int32(cityid), examyear, int32(examcode), int32(centerid))
+		if err != nil {
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
+			return
+		}
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching ExamcenterHall by CityId",
+			"data":       records,
+			"dataexists": dataStatus,
+		})
+	}
+	return gin.HandlerFunc(fn)
+}
+func GetPMPACandiadatesExamcenterhallBycityid(client *ent.Client) gin.HandlerFunc {
+	fn := func(gctx *gin.Context) {
+
+		id := gctx.Param("cityid")
+		examyear := gctx.Param("examyear")
+		id2 := gctx.Param("examcode")
+		id3 := gctx.Param("centerid")
+		hallname := gctx.Param("hallname")
+
+		var mainFunction string = " main - GetIPCandiadatesExamcenterhallBycityid "
+		var startFunction string = " - start - GetCandidateExamCenterHallbyCityID "
+
+		cityid, _ := strconv.ParseInt(id, 10, 32)
+		examcode, _ := strconv.ParseInt(id2, 10, 32)
+		centerid, _ := strconv.ParseInt(id3, 10, 32)
+
+		records, status, stgError, dataStatus, err := start.GetPMPACandidateExamCenterHallbyCityID(client, int32(cityid), examyear, int32(examcode), int32(centerid), hallname)
+		if err != nil {
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithoutLog(gctx, err, status, stgError, client, Remarks)
+			return
+		}
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "Fetching Candidates in ExamcenterHall by CityId",
+			"data":       records,
+			"dataexists": dataStatus,
+		})
+	}
+	return gin.HandlerFunc(fn)
+}
+
+func CreatePMPAExamCenterHall(client *ent.Client) gin.HandlerFunc {
+	fn := func(gctx *gin.Context) {
+
+		//ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
+		//defer cancel()
+		var mainFunction string = " main - CreatePMPAExamCenterHall "
+		var startFunction string = " - start SubPmPaCreateExamCenterHall "
+		var examCenterHall ca_reg.StruExamCenterHall
+		if err := gctx.ShouldBindJSON(&examCenterHall); err != nil {
+			Remarks = "400 error from " + mainFunction + " - ShouldBindJSON " + err.Error()
+			start.MainHandleError(gctx, client, Remarks, " -HA01", gctx.GetHeader("UserName"))
+			return
+		}
+
+		logdata := examCenterHall.Edges.LogData[0]
+
+		result, status, stgError, dataStatus, err := start.SubPmPaCreateExamCenterHall(client, &examCenterHall)
+
+		if err != nil {
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithLog(gctx, err, status, stgError, logdata, client, Remarks)
+			return
+		}
+
+		util.LoggerNew(client, logdata)
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "IP Application submitted successfully",
+			"data":       result,
+			"dataexists": dataStatus,
+		})
+	}
+	return gin.HandlerFunc(fn)
+}
+func ResetPmpaExamCenterHall(client *ent.Client) gin.HandlerFunc {
+	fn := func(gctx *gin.Context) {
+
+		//ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
+		//defer cancel()
+		var mainFunction string = " main - ResetPmpaExamCenterHall "
+		var startFunction string = " - start SubResetPmpaExamCenterHall "
+		var examCenterHall ca_reg.StruExamCenterHallReset
+		if err := gctx.ShouldBindJSON(&examCenterHall); err != nil {
+			Remarks = "400 error from " + mainFunction + " - ShouldBindJSON " + err.Error()
+			start.MainHandleError(gctx, client, Remarks, " -HA01", gctx.GetHeader("UserName"))
+			return
+		}
+
+		logdata := examCenterHall.Edges.LogData[0]
+
+		result, status, stgError, dataStatus, err := start.SubResetPmpaExamCenterHall(client, &examCenterHall)
+
+		if err != nil {
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithLog(gctx, err, status, stgError, logdata, client, Remarks)
+			return
+		}
+
+		util.LoggerNew(client, logdata)
+		gctx.JSON(http.StatusOK, gin.H{
+			"success":    true,
+			"message":    "IP Application ExamHall Reseted successfully",
+			"data":       result,
+			"dataexists": dataStatus,
+		})
+	}
+	return gin.HandlerFunc(fn)
+}
+func ResetPMPAApplicationNA(client *ent.Client) gin.HandlerFunc {
+	fn := func(gctx *gin.Context) {
+
+		/* ctx, cancel := context.WithTimeout(context.Background(), util.GetCtxTimeOut())
+		defer cancel()
+		*/
+		var mainFunction string = " main - ResetIPApplicationNA "
+		var startFunction string = " - start - SubResetPMPAApplicationNA "
+		var newAppln ca_reg.NAVerifyApplicationPMPA
+
+		if err := gctx.ShouldBindJSON(&newAppln); err != nil {
+			Remarks = "400 error from " + mainFunction + " - ShouldBindJSON " + err.Error()
+			start.MainHandleError(gctx, client, Remarks, " -HA01", gctx.GetHeader("UserName"))
+			return
+		}
+		logdata := newAppln.Edges.LogData[0]
+
+		application, status, stgError, dataStatus, err := start.SubResetPMPAApplicationNA(client, &newAppln)
+		if err != nil {
+			Remarks = mainFunction + startFunction
+			start.StartErrorHandlerWithLog(gctx, err, status, stgError, logdata, client, Remarks)
+			return
+		}
+		/*
+			var submittedDate string = application.ApplnSubmittedDate.Format("02-01-2006 15:04:05")
+			var Smsuserid = fmt.Sprint(newAppln.EmployeeID)
+			var emailsentstatus string = ""
+			if application.ApplicationStatus == "VerifiedByNA" {
+				//examshortname ,appno ,ca,submittedDate ,recommended, comments
+				emailsentstatus = mail.SendEMailNew(ctx, client, Smsuserid, 4, " LDCE PA/SA to IP ", application.ApplicationNumber, application.ControllingOfficeName, submittedDate, application.RecommendedStatus, application.NARemarks)
+			} else if application.ApplicationStatus == "PendingWithCandidate" {
+				//examshortname ,	appno, ca, submittedDate, comments
+				emailsentstatus = mail.SendEMailNew(ctx, client, Smsuserid, 6, " LDCE PA/SA to IP ", application.ApplicationNumber, application.ControllingOfficeName, submittedDate, application.NARemarks)
+			}
+
+			var smssentstatus string = ""
+			if application.ApplicationStatus == "VerifiedByNA" {
+				smssentstatus = sms.SendSmsNew(ctx, client, Smsuserid, 4, "LDCE PA/SA to IP", application.ApplicationNumber, application.RecommendedStatus)
+			} else if application.ApplicationStatus == "PendingWithCandidate" {
+				smssentstatus = sms.SendSmsNew(ctx, client, Smsuserid, 4, "LDCE PA/SA to IP", application.ApplicationNumber, "Returned for correction")
+			}
+		*/
+		util.LoggerNew(client, logdata)
+
+		gctx.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "Nodal officer successfully resetted this IP application ",
+			"data": gin.H{
+				"EmployeeID":          application.EmployeeID,
+				"ApplicationStatus":   application.ApplicationStatus,
+				"Application Remarks": application.AppliactionRemarks,
+				//"EmailStatus":         emailsentstatus,
+				//	"SMSStatus":           smssentstatus,
+				"RoleUserCode": application.RoleUserCode,
+				//"Email":               application.EmailID,
+				//"Mobile":              application.MobileNumber,
+			},
+			"dataexists": dataStatus,
+		})
+
+	}
 	return gin.HandlerFunc(fn)
 }
